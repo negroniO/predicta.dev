@@ -27,13 +27,13 @@ export default function Home() {
           </p>
           <div className="mt-5 flex flex-wrap gap-3 text-sm">
             <Link
-              href="#projects"
+              href="/projects"
               className="px-4 py-2 rounded-full bg-cyan-500/90 hover:bg-cyan-400 text-slate-950 font-medium shadow-lg shadow-cyan-500/25 transition transform hover:-translate-y-0.5 hover:shadow-cyan-400/40"
             >
               View Projects
             </Link>
             <Link
-              href="#contact"
+              href="/contact"
               className="px-4 py-2 rounded-full border border-slate-700/80 hover:border-cyan-400/80 text-slate-200 bg-slate-900/60 backdrop-blur-md transition transform hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-900/60"
             >
               Get in touch
@@ -108,9 +108,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Projects */}
+      {/* Featured Projects */}
       <section id="projects" className="space-y-4">
-        <h2 className="text-xl font-semibold tracking-tight">Projects</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Featured projects</h2>
         <p className="text-sm text-slate-300">
           A selection of work focused on payment recovery, collections, and
           finance analytics.
@@ -119,7 +119,7 @@ export default function Home() {
         <div className="space-y-4">
           <article className="rounded-2xl border border-slate-700/70 bg-slate-900/60 backdrop-blur-xl p-4 shadow-lg transition transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-500/25">
             <h3 className="text-sm font-semibold">
-              1️⃣ Payment Recovery ML (End-to-End System)
+              Payment Recovery ML (End-to-End System)
             </h3>
             <p className="mt-1 text-sm text-slate-300">
               Predicts which failed / unpaid transactions are likely to be recovered
@@ -130,21 +130,13 @@ export default function Home() {
               <li>Calibrated Logistic Regression with PR AUC, Brier Score, lift analysis</li>
               <li>Expected value ranking: amount × probability</li>
             </ul>
-            <div className="mt-3 flex flex-wrap gap-2 text-xs">
-              <span className="px-2 py-1 rounded-full border border-emerald-400/70 bg-emerald-500/10 text-emerald-200/90">
-                ML
-              </span>
-              <span className="px-2 py-1 rounded-full border border-sky-400/70 bg-sky-500/10 text-sky-200/90">
-                Finance
-              </span>
-              <span className="px-2 py-1 rounded-full border border-fuchsia-400/70 bg-fuchsia-500/10 text-fuchsia-200/90">
-                Streamlit
-              </span>
-              <span className="px-2 py-1 rounded-full border border-amber-400/70 bg-amber-500/10 text-amber-200/90">
-                SQL
-              </span>
-            </div>
             <div className="mt-3 flex flex-wrap gap-3 text-xs">
+              <Link
+                href="/projects/payment-recovery-ml"
+                className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2"
+              >
+                Read case study
+              </Link>
               <Link
                 href="https://github.com/negroniO/payment-recovery-ml"
                 target="_blank"
@@ -164,7 +156,7 @@ export default function Home() {
 
           <article className="rounded-2xl border border-slate-700/70 bg-slate-900/60 backdrop-blur-xl p-4 shadow-lg transition transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-500/25">
             <h3 className="text-sm font-semibold">
-              2️⃣ Finance Collections &amp; DSO Forecasting
+              Finance Collections &amp; DSO Forecasting
             </h3>
             <p className="mt-1 text-sm text-slate-300">
               Time series forecasting for collections and Days Sales Outstanding (DSO),
@@ -174,77 +166,48 @@ export default function Home() {
               Built using Prophet and invoice / AR data, producing visual forecasts of
               expected cash inflows and DSO trends.
             </p>
+            <div className="mt-3 flex flex-wrap gap-3 text-xs">
+              <Link
+                href="/projects/dso-forecasting"
+                className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2"
+              >
+                Read case study
+              </Link>
+            </div>
           </article>
         </div>
-      </section>
 
-      {/* Skills */}
-      <section id="skills" className="space-y-4">
-        <h2 className="text-xl font-semibold tracking-tight">Skills & Experience</h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="rounded-2xl border border-slate-700/70 bg-slate-900/60 backdrop-blur-xl p-4 transition transform hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-500/20">
-            <h3 className="text-sm font-semibold mb-2">Technical</h3>
-            <ul className="text-xs text-slate-300 space-y-1">
-              <li>Python · SQL (PostgreSQL, Presto) · R (basic)</li>
-              <li>scikit-learn · time series forecasting (Prophet)</li>
-              <li>Feature engineering · model evaluation · calibration</li>
-              <li>Streamlit · Tableau · Power BI · advanced Excel</li>
-            </ul>
-          </div>
-         <div className="rounded-2xl border border-slate-700/70 bg-slate-900/60 backdrop-blur-xl p-4 transition transform hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-500/20">
-            <h3 className="text-sm font-semibold mb-2">Finance & Business</h3>
-            <ul className="text-xs text-slate-300 space-y-1">
-              <li>FP&amp;A: budgeting, variance analysis, forecasting</li>
-              <li>Credit control &amp; collections; DSO reduction</li>
-              <li>Payment operations: card payments, providers, settlement</li>
-              <li>Reporting &amp; KPI dashboards for stakeholders</li>
-            </ul>
-          </div>
+        <div className="pt-1">
+          <Link
+            href="/projects"
+            className="text-xs text-cyan-300 hover:text-cyan-200 underline underline-offset-2"
+          >
+            View all projects →
+          </Link>
         </div>
       </section>
 
-      {/* Finance Use Cases */}
-      <section id="finance" className="space-y-4">
-        <h2 className="text-xl font-semibold tracking-tight">Finance Use Cases</h2>
-        <ul className="text-sm text-slate-300 space-y-1">
-          <li>• Payment recovery &amp; collections prioritisation using ML</li>
-          <li>• DSO &amp; cash flow forecasting for planning &amp; treasury</li>
-          <li>• Credit control &amp; risk segmentation by payment behaviour</li>
-          <li>• BI dashboards automating manual Excel workflows</li>
-        </ul>
-      </section>
-
-      {/* Contact */}
-      <section id="contact" className="space-y-3">
-        <h2 className="text-xl font-semibold tracking-tight">Contact</h2>
-        <p className="text-sm text-slate-300">
-          Open to roles in{" "}
-          <strong>data analytics</strong>, <strong>data science</strong>, and{" "}
-          <strong>finance analytics</strong>.
+      {/* About teaser */}
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold tracking-tight">A bit about me</h2>
+        <p className="text-sm text-slate-300 max-w-3xl">
+          I started on the operations side of finance — allocating payments,
+          reconciling accounts, resolving disputes, and reducing DSO. Over time I
+          moved into FP&amp;A and analytics, combining{" "}
+          <strong>finance domain knowledge</strong> with{" "}
+          <strong>Python, SQL, forecasting, and BI</strong> to build tools that
+          teams actually use.
         </p>
-        <ul className="text-sm text-slate-300 space-y-1">
-          <li>
-            GitHub:{" "}
-            <Link
-              href="https://github.com/negroniO"
-              target="_blank"
-              className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2"
-            >
-              @negroniO
-            </Link>
-          </li>
-          <li>
-            LinkedIn:{" "}
-            <Link
-              href="https://www.linkedin.com/in/george-iordanous"
-              target="_blank"
-              className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2"
-            >
-              George Iordanous
-            </Link>
-          </li>
-          <li>Email: <span className="text-slate-100">george.iordanous@hotmail.com</span></li>
-        </ul>
+        <p className="text-sm text-slate-400">
+          You can read more about my background and how I like to work on the{" "}
+          <Link
+            href="/about"
+            className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2"
+          >
+            About
+          </Link>{" "}
+          page.
+        </p>
       </section>
     </div>
   );
