@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: "predicta.dev",
     images: [
       {
-        url: "/og-image.png", // we'll add this file in /public
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "predicta.dev – Data & Finance Analytics by George Iordanous",
