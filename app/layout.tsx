@@ -75,7 +75,6 @@ export default function RootLayout({
               <Link href="/" className="font-semibold tracking-tight">
                 predicta.dev
               </Link>
-
               <nav className="flex gap-4 text-sm text-slate-300">
                 <Link
                   href="/"
@@ -90,19 +89,13 @@ export default function RootLayout({
                   Projects
                 </Link>
                 <Link
-                  href="/#skills"
+                  href="/about"
                   className="hover:text-cyan-300 transition-colors duration-150"
                 >
-                  Skills
+                  About
                 </Link>
                 <Link
-                  href="/#finance"
-                  className="hover:text-cyan-300 transition-colors duration-150"
-                >
-                  Finance Use Cases
-                </Link>
-                <Link
-                  href="/#contact"
+                  href="/contact"
                   className="hover:text-cyan-300 transition-colors duration-150"
                 >
                   Contact
