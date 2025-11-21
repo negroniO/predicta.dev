@@ -3,10 +3,62 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "predicta.dev | Data & Finance Analytics",
+  // Base URL for all absolute links
+  metadataBase: new URL("https://predicta.dev"),
+
+  // Browser title + template for subpages
+  title: {
+    default: "predicta.dev | Data & Finance Analytics",
+    template: "%s | predicta.dev",
+  },
+
   description:
-    "Predicta – ML-powered FP&A, collections, and finance analytics projects in payments and financial operations.",
+    "Predicta – portfolio of George Iordanous. FP&A, credit control, data analytics, and machine learning projects in finance and payments.",
+
+  // OpenGraph → LinkedIn, Slack, etc. preview
+  openGraph: {
+    title: "predicta.dev | Data & Finance Analytics",
+    description:
+      "Predicta – FP&A, collections, and machine learning projects in finance and payments by George Iordanous.",
+    url: "https://predicta.dev",
+    siteName: "predicta.dev",
+    images: [
+      {
+        url: "/og-image.png", // we'll add this file in /public
+        width: 1200,
+        height: 630,
+        alt: "predicta.dev – Data & Finance Analytics by George Iordanous",
+      },
+    ],
+    locale: "en_GB",
+    type: "website",
+  },
+
+  // Twitter / X card
+  twitter: {
+    card: "summary_large_image",
+    title: "predicta.dev | Data & Finance Analytics",
+    description:
+      "Predicta – FP&A, collections, and machine learning projects in finance and payments by George Iordanous.",
+    images: ["/og-image.png"],
+  },
+
+  // Browser tab icons
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [
+      {
+        url: "/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
+  },
 };
+
 
 export default function RootLayout({
   children,
