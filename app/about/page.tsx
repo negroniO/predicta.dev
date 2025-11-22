@@ -15,7 +15,7 @@ export default function AboutPage() {
           About
         </p>
         <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
-          About me
+          About George Iordanous
         </h1>
         <p className="text-sm text-slate-300 max-w-2xl">
           FP&amp;A analyst with a background in credit control and a master&apos;s
@@ -51,17 +51,15 @@ export default function AboutPage() {
           </p>
         </div>
 
-        <aside className="rounded-2xl border border-slate-700/70 bg-slate-900/60 backdrop-blur-xl p-4 text-xs text-slate-200 space-y-2">
+        <aside className="rounded-2xl border border-slate-700/70 bg-slate-900/60 backdrop-blur-xl p-4 text-xs text-slate-200 space-y-2 shadow-lg transition transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-500/25">
           <h3 className="text-xs font-semibold text-slate-100 mb-1">
             Snapshot
           </h3>
           <ul className="space-y-1">
-            <li>
-              🎓 MSc Data Analytics in Accounting &amp; Finance
-            </li>
+            <li>🎓 MSc Data Analytics in Accounting &amp; Finance</li>
             <li>📊 FP&amp;A &amp; collections experience in transportation / payments</li>
-            <li>🧮 Strong with Python, SQL, forecasting, and BI dashboards</li>
-            <li>💳 Special interest in payments, failed transactions, and AR</li>
+            <li>🧮 Python, SQL, forecasting, BI dashboards</li>
+            <li>💳 Focus on payments, failed transactions, and AR</li>
           </ul>
         </aside>
       </section>
@@ -121,6 +119,25 @@ export default function AboutPage() {
         </ul>
       </section>
 
+      {/* What I'm interested in */}
+      <section className="space-y-3">
+        <h2 className="text-sm font-semibold text-slate-100">
+          What I&apos;m interested in next
+        </h2>
+        <p className="text-sm text-slate-300">
+          I&apos;m especially interested in roles where I can sit between{" "}
+          <strong>finance</strong> and <strong>data</strong> – for example:
+        </p>
+        <ul className="text-sm text-slate-300 list-disc list-inside space-y-1">
+          <li>Data analyst / analytics engineer in a finance or payments team</li>
+          <li>Data scientist focusing on risk, churn, or revenue forecasting</li>
+          <li>
+            FP&amp;A / finance analytics roles with strong ownership of data
+            models and reporting
+          </li>
+        </ul>
+      </section>
+
       {/* Links */}
       <section className="pt-2 text-sm text-slate-300 space-y-2">
         <p>
@@ -136,7 +153,7 @@ export default function AboutPage() {
         <p>
           If you&apos;d like to connect, feel free to{" "}
           <Link
-            href="/#contact"
+            href="/contact"
             className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2"
           >
             get in touch

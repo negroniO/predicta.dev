@@ -19,7 +19,8 @@ export default function ContactPage() {
           Let&apos;s get in touch
         </h1>
         <p className="text-sm text-slate-400 max-w-2xl">
-          The best ways to reach me are email and LinkedIn – I&apos;ll
+          I&apos;m open to roles in data analytics, data science, and finance
+          analytics. The best ways to reach me are email and LinkedIn – I&apos;ll
           usually respond within a couple of days.
         </p>
       </header>
@@ -29,19 +30,22 @@ export default function ContactPage() {
         {/* Email */}
         <a
           href="mailto:george.iordanous@hotmail.com?subject=Contact%20from%20predicta.dev"
-          className="group rounded-2xl border border-slate-700/70 bg-slate-900/60 backdrop-blur-xl p-6 flex flex-col items-center hover:border-cyan-400/80 transition"
+          className="group rounded-2xl border border-slate-700/70 bg-slate-900/60 backdrop-blur-xl p-6 flex flex-col items-center shadow-lg transition transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-500/25"
         >
           <div className="p-3 rounded-full bg-slate-800/60 group-hover:bg-cyan-500/20 transition">
             <Mail size={28} className="text-cyan-300 group-hover:text-cyan-200" />
           </div>
           <p className="mt-3 text-sm font-medium text-slate-100">Email</p>
+          <p className="text-xs text-slate-400 mt-1">
+            Click to send me an email
+          </p>
         </a>
 
         {/* LinkedIn */}
         <Link
           href="https://www.linkedin.com/in/george-iordanous"
           target="_blank"
-          className="group rounded-2xl border border-slate-700/70 bg-slate-900/60 backdrop-blur-xl p-6 flex flex-col items-center hover:border-cyan-400/80 transition"
+          className="group rounded-2xl border border-slate-700/70 bg-slate-900/60 backdrop-blur-xl p-6 flex flex-col items-center shadow-lg transition transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-500/25"
         >
           <div className="p-3 rounded-full bg-slate-800/60 group-hover:bg-cyan-500/20 transition">
             <Linkedin
@@ -50,13 +54,14 @@ export default function ContactPage() {
             />
           </div>
           <p className="mt-3 text-sm font-medium text-slate-100">LinkedIn</p>
+          <p className="text-xs text-slate-400 mt-1">Connect with me</p>
         </Link>
 
         {/* GitHub */}
         <Link
           href="https://github.com/negroniO"
           target="_blank"
-          className="group rounded-2xl border border-slate-700/70 bg-slate-900/60 backdrop-blur-xl p-6 flex flex-col items-center hover:border-cyan-400/80 transition"
+          className="group rounded-2xl border border-slate-700/70 bg-slate-900/60 backdrop-blur-xl p-6 flex flex-col items-center shadow-lg transition transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-500/25"
         >
           <div className="p-3 rounded-full bg-slate-800/60 group-hover:bg-cyan-500/20 transition">
             <Github
@@ -65,6 +70,7 @@ export default function ContactPage() {
             />
           </div>
           <p className="mt-3 text-sm font-medium text-slate-100">GitHub</p>
+          <p className="text-xs text-slate-400 mt-1">See my code</p>
         </Link>
       </section>
 
