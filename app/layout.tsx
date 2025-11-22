@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import ScrollToTop from "./components/ScrollToTop";
 
 export const metadata: Metadata = {
@@ -35,19 +36,31 @@ export const metadata: Metadata = {
       "Predicta – FP&A, collections, and machine learning projects in finance and payments by George Iordanous.",
     images: ["/og-image.png"],
   },
-  icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/icon.png", sizes: "32x32", type: "image/png" },
-    ],
-    apple: [
-      {
-        url: "/apple-touch-icon.png",
-        sizes: "180x180",
-        type: "image/png",
-      },
-    ],
-  },
+icons: {
+  icon: [
+    { url: "/favicon.ico" },
+    { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+    { url: "/favicon.svg", type: "image/svg+xml" },
+  ],
+  apple: [
+    {
+      url: "/apple-touch-icon.png",
+      sizes: "180x180",
+      type: "image/png",
+    },
+  ],
+  other: [
+    {
+      rel: "manifest",
+      url: "/site.webmanifest",
+    },
+    {
+      rel: "mask-icon",
+      url: "/favicon.svg",
+      color: "#22d3ee",
+    },
+  ],
+},
 };
 
 export default function RootLayout({
@@ -99,12 +112,15 @@ export default function RootLayout({
                 href="/"
                 className="flex items-center gap-2 font-semibold tracking-tight"
               >
-                <img
-                  src="/icon.png"
-                  alt="Predicta logo"
-                  className="w-5 h-5 nav-logo opacity-90"
-                />
-                <span>predicta.dev</span>
+                  <Image
+                    src="/logo.svg"
+                    alt="Predicta logo"
+                    width={20}
+                    height={20}
+                    className="nav-logo opacity-90"
+                    priority
+                  />
+                  <span>predicta.dev</span>
               </Link>
 
               <nav className="flex gap-4 text-sm text-slate-300">
@@ -152,3 +168,4 @@ export default function RootLayout({
     </html>
   );
 }
+
