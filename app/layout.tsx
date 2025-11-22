@@ -12,7 +12,8 @@ export const metadata: Metadata = {
   },
   description:
     "Predicta – portfolio of George Iordanous. FP&A, credit control, data analytics, and machine learning projects in finance and payments.",
-  openGraph: {
+  themeColor: "#0d1623", 
+    openGraph: {
     title: "predicta.dev | Data & Finance Analytics",
     description:
       "Predicta – FP&A, collections, and machine learning projects in finance and payments by George Iordanous.",
@@ -81,7 +82,7 @@ export default function RootLayout({
               name: "George Iordanous",
               jobTitle: "FP&A Analyst / Data Analytics",
               url: "https://predicta.dev",
-              image: "https://predicta.dev/icon.png",
+              image: "https://predicta.dev/logo.svg",
               sameAs: [
                 "https://www.linkedin.com/in/george-iordanous",
                 "https://github.com/negroniO",
