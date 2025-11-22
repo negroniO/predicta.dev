@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import ScrollToTop from "./components/ScrollToTop";
+import { Analytics } from "@vercel/analytics/react";  // 👈 NEW
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://predicta.dev"),
@@ -12,8 +13,8 @@ export const metadata: Metadata = {
   },
   description:
     "Predicta – portfolio of George Iordanous. FP&A, credit control, data analytics, and machine learning projects in finance and payments.",
-  themeColor: "#0d1623", 
-    openGraph: {
+  themeColor: "#0d1623",
+  openGraph: {
     title: "predicta.dev | Data & Finance Analytics",
     description:
       "Predicta – FP&A, collections, and machine learning projects in finance and payments by George Iordanous.",
@@ -37,31 +38,31 @@ export const metadata: Metadata = {
       "Predicta – FP&A, collections, and machine learning projects in finance and payments by George Iordanous.",
     images: ["/og-image.png"],
   },
-icons: {
-  icon: [
-    { url: "/favicon.ico" },
-    { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
-    { url: "/favicon.svg", type: "image/svg+xml" },
-  ],
-  apple: [
-    {
-      url: "/apple-touch-icon.png",
-      sizes: "180x180",
-      type: "image/png",
-    },
-  ],
-  other: [
-    {
-      rel: "manifest",
-      url: "/site.webmanifest",
-    },
-    {
-      rel: "mask-icon",
-      url: "/favicon.svg",
-      color: "#22d3ee",
-    },
-  ],
-},
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      {
+        url: "/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
+    other: [
+      {
+        rel: "manifest",
+        url: "/site.webmanifest",
+      },
+      {
+        rel: "mask-icon",
+        url: "/favicon.svg",
+        color: "#22d3ee",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -113,15 +114,15 @@ export default function RootLayout({
                 href="/"
                 className="flex items-center gap-2 font-semibold tracking-tight"
               >
-                  <Image
-                    src="/logo.svg"
-                    alt="Predicta logo"
-                    width={20}
-                    height={20}
-                    className="nav-logo opacity-90"
-                    priority
-                  />
-                  <span>predicta.dev</span>
+                <Image
+                  src="/logo.svg"
+                  alt="Predicta logo"
+                  width={20}
+                  height={20}
+                  className="nav-logo opacity-90"
+                  priority
+                />
+                <span>predicta.dev</span>
               </Link>
 
               <nav className="flex gap-4 text-sm text-slate-300">
@@ -165,8 +166,10 @@ export default function RootLayout({
 
         {/* Scroll-to-top floating button */}
         <ScrollToTop />
+
+        {/* Vercel Analytics */}
+        <Analytics />
       </body>
     </html>
   );
 }
-
