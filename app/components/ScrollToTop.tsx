@@ -20,7 +20,7 @@ export default function ScrollToTop() {
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       className="
-        fixed bottom-6 right-6 z-50 
+        fixed bottom-6 left-1/2 -translate-x-1/2 z-50
         p-3 rounded-full 
         bg-slate-900/70 border border-slate-700/70 
         shadow-lg backdrop-blur-md 
