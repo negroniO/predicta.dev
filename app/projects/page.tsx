@@ -114,7 +114,7 @@ export default function ProjectsPage() {
               {p.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2 py-1 rounded-full border border-slate-600/80 bg-slate-900/70 text-slate-200"
+                  className="px-2 py-1 rounded-full border border-slate-700/70 bg-slate-900/60 text-slate-200 text-[11px]"
                 >
                   {tag}
                 </span>
