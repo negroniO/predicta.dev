@@ -74,7 +74,7 @@ export default function RootLayout({
               {/* Brand name updated */}
               <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
                 <img
-                  src="/icon.png"
+                  src="/favicon-32x32.png"
                   alt="Predicta logo"
                   className="w-5 h-5 opacity-90 hover:opacity-100 transition"
                 />
