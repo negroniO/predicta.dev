@@ -1,21 +1,16 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import Link from "next/link";
+import ScrollToTop from "./components/ScrollToTop";
 
 export const metadata: Metadata = {
-  // Base URL for all absolute links
   metadataBase: new URL("https://predicta.dev"),
-
-  // Browser title + template for subpages
   title: {
     default: "predicta.dev | Data & Finance Analytics",
     template: "%s | predicta.dev",
   },
-
   description:
     "Predicta – portfolio of George Iordanous. FP&A, credit control, data analytics, and machine learning projects in finance and payments.",
-
-  // OpenGraph → LinkedIn, Slack, etc. preview
   openGraph: {
     title: "predicta.dev | Data & Finance Analytics",
     description:
@@ -33,8 +28,6 @@ export const metadata: Metadata = {
     locale: "en_GB",
     type: "website",
   },
-
-  // Twitter / X card
   twitter: {
     card: "summary_large_image",
     title: "predicta.dev | Data & Finance Analytics",
@@ -42,8 +35,6 @@ export const metadata: Metadata = {
       "Predicta – FP&A, collections, and machine learning projects in finance and payments by George Iordanous.",
     images: ["/og-image.png"],
   },
-
-  // Browser tab icons
   icons: {
     icon: [
       { url: "/favicon.ico" },
@@ -59,7 +50,6 @@ export const metadata: Metadata = {
   },
 };
 
-
 export default function RootLayout({
   children,
 }: {
@@ -68,18 +58,55 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen bg-gradient-to-b from-[#0d1623] via-[#111c2a] to-[#0d1623] text-slate-100">
+        {/* Schema.org JSON-LD for SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: "George Iordanous",
+              jobTitle: "FP&A Analyst / Data Analytics",
+              url: "https://predicta.dev",
+              image: "https://predicta.dev/icon.png",
+              sameAs: [
+                "https://www.linkedin.com/in/george-iordanous",
+                "https://github.com/negroniO",
+              ],
+              alumniOf: {
+                "@type": "CollegeOrUniversity",
+                name: "MSc Data Analytics in Accounting & Finance",
+              },
+              knowsAbout: [
+                "FP&A",
+                "Credit Control",
+                "Collections",
+                "Machine Learning",
+                "Finance Analytics",
+                "Python",
+                "SQL",
+                "Forecasting",
+                "BI Tools",
+              ],
+            }),
+          }}
+        />
+
         <div className="min-h-screen flex flex-col">
           <header className="border-b border-slate-700/50 bg-[#132235]/70 backdrop-blur-md sticky top-0 z-20">
             <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-              {/* Brand name updated */}
-              <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
+              <Link
+                href="/"
+                className="flex items-center gap-2 font-semibold tracking-tight"
+              >
                 <img
-                  src="/favicon-32x32.png"
+                  src="/icon.png"
                   alt="Predicta logo"
-                  className="w-5 h-5 opacity-90 hover:opacity-100 transition"
+                  className="w-5 h-5 nav-logo opacity-90"
                 />
-                predicta.dev
+                <span>predicta.dev</span>
               </Link>
+
               <nav className="flex gap-4 text-sm text-slate-300">
                 <Link
                   href="/"
@@ -118,6 +145,9 @@ export default function RootLayout({
             </div>
           </footer>
         </div>
+
+        {/* Scroll-to-top floating button */}
+        <ScrollToTop />
       </body>
     </html>
   );

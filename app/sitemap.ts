@@ -1,20 +1,25 @@
+// app/sitemap.ts
 import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://predicta.dev";
+  const now = new Date();
 
   return [
     {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 1,
+      url: "https://predicta.dev",
+      lastModified: now,
     },
     {
-      url: `${baseUrl}/projects`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
+      url: "https://predicta.dev/projects",
+      lastModified: now,
+    },
+    {
+      url: "https://predicta.dev/about",
+      lastModified: now,
+    },
+    {
+      url: "https://predicta.dev/contact",
+      lastModified: now,
     },
   ];
 }

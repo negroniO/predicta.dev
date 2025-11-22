@@ -1,6 +1,15 @@
 import Link from "next/link";
 import PageTransition from "../components/PageTransition";
 
+export const metadata = {
+  title: "Projects | predicta.dev",
+  description:
+    "Projects by George Iordanous – payment recovery ML, collections analytics, DSO forecasting, and SQL/BI work in finance and payments.",
+  alternates: {
+    canonical: "/projects",
+  },
+};
+
 const projects = [
   {
     id: 1,

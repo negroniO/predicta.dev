@@ -1,12 +1,20 @@
-import type { Metadata } from "next";
+import ReadingProgress from "../../components/ReadingProgress";
 import PaymentRecoveryClientPage from "./PaymentRecoveryClientPage";
 
-export const metadata: Metadata = {
-  title: "Payment Recovery ML | Project Case Study",
+export const metadata = {
+  title: "Payment Recovery ML | predicta.dev",
   description:
-    "End-to-end machine learning system to predict recovered payments and prioritise collections outreach by expected revenue.",
+    "Case study: ML system to predict recovery of failed / unpaid transactions and prioritise credit control outreach by expected recovered revenue.",
+  alternates: {
+    canonical: "/projects/payment-recovery-ml",
+  },
 };
 
 export default function PaymentRecoveryPage() {
-  return <PaymentRecoveryClientPage />;
+  return (
+    <>
+      <ReadingProgress />
+      <PaymentRecoveryClientPage />
+    </>
+  );
 }

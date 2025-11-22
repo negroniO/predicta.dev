@@ -5,6 +5,9 @@ export const metadata = {
   title: "About | predicta.dev",
   description:
     "About George Iordanous – FP&A analyst specialising in data-driven collections, forecasting, and payment analytics.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 export default function AboutPage() {
@@ -154,13 +157,13 @@ export default function AboutPage() {
           </p>
           <p>
             If you&apos;d like to connect, feel free to{" "}
-              <Link
-                href="/contact"
-                className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2"
-              >
-                get in touch
-              </Link>{" "}
-              via email or LinkedIn.
+            <Link
+              href="/contact"
+              className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2"
+            >
+              get in touch
+            </Link>{" "}
+            via email or LinkedIn.
           </p>
         </section>
       </div>
