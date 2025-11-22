@@ -72,7 +72,12 @@ export default function RootLayout({
           <header className="border-b border-slate-700/50 bg-[#132235]/70 backdrop-blur-md sticky top-0 z-20">
             <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
               {/* Brand name updated */}
-              <Link href="/" className="font-semibold tracking-tight">
+              <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
+                <img
+                  src="/icon.png"
+                  alt="Predicta logo"
+                  className="w-5 h-5 opacity-90 hover:opacity-100 transition"
+                />
                 predicta.dev
               </Link>
               <nav className="flex gap-4 text-sm text-slate-300">
