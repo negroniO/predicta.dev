@@ -1,11 +1,15 @@
+// app/robots.ts
 import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
+  const base = "https://predicta.dev";
+
   return {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: [],
     },
-    sitemap: "https://predicta.dev/sitemap.xml",
+    sitemap: `${base}/sitemap.xml`,
   };
 }

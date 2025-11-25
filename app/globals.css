@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* (optional, only if you installed the plugin below) */
+@plugin "@tailwindcss/typography";
 
 /* ---- Design tokens ---- */
 :root {
