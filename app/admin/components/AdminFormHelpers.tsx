@@ -184,7 +184,7 @@ export function slugify(value: string) {
 type SlugInputProps = {
   name: string;
   label: string;
-  typeName: "project" | "category";
+  typeName: "project" | "category" | "page";
   initialValue?: string;
   placeholder?: string;
 };

@@ -5,7 +5,7 @@ import React from "react";
 type CardShellProps = {
   children: React.ReactNode;
   className?: string;
-  as?: keyof JSX.IntrinsicElements;
+  as?: keyof React.JSX.IntrinsicElements;
 };
 
 function cn(...classes: (string | undefined | false)[]) {

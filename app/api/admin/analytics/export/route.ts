@@ -16,12 +16,12 @@ export async function GET(req: NextRequest) {
   const startParam = searchParams.get("start");
   const endParam = searchParams.get("end");
 
-  const start = startParam ? new Date(startParam) : (() => {
+  let start = startParam ? new Date(startParam) : (() => {
     const d = new Date();
     d.setDate(d.getDate() - 30);
     return d;
   })();
-  const end = endParam ? new Date(endParam) : new Date();
+  let end = endParam ? new Date(endParam) : new Date();
 
   if (Number.isNaN(start.getTime())) {
     start.setDate(start.getDate() - 30);
@@ -30,7 +30,9 @@ export async function GET(req: NextRequest) {
     end.setTime(Date.now());
   }
   end.setHours(23, 59, 59, 999);
-  ({ start, end } = clampDateRange(start, end, 90));
+  const clamped = clampDateRange(start, end, 90);
+  start = clamped.start;
+  end = clamped.end;
 
   const views = await prisma.projectView.findMany({
     where: { createdAt: { gte: start, lte: end } },

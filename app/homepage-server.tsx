@@ -3,12 +3,8 @@ import PageTransition from "./components/PageTransition";
 import Link from "next/link";
 import { prisma } from "@/app/lib/prisma";
 import SubscribeForm from "./components/SubscribeForm";
-import FeaturedCarousel from "./components/FeaturedCarousel";
-import HomeFall from "./components/HomeFallOut";
 import CardShell from "./components/CardShell";
-import mlhome from "./components/MlHome";
 import MlHome from "./components/MlHome";
-import MlScatter from "./components/MlScatter";
 import FeaturedRowCarousel from "./components/FeaturedRowCarousel";
 
 
