@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { prisma } from "@/app/lib/prisma";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 export const alt = "predicta.dev project";
 export const size = {
   width: 1200,
