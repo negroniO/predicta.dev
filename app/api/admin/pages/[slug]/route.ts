@@ -1,0 +1,72 @@
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/app/lib/prisma";
+import { normalizeSlug, isValidSlug } from "@/app/lib/validation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
+export const runtime = "nodejs";
+
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ slug: string }> }
+) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.redirect("/api/auth/signin?callbackUrl=/admin/pages", {
+      status: 302,
+    });
+  }
+
+  const { slug } = await params;
+  const body = await req.formData();
+  const action = (body.get("_action") as string) || "update";
+
+  if (action === "delete") {
+    try {
+      await prisma.page.delete({ where: { slug } });
+      const url = new URL("/admin/pages?deleted=1", req.url);
+      return NextResponse.redirect(url, { status: 302 });
+    } catch (error) {
+      console.error("[DELETE page] error", error);
+      const url = new URL("/admin/pages?error=delete_failed", req.url);
+      return NextResponse.redirect(url, { status: 302 });
+    }
+  }
+
+  const title = (body.get("title") as string)?.trim();
+  const newSlugRaw = (body.get("slug") as string)?.trim();
+  const newSlug = newSlugRaw ? normalizeSlug(newSlugRaw) : "";
+  const content = (body.get("content") as string)?.trim() || "";
+  const excerpt = (body.get("excerpt") as string)?.trim() || null;
+  const status = (body.get("status") as string)?.trim() || "published";
+
+  if (!title || !newSlug || !isValidSlug(newSlug)) {
+    const url = new URL(`/admin/pages?error=missing_fields`, req.url);
+    return NextResponse.redirect(url, { status: 302 });
+  }
+
+  if (status !== "published" && status !== "draft") {
+    const url = new URL("/admin/pages?error=bad_status", req.url);
+    return NextResponse.redirect(url, { status: 302 });
+  }
+
+  try {
+    await prisma.page.update({
+      where: { slug },
+      data: {
+        title,
+        slug: newSlug,
+        content,
+        excerpt,
+        status,
+      },
+    });
+
+    const url = new URL("/admin/pages?updated=1", req.url);
+    return NextResponse.redirect(url, { status: 302 });
+  } catch (error) {
+    console.error("[UPDATE page] error", error);
+    const url = new URL("/admin/pages?error=update_failed", req.url);
+    return NextResponse.redirect(url, { status: 302 });
+  }
+}

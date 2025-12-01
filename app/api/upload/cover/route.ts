@@ -4,10 +4,16 @@ import { createClient } from "@supabase/supabase-js";
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!  
-  );
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !supabaseServiceKey) {
+    console.error("[UPLOAD cover] missing Supabase env vars");
+    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+  }
+
+  // Use service role so the upload bypasses RLS on the storage bucket
+  const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   const data = await req.formData();
   const file = data.get("file") as File | null;
@@ -34,7 +40,7 @@ export async function POST(req: NextRequest) {
   }
 
   // PUBLIC URL
-  const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/project-images/${fileName}`;
+  const url = `${supabaseUrl}/storage/v1/object/public/project-images/${fileName}`;
 
   return NextResponse.json({ url });
 }

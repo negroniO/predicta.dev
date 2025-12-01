@@ -4,6 +4,10 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { marked } from "marked";
 import { useEffect, useState } from "react";
+import ShareButtons from "./ShareButtons";
+import TrackedLink from "@/app/components/TrackedLink";
+import ReactionButtons from "./ReactionButtons";
+import RelatedProjects from "./RelatedProjects";
 
 type NavProject = { slug: string; title: string };
 
@@ -19,10 +23,12 @@ type Project = {
   tags: string[] | null;
   techStack: string[] | null;
   status: string;
+  category?: string | null; // 👈 added, matches Prisma model
   readingTime?: number;
   createdAt: string | Date;
   updatedAt: string | Date;
-  views?: number; // 👈 added
+  coverImageUrl?: string | null;
+  views?: number;
 };
 
 const container = {
@@ -58,11 +64,13 @@ export default function ProjectCaseStudyClient({
   prevProject,
   nextProject,
   views = 0,
+  related = [],
 }: {
   project: Project;
   prevProject?: NavProject | null;
   nextProject?: NavProject | null;
   views?: number;
+  related?: NavProject[];
 }) {
   const [html, setHtml] = useState<string | null>(null);
 
@@ -71,7 +79,7 @@ export default function ProjectCaseStudyClient({
 
     async function renderMarkdown() {
       if (project.content && project.content.trim().length > 0) {
-        const parsed = await marked(project.content); // always resolves to string
+        const parsed = await marked(project.content); // resolves to string
         if (isMounted) setHtml(parsed);
       } else {
         if (isMounted) setHtml(null);
@@ -121,10 +129,7 @@ export default function ProjectCaseStudyClient({
     },
     url: `${baseUrl}/projects/${project.slug}`,
     inLanguage: "en-GB",
-    keywords: [
-      ...(project.tags ?? []),
-      ...(project.techStack ?? []),
-    ].join(", "),
+    keywords: [...(project.tags ?? []), ...(project.techStack ?? [])].join(", "),
   };
 
   return (
@@ -144,91 +149,122 @@ export default function ProjectCaseStudyClient({
         {/* Breadcrumb */}
         <motion.nav
           variants={item}
-          className="text-[11px] text-slate-400 mb-1 flex flex-wrap items-center gap-1"
+          className="text-[11px] text-foreground/60 mb-1 flex flex-wrap items-center gap-1"
         >
-          <Link href="/" className="hover:text-cyan-300">
+          <Link href="/" className="hover:text-accent">
             Home
           </Link>
           <span>/</span>
-          <Link href="/projects" className="hover:text-cyan-300">
+          <Link href="/projects" className="hover:text-accent">
             Projects
           </Link>
           <span>/</span>
-          <span className="text-slate-200">{project.title}</span>
+          <span className="text-foreground">{project.title}</span>
         </motion.nav>
 
-        {/* Header */}
-        <motion.header variants={item} className="space-y-3">
-          <p className="text-xs uppercase tracking-[0.25em] text-cyan-300/80">
-            Case Study
-          </p>
-          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
-            {project.title}
-          </h1>
-          {project.subtitle && (
-            <p className="text-sm text-slate-300 max-w-2xl">
-              {project.subtitle}
-            </p>
-          )}
-        </motion.header>
-
-        {/* Meta row under title: published / edited / reading / reads */}
-        <motion.div
+        {/* Hero with overlay card (Option C) */}
+        <motion.section
           variants={item}
-          className="flex flex-wrap items-center justify-between gap-3 text-[11px] text-slate-400 border-b border-slate-800 pb-3"
+          className="relative overflow-hidden rounded-2xl border border-card-border/70 bg-card/80"
         >
-          <div className="flex flex-wrap gap-x-4 gap-y-1">
-            <span>
-              <span className="uppercase tracking-[0.16em] text-slate-500">
-                Published:
-              </span>{" "}
-              {publishedLabel}
-            </span>
-            <span>
-              <span className="uppercase tracking-[0.16em] text-slate-500">
-                Last edited:
-              </span>{" "}
-              {updatedLabel}
-            </span>
-            <span>
-              <span className="uppercase tracking-[0.16em] text-slate-500">
-                Reading time:
-              </span>{" "}
-              {readingLabel}
-            </span>
-          </div>
+          {/* Background image */}
+          {project.coverImageUrl && (
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${project.coverImageUrl})` }}
+            />
+          )}
 
-          {/* Reads pill (top-right) */}
-          <div className="flex items-center gap-1 rounded-full border border-slate-700 bg-slate-900/80 px-2.5 py-1 text-[11px] text-slate-200">
-            <svg
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              className="h-3.5 w-3.5 text-cyan-300"
-            >
-              <path
-                fill="currentColor"
-                d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7Zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z"
-              />
-            </svg>
-            <span className="font-medium">{views}</span>
-            <span className="text-slate-400">reads</span>
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-card via-card/80 to-card/30" />
+
+          {/* Floating card content */}
+          <div className="relative px-5 py-6 md:px-8 md:py-8 flex flex-col md:flex-row md:items-end gap-4">
+            <div className="flex-1 space-y-3">
+              <p className="text-[11px] uppercase tracking-[0.25em] text-accent/80">
+                Case Study
+              </p>
+              <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground">
+                {project.title}
+              </h1>
+              {project.subtitle && (
+                <p className="text-sm text-foreground/85 max-w-2xl">
+                  {project.subtitle}
+                </p>
+              )}
+
+              {/* Meta row: published / edited / reading */}
+              <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-foreground/80">
+                <span>
+                  <span className="uppercase tracking-[0.16em] text-foreground/60">
+                    Published:
+                  </span>{" "}
+                  {publishedLabel}
+                </span>
+                <span>
+                  <span className="uppercase tracking-[0.16em] text-foreground/60">
+                    Last edited:
+                  </span>{" "}
+                  {updatedLabel}
+                </span>
+                <span>
+                  <span className="uppercase tracking-[0.16em] text-foreground/60">
+                    Reading time:
+                  </span>{" "}
+                  {readingLabel}
+                </span>
+              </div>
+            </div>
+
+            {/* Right side: reads + chips */}
+            <div className="flex flex-col items-end gap-2 text-[11px]">
+              {/* Reads pill */}
+              <div className="flex items-center gap-1 rounded-full border border-card-border bg-card/80 px-2.5 py-1 text-[11px] text-foreground shadow-md shadow-black/40">
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  className="h-3.5 w-3.5 text-accent"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7Zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z"
+                  />
+                </svg>
+                <span className="font-medium">{views}</span>
+                <span className="text-foreground/70">reads</span>
+              </div>
+
+              {/* Category + status chips (optional) */}
+              <div className="flex flex-wrap justify-end gap-2">
+                {project.category && (
+                  <span className="rounded-full border border-card-border/70 bg-card/80 px-2 py-1 text-[10px] uppercase tracking-[0.12em] text-foreground/90">
+                    {project.category}
+                  </span>
+                )}
+                {project.status && (
+                  <span className="rounded-full border border-card-border/70 bg-card/80 px-2 py-1 text-[10px] uppercase tracking-[0.12em] text-foreground/80">
+                    {project.status}
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
-        </motion.div>
+        </motion.section>
 
         {/* Tech stack row */}
         {project.techStack && project.techStack.length > 0 && (
           <motion.div
             variants={item}
-            className="flex flex-wrap items-center gap-2 text-[11px] text-slate-300"
+            className="flex flex-wrap items-center gap-2 text-[11px] text-foreground/80"
           >
-            <span className="uppercase tracking-[0.16em] text-slate-500">
+            <span className="uppercase tracking-[0.16em] text-foreground/60">
               Tech stack
             </span>
             <div className="flex flex-wrap gap-1.5">
               {project.techStack.map((tech) => (
                 <span
                   key={tech}
-                  className="px-2 py-1 rounded-full bg-slate-900/70 border border-slate-700/70 text-[11px]"
+                  className="px-2 py-1 rounded-full bg-card/70 border border-card-border/70 text-[11px] text-foreground/85"
                 >
                   {tech}
                 </span>
@@ -241,16 +277,16 @@ export default function ProjectCaseStudyClient({
         {project.tags && project.tags.length > 0 && (
           <motion.div
             variants={item}
-            className="flex flex-wrap items-center gap-2 text-[11px] text-slate-300"
+            className="flex flex-wrap items-center gap-2 text-[11px] text-foreground/80"
           >
-            <span className="uppercase tracking-[0.16em] text-slate-500">
+            <span className="uppercase tracking-[0.16em] text-foreground/60">
               Tags
             </span>
             <div className="flex flex-wrap gap-1.5">
               {project.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2 py-1 rounded-full bg-slate-900/70 border border-slate-700/70 text-[11px]"
+                  className="px-2 py-1 rounded-full bg-card/70 border border-card-border/70 text-[11px] text-foreground/85"
                 >
                   {tag}
                 </span>
@@ -259,26 +295,26 @@ export default function ProjectCaseStudyClient({
           </motion.div>
         )}
 
-        {/* Overview – single column, no sidebar card */}
+        {/* Overview – single column */}
         <motion.section variants={item} className="space-y-4 text-sm pt-2">
-          <h2 className="text-sm font-semibold text-slate-100">Overview</h2>
+          <h2 className="text-sm font-semibold text-foreground">Overview</h2>
 
           {html ? (
             <div
               className="
                 prose prose-invert max-w-none
-                prose-headings:text-slate-100
-                prose-p:text-slate-300
-                prose-li:text-slate-300
-                prose-strong:text-white
-                prose-code:text-cyan-300
+                prose-headings:text-foreground
+                prose-p:text-foreground/80
+                prose-li:text-foreground/80
+                prose-strong:text-foreground
+                prose-code:text-accent
               "
               dangerouslySetInnerHTML={{ __html: html }}
             />
           ) : fallbackParagraphs && fallbackParagraphs.length > 0 ? (
             fallbackParagraphs.map((p, idx) => <p key={idx}>{p}</p>)
           ) : (
-            <p className="text-slate-400">
+            <p className="text-foreground/60">
               No description has been added yet for this project.
             </p>
           )}
@@ -286,35 +322,45 @@ export default function ProjectCaseStudyClient({
           {/* GitHub / Live links under content */}
           <div className="pt-4 flex flex-wrap gap-2 text-xs">
             {project.githubUrl && (
-              <Link
-                href={project.githubUrl}
+              <TrackedLink
+                href={`${project.githubUrl}?utm_source=predicta&utm_medium=project&utm_campaign=${project.slug}`}
                 target="_blank"
-                className="px-3 py-1.5 rounded-full bg-slate-100 text-slate-900 text-xs font-medium hover:bg-slate-200"
+                rel="noopener noreferrer"
+                className="btn btn-outline btn-sm"
               >
                 GitHub Repo
-              </Link>
+              </TrackedLink>
             )}
             {project.liveUrl && (
-              <Link
-                href={project.liveUrl}
+              <TrackedLink
+                href={`${project.liveUrl}?utm_source=predicta&utm_medium=project&utm_campaign=${project.slug}`}
                 target="_blank"
-                className="px-3 py-1.5 rounded-full bg-cyan-400 text-slate-950 text-xs font-medium hover:bg-cyan-300"
+                rel="noopener noreferrer"
+                className="btn btn-outline btn-sm"
               >
                 Live App
-              </Link>
+              </TrackedLink>
             )}
+          </div>
+        </motion.section>
+
+        {/* Share */}
+        <motion.section variants={item} className="pt-2">
+          <ShareButtons slug={project.slug} title={project.title} />
+          <div className="pt-2">
+            <ReactionButtons slug={project.slug} />
           </div>
         </motion.section>
 
         {/* Back + prev/next */}
         <motion.section
           variants={item}
-          className="pt-6 flex flex-col gap-3 text-xs border-t border-slate-800 mt-4"
+          className="pt-6 flex flex-col gap-3 text-xs border-t border-card-border/60 mt-4"
         >
           <div className="flex justify-between items-center flex-wrap gap-2">
             <Link
               href="/projects"
-              className="text-slate-300 hover:text-cyan-300 underline underline-offset-2"
+              className="text-foreground/80 hover:text-accent underline underline-offset-2"
             >
               ← Back to all projects
             </Link>
@@ -323,7 +369,7 @@ export default function ProjectCaseStudyClient({
               {prevProject && (
                 <Link
                   href={`/projects/${prevProject.slug}`}
-                  className="text-slate-300 hover:text-cyan-300 underline underline-offset-2"
+                  className="text-foreground/80 hover:text-accent underline underline-offset-2"
                 >
                   ← {prevProject.title}
                 </Link>
@@ -331,13 +377,18 @@ export default function ProjectCaseStudyClient({
               {nextProject && (
                 <Link
                   href={`/projects/${nextProject.slug}`}
-                  className="text-slate-300 hover:text-cyan-300 underline underline-offset-2"
+                  className="text-foreground/80 hover:text-accent underline underline-offset-2"
                 >
                   {nextProject.title} →
                 </Link>
               )}
             </div>
           </div>
+          {related && related.length > 0 && (
+            <div className="pt-3">
+              <RelatedProjects currentSlug={project.slug} related={related} />
+            </div>
+          )}
         </motion.section>
       </motion.div>
     </>

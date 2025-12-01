@@ -1,43 +1,65 @@
-// app/rss.xml/route.ts
+// app/rss/route.ts
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 
 export const runtime = "nodejs";
 
-const siteUrl = "https://predicta.dev";
+const SITE_URL =
+  process.env.NEXT_PUBLIC_BASE_URL ?? "https://predicta.dev";
+
+function escapeXml(value: string | null | undefined): string {
+  if (!value) return "";
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
 
 export async function GET() {
+  // Only include non-draft projects
   const projects = await prisma.project.findMany({
-    orderBy: [{ createdAt: "desc" }],
+    where: {
+      status: {
+        in: ["Completed", "In Progress"],
+      },
+    },
+    orderBy: { createdAt: "desc" },
+    take: 30, // last 30 case studies
   });
 
-  const items = projects
+  const itemsXml = projects
     .map((p) => {
-      const url = `${siteUrl}/projects/${p.slug}`;
+      const link = `${SITE_URL}/projects/${p.slug}`;
+      const title = escapeXml(p.title);
+      const description = escapeXml(p.subtitle ?? p.description);
       const pubDate = p.createdAt.toUTCString();
-      const updatedDate = p.updatedAt.toUTCString();
-      const description = p.subtitle || p.description;
+      const updated = p.updatedAt.toUTCString();
 
       return `
   <item>
-    <title><![CDATA[${p.title}]]></title>
-    <link>${url}</link>
-    <guid isPermaLink="true">${url}</guid>
-    <description><![CDATA[${description}]]></description>
+    <title>${title}</title>
+    <link>${link}</link>
+    <guid isPermaLink="true">${link}</guid>
+    <description>${description}</description>
     <pubDate>${pubDate}</pubDate>
-    <lastBuildDate>${updatedDate}</lastBuildDate>
+    <lastBuildDate>${updated}</lastBuildDate>
   </item>`;
     })
-    .join("\n");
+    .join("");
+
+  const now = new Date().toUTCString();
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
 <channel>
-  <title>predicta.dev – Projects</title>
-  <link>${siteUrl}</link>
-  <description>FP&A, collections, DSO forecasting and analytics engineering projects by George Iordanous.</description>
+  <title>predicta.dev – Projects by George Iordanous</title>
+  <link>${SITE_URL}</link>
+  <description>Case studies in payment recovery, collections, forecasting, and analytics engineering.</description>
   <language>en-gb</language>
-  ${items}
+  <lastBuildDate>${now}</lastBuildDate>
+  ${itemsXml}
 </channel>
 </rss>`;
 

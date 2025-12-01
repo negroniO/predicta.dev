@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import ScrollToTop from "./components/ScrollToTop";
 import { Analytics } from "@vercel/analytics/react";  // 👈 NEW
+import type { Viewport } from "next";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://predicta.dev"),
@@ -13,7 +14,6 @@ export const metadata: Metadata = {
   },
   description:
     "Predicta – portfolio of George Iordanous. FP&A, credit control, data analytics, and machine learning projects in finance and payments.",
-  themeColor: "#0d1623",
   openGraph: {
     title: "predicta.dev | Data & Finance Analytics",
     description:
@@ -65,6 +65,10 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#1f2937",
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -72,7 +76,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-gradient-to-b from-[#0d1623] via-[#111c2a] to-[#0d1623] text-slate-100">
+      <body className="min-h-screen bg-[color:var(--background)] text-foreground">
         {/* Schema.org JSON-LD for SEO */}
         <script
           type="application/ld+json"
@@ -108,7 +112,7 @@ export default function RootLayout({
         />
 
         <div className="min-h-screen flex flex-col">
-          <header className="border-b border-slate-700/50 bg-[#132235]/70 backdrop-blur-md sticky top-0 z-20">
+          <header className="border-b border-card-border/60 bg-card/70 backdrop-blur-md sticky top-0 z-20">
             <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
               <Link
                 href="/"

@@ -1,15 +1,16 @@
 // app/robots.ts
 import type { MetadataRoute } from "next";
 
-export default function robots(): MetadataRoute.Robots {
-  const base = "https://predicta.dev";
+const BASE_URL =
+  process.env.NEXT_PUBLIC_BASE_URL ?? "https://predicta.dev";
 
+export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: [],
+      disallow: ["/admin", "/api"],
     },
-    sitemap: `${base}/sitemap.xml`,
+    sitemap: `${BASE_URL}/sitemap.xml`,
   };
 }

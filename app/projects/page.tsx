@@ -14,11 +14,12 @@ export const metadata = {
 
 export default async function ProjectsPage() {
   const projects = await prisma.project.findMany({
-    orderBy: [{ sortOrder: "asc" }, { year: "desc" }],
-    include: {
-      _count: { select: { views: true } },
-    },
-  });
+      orderBy: [{ sortOrder: "asc" }, { year: "desc" }],
+      include: {
+        category: true,
+        _count: { select: { views: true, reactions: true } },
+      },
+    });
 
   return (
     <PageTransition>
@@ -34,8 +35,9 @@ export default async function ProjectsPage() {
           githubUrl: p.githubUrl,
           liveUrl: p.liveUrl,
           views: p._count.views,
-          // category goes to client too if you want to show/use it later:
-          category: (p as any).category ?? null,
+          reactions: p._count.reactions,
+          category: p.category?.name ?? null,
+          coverImageUrl: p.coverImageUrl ?? null,   // 👈 add this
         }))}
       />
     </PageTransition>

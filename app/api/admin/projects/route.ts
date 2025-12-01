@@ -1,9 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import {
+  normalizeSlug,
+  isValidSlug,
+  parseIntOr,
+  splitCsv,
+} from "@/app/lib/validation";
 
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.redirect("/api/auth/signin?callbackUrl=/admin", { status: 302 });
+  }
+
   const body = await req.formData();
 
   // 1) Handle cover image upload
@@ -31,30 +44,32 @@ export async function POST(req: NextRequest) {
 
   // 2) Normal fields
   const title = (body.get("title") as string)?.trim();
-  const slug = (body.get("slug") as string)?.trim();
+  const slugRaw = (body.get("slug") as string)?.trim();
+  const slug = slugRaw ? normalizeSlug(slugRaw) : "";
   const subtitle = (body.get("subtitle") as string)?.trim() || null;
   const description = (body.get("description") as string)?.trim() || "";
   const content = (body.get("content") as string)?.trim() || null;
   const status = (body.get("status") as string)?.trim() || "In Progress";
-  const year = parseInt(
+  const year = parseIntOr(
     (body.get("year") as string) || `${new Date().getFullYear()}`,
-    10
+    new Date().getFullYear()
   );
-  const sortOrder = parseInt(
-    (body.get("sortOrder") as string) || "999",
-    10
-  );
+  const sortOrder = parseIntOr((body.get("sortOrder") as string) || "999", 999);
 
-  const tagsRaw = (body.get("tags") as string) || "";
-  const tags = tagsRaw
-    ? tagsRaw.split(",").map((t) => t.trim()).filter(Boolean)
-    : [];
+  const tags = splitCsv(body.get("tags") as string);
+  const techStack = splitCsv(body.get("techStack") as string);
+
+  const categoryIdRaw = (body.get("category") as string) || "";
+  const categoryId =
+    categoryIdRaw && !Number.isNaN(parseInt(categoryIdRaw, 10))
+      ? parseInt(categoryIdRaw, 10)
+      : null;
 
   const githubUrl = ((body.get("githubUrl") as string) || "").trim() || null;
   const liveUrl = ((body.get("liveUrl") as string) || "").trim() || null;
   const featured = body.get("featured") !== null;
 
-  if (!title || !slug) {
+  if (!title || !slug || !isValidSlug(slug)) {
     const url = new URL("/admin?error=missing_title_or_slug", req.url);
     return NextResponse.redirect(url, { status: 302 });
   }
@@ -72,10 +87,17 @@ export async function POST(req: NextRequest) {
         featured,
         sortOrder,
         tags,
-        techStack: [],
+        techStack,
         githubUrl,
         liveUrl,
         coverImageUrl, // store the uploaded image URL
+        ...(categoryId
+          ? {
+              category: {
+                connect: { id: categoryId },
+              },
+            }
+          : {}),
       },
     });
 

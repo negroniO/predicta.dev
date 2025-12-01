@@ -14,7 +14,6 @@ model Project {
   subtitle      String?
   description   String
   year          Int
-  category      String?
   status        String
   featured      Boolean       @default(false)
   tags          String[]
@@ -27,6 +26,36 @@ model Project {
   content       String?
   coverImageUrl String?
   views         ProjectView[]
+  category      Category?     @relation(fields: [categoryId], references: [id])
+  categoryId    Int?
+  reactions     ProjectReaction[]
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String
+  slug      String    @unique
+  sortOrder Int       @default(0)
+  projects  Project[]
+}
+
+model Page {
+  id            Int      @id @default(autoincrement())
+  slug          String   @unique
+  title         String
+  excerpt       String?
+  content       String?
+  status        String   @default("published")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model ContactClick {
+  id        Int      @id @default(autoincrement())
+  href      String
+  referrer  String?
+  userAgent String?
+  createdAt DateTime @default(now())
 }
 
 model User {
@@ -86,5 +115,33 @@ model ProjectView {
 
   @@index([projectId])
   @@index([createdAt])
+  @@index([visitorId])
+}
+
+model NewsletterSubscriber {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+model Testimonial {
+  id        Int      @id @default(autoincrement())
+  name      String
+  role      String?
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model ProjectReaction {
+  id         Int      @id @default(autoincrement())
+  projectId  Int
+  kind       String   // "like" or "dislike"
+  visitorId  String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, visitorId])
+  @@index([projectId])
   @@index([visitorId])
 }

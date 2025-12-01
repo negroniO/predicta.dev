@@ -1,10 +1,18 @@
+// app/admin/edit/[slug]/page.tsx
 import { prisma } from "@/app/lib/prisma";
 import { notFound, redirect } from "next/navigation";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import MarkdownEditorWithPreview from "@/app/components/MarkdownEditorWithPreview";
-
+import {
+  FormWithSubmitState,
+  SubmitButton,
+  ChipInput,
+  ConfirmDeleteButton,
+  SlugInput,
+  CoverImageInput,
+} from "../../components/AdminFormHelpers";
 
 export const runtime = "nodejs";
 
@@ -18,11 +26,16 @@ export default async function EditProjectPage({
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/api/auth/signin");
+    redirect(`/api/auth/signin?callbackUrl=/admin/edit/${slug}`);
   }
 
   const project = await prisma.project.findUnique({
     where: { slug },
+    include: { category: true },
+  });
+
+  const categories = await prisma.category.findMany({
+    orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
   });
 
   if (!project) {
@@ -50,7 +63,7 @@ export default async function EditProjectPage({
 
       <section className="rounded-2xl border border-slate-700/70 bg-slate-900/60 p-4 space-y-4 text-xs">
         {/* UPDATE FORM */}
-        <form
+        <FormWithSubmitState
           action={`/api/admin/projects/${project.slug}`}
           method="POST"
           encType="multipart/form-data"
@@ -68,15 +81,13 @@ export default async function EditProjectPage({
             />
           </div>
 
-          <div className="space-y-1">
-            <label className="block text-slate-300">Slug (URL) *</label>
-            <input
-              name="slug"
-              defaultValue={project.slug}
-              required
-              className="w-full rounded-lg bg-slate-900 border border-slate-700 px-2 py-2 text-xs focus:border-cyan-400 outline-none"
-            />
-          </div>
+          <SlugInput
+            name="slug"
+            label="Slug (URL) *"
+            typeName="project"
+            initialValue={project.slug}
+            placeholder="payment-recovery-ml"
+          />
 
           <div className="space-y-1 md:col-span-2">
             <label className="block text-slate-300">Subtitle</label>
@@ -97,11 +108,12 @@ export default async function EditProjectPage({
             />
           </div>
 
-            <MarkdownEditorWithPreview
-              name="content"
-              initialValue={project.content ?? ""}
-              rows={16}
-            />
+          {/* Markdown content */}
+          <MarkdownEditorWithPreview
+            name="content"
+            initialValue={project.content ?? ""}
+            rows={16}
+          />
 
           <div className="space-y-1">
             <label className="block text-slate-300">Status *</label>
@@ -126,16 +138,47 @@ export default async function EditProjectPage({
             />
           </div>
 
+          {/* Category (for ML / Apps / Articles etc.) */}
+          <div className="space-y-1">
+            <label className="block text-slate-300">Category</label>
+            <select
+              name="category"
+              defaultValue={project.categoryId ?? ""}
+              className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-xs focus:border-cyan-400 outline-none"
+            >
+              <option value="">— None —</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+            {categories.length === 0 && (
+              <p className="text-[11px] text-slate-500">
+                No categories yet. Add one from the admin page.
+              </p>
+            )}
+          </div>
+
           <div className="space-y-1">
             <label className="block text-slate-300">
-              Tags (comma-separated)
+              Tags
             </label>
-            <input
+            <ChipInput
               name="tags"
-              defaultValue={project.tags?.join(", ") ?? ""}
-              className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-xs focus:border-cyan-400 outline-none"
+              label="Tags"
+              initialItems={project.tags ?? []}
+              placeholder="Press Enter to add tag"
             />
           </div>
+
+          {/* Tech stack */}
+          <ChipInput
+            name="techStack"
+            label="Tech stack"
+            initialItems={project.techStack ?? []}
+            placeholder="Python, SQL, Airflow"
+          />
 
           <div className="space-y-1">
             <label className="block text-slate-300">Sort Order</label>
@@ -177,49 +220,30 @@ export default async function EditProjectPage({
             </span>
           </div>
 
-          {/* Cover Image Upload */}
-          <div className="space-y-1 md:col-span-2">
-            <label className="block text-slate-300">Cover Image (Upload to replace)</label>
-            <input
-              type="file"
-              name="coverImage"
-              accept="image/*"
-              className="text-xs text-slate-300"
-            />
-
-            {project.coverImageUrl && (
-              <img
-                src={project.coverImageUrl}
-                alt="Cover"
-                className="mt-2 h-24 rounded-lg border border-slate-700/70 object-cover"
-              />
-            )}
-          </div>
+          <CoverImageInput initialUrl={project.coverImageUrl} />
 
           <div className="md:col-span-2 flex gap-3 pt-2">
-            <button
-              type="submit"
-              className="inline-flex items-center rounded-full bg-cyan-500 px-4 py-2 text-xs font-medium text-slate-950 hover:bg-cyan-400 transition"
-            >
+            <SubmitButton className="inline-flex items-center rounded-full bg-cyan-500 px-4 py-2 text-xs font-medium text-slate-950 hover:bg-cyan-400 transition">
               Save changes
-            </button>
+            </SubmitButton>
           </div>
-        </form>
+        </FormWithSubmitState>
 
         {/* DELETE FORM */}
-        <form
+        <FormWithSubmitState
           action={`/api/admin/projects/${project.slug}`}
           method="POST"
           className="pt-2"
+          disableOnSubmit={false}
         >
           <input type="hidden" name="_action" value="delete" />
-          <button
-            type="submit"
+          <ConfirmDeleteButton
             className="text-xs text-red-400 hover:text-red-300 underline underline-offset-2"
+            message={`Delete project "${project.title}"?`}
           >
             Delete project
-          </button>
-        </form>
+          </ConfirmDeleteButton>
+        </FormWithSubmitState>
       </section>
     </main>
   );

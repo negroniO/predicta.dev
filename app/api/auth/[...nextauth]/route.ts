@@ -4,6 +4,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/app/lib/prisma";
 
 export const authOptions: NextAuthOptions = {
+  // Keep the adapter for user/account storage, but use JWT sessions so proxy/getToken works.
   adapter: PrismaAdapter(prisma),
   providers: [
     GitHubProvider({
@@ -16,7 +17,6 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async session({ session, user }) {
-      // expose user id & email
       if (session.user) {
         (session.user as any).id = user.id;
         session.user.email = user.email;

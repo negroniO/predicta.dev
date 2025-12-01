@@ -14,7 +14,7 @@ export async function generateMetadata({
 
   const project = await prisma.project.findUnique({
     where: { slug },
-    select: { title: true, subtitle: true },
+    select: { title: true, subtitle: true, coverImageUrl: true },
   });
 
   if (!project) {
@@ -24,6 +24,20 @@ export async function generateMetadata({
   return {
     title: `${project.title} | predicta.dev`,
     description: project.subtitle ?? "Project case study on predicta.dev",
+    openGraph: {
+      title: `${project.title} | predicta.dev`,
+      description: project.subtitle ?? "Project case study on predicta.dev",
+      url: `https://predicta.dev/projects/${slug}`,
+      images: project.coverImageUrl
+        ? [{ url: project.coverImageUrl, width: 1200, height: 630, alt: project.title }]
+        : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${project.title} | predicta.dev`,
+      description: project.subtitle ?? "Project case study on predicta.dev",
+      images: project.coverImageUrl ? [project.coverImageUrl] : undefined,
+    },
     alternates: {
       canonical: `/projects/${slug}`,
     },
@@ -48,13 +62,31 @@ export default async function ProjectPage({
   const [project, ordered] = await Promise.all([
     prisma.project.findUnique({
       where: { slug },
-      include: {
-        _count: { select: { views: true } },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        subtitle: true,
+        description: true,
+        content: true,
+        status: true,
+        year: true,
+        sortOrder: true,
+        tags: true,
+        techStack: true,
+        githubUrl: true,
+        liveUrl: true,
+        coverImageUrl: true,
+        categoryId: true,
+        createdAt: true,
+        updatedAt: true,
+        category: { select: { name: true } },
+        _count: { select: { views: true, reactions: true } },
       },
     }),
     prisma.project.findMany({
       orderBy: [{ sortOrder: "asc" }, { year: "desc" }],
-      select: { slug: true, title: true },
+      select: { slug: true, title: true, tags: true, category: { select: { name: true } } },
     }),
   ]);
 
@@ -69,20 +101,78 @@ export default async function ProjectPage({
 
   const readingTime = estimateReadingTime(project.content || project.description);
   const views = project._count.views;
+  const projectForClient = {
+    ...project,
+    category: project.category?.name ?? null,
+    reactions: project._count.reactions,
+  };
+
+  const related = ordered
+    .filter((p) => p.slug !== slug)
+    .filter((p) => {
+      const tags = p.tags ?? [];
+      const currentTags = project.tags ?? [];
+      const overlap = tags.some((t) => currentTags.includes(t));
+      const catMatch = project.category?.name && p.category?.name === project.category.name;
+      return overlap || catMatch;
+    })
+    .slice(0, 3)
+    .map((p) => ({ slug: p.slug, title: p.title }));
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Home",
+                  item: "https://predicta.dev/",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Projects",
+                  item: "https://predicta.dev/projects",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: project.title,
+                  item: `https://predicta.dev/projects/${slug}`,
+                },
+              ],
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "CreativeWork",
+              name: project.title,
+              description: project.subtitle || project.description || undefined,
+              url: `https://predicta.dev/projects/${slug}`,
+              image: project.coverImageUrl || undefined,
+            },
+          ]),
+        }}
+      />
       {/* Invisible analytics */}
       <TrackProjectView slug={slug} />
       <ReadingProgress />
       <ProjectCaseStudyClient
         project={{
-          ...project,
+          ...projectForClient,
           readingTime,
         } as any}
         prevProject={prevProject}
         nextProject={nextProject}
         views={views}
+        related={related}
       />
     </>
   );

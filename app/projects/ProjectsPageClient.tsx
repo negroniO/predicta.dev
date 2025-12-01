@@ -16,12 +16,16 @@ type Project = {
   liveUrl: string | null;
   views?: number;
   category?: string | null;
+  coverImageUrl?: string | null;
+  reactions?: number;
 };
 
 export default function ProjectsPageClient({ projects }: { projects: Project[] }) {
   const [query, setQuery] = useState("");
   const [focused, setFocused] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
 
   const normalizedQuery = query.trim().toLowerCase();
 
@@ -55,6 +59,12 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
     });
   }, [projects, normalizedQuery, activeCategory]);
 
+  const totalPages = Math.max(1, Math.ceil(filteredProjects.length / pageSize));
+  const pagedProjects = useMemo(() => {
+    const start = (page - 1) * pageSize;
+    return filteredProjects.slice(start, start + pageSize);
+  }, [filteredProjects, page, pageSize]);
+
   const suggestions = useMemo(() => {
     if (!normalizedQuery) return [];
     return projects
@@ -70,13 +80,13 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
     <div className="max-w-5xl mx-auto px-4 py-10 space-y-8">
       {/* Header */}
       <header className="space-y-2">
-        <p className="text-xs uppercase tracking-[0.25em] text-cyan-300/80">
+        <p className="text-xs uppercase tracking-[0.25em] text-accent/80">
           Portfolio
         </p>
         <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
           Projects
         </h1>
-        <p className="text-sm text-slate-300 max-w-2xl">
+        <p className="text-sm text-foreground/80 max-w-2xl">
           A deeper look at the projects I&apos;ve built across{" "}
           <strong>payment recovery</strong>, <strong>collections</strong>,{" "}
           <strong>cash flow forecasting</strong>, and{" "}
@@ -93,11 +103,12 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
             onFocus={() => setFocused(true)}
             onBlur={() => setTimeout(() => setFocused(false), 100)}
             placeholder="Search by title, tag, or topic..."
-            className="w-full rounded-full bg-slate-900/70 border border-slate-700 px-4 py-2 text-xs text-slate-100 placeholder:text-slate-500 outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/60"
+            className="w-full rounded-full bg-card/70 border border-card-border px-4 py-2 text-xs text-foreground placeholder:text-foreground/60 outline-none focus:border-accent focus:ring-1 focus:ring-accent/60"
           />
 
+          {/* Search suggestions dropdown */}
           {focused && suggestions.length > 0 && (
-            <div className="absolute z-20 mt-1 w-full rounded-xl border border-slate-700 bg-slate-950/95 shadow-xl shadow-black/40 max-h-64 overflow-auto">
+            <div className="absolute z-20 mt-1 w-full rounded-xl border border-card-border bg-card/95 shadow-xl shadow-black/40 max-h-64 overflow-auto">
               {suggestions.map((p) => (
                 <Link
                   key={p.id}
@@ -106,7 +117,7 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
                   className="flex items-center justify-between px-3 py-2 text-xs hover:bg-slate-800/80 transition"
                 >
                   <div className="flex flex-col">
-                    <span className="text-slate-100">{p.title}</span>
+                    <span className="text-foreground">{p.title}</span>
                     {p.subtitle && (
                       <span className="text-[11px] text-slate-400 line-clamp-1">
                         {p.subtitle}
@@ -126,15 +137,15 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
 
         {/* Category pills */}
         {categories.length > 0 && (
-          <div className="flex flex-wrap gap-2 text-[11px]">
+          <div className="flex flex-wrap gap-1.5 text-[11px]">
             <button
               type="button"
               onClick={() => setActiveCategory(null)}
               className={
                 "px-2.5 py-1 rounded-full border text-xs " +
                 (activeCategory === null
-                  ? "border-cyan-400 bg-cyan-500/10 text-cyan-200"
-                  : "border-slate-700 bg-slate-900/70 text-slate-300 hover:border-cyan-400")
+                  ? "border-accent bg-accent/10 text-accent"
+                  : "border-card-border bg-card/70 text-foreground/80 hover:border-accent")
               }
             >
               All
@@ -147,8 +158,8 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
                 className={
                   "px-2.5 py-1 rounded-full border text-xs " +
                   (activeCategory === cat
-                    ? "border-cyan-400 bg-cyan-500/10 text-cyan-200"
-                    : "border-slate-700 bg-slate-900/70 text-slate-300 hover:border-cyan-400")
+                    ? "border-accent bg-accent/10 text-accent"
+                    : "border-card-border bg-card/70 text-foreground/80 hover:border-accent")
                 }
               >
                 {cat}
@@ -157,7 +168,7 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
           </div>
         )}
 
-        <p className="text-[11px] text-slate-500">
+        <p className="text-[11px] text-foreground/60">
           Showing{" "}
           <span className="text-slate-200">{filteredProjects.length}</span> of{" "}
           <span className="text-slate-200">{projects.length}</span> projects
@@ -177,86 +188,113 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
         </p>
       </section>
 
-      {/* Project Cards */}
-      <section className="space-y-5">
-        {filteredProjects.map((p) => (
+      {/* Project Cards – overlay hero style */}
+      <section className="space-y-4">
+        {pagedProjects.map((p) => (
           <article
             key={p.id}
-            className="rounded-2xl border border-slate-600/60 bg-slate-900/60 backdrop-blur-xl p-5 shadow-lg shadow-black/40 transition transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-500/30"
+            className="group rounded-lg border border-card-border/70 bg-card/90 backdrop-blur-xl shadow-lg shadow-black/40 transition transform hover:-translate-y-0.5 hover:shadow-accent/25 overflow-hidden"
           >
-            <div className="flex justify-between items-center flex-wrap gap-2">
-              <h2 className="text-sm md:text-base font-semibold text-slate-50">
-                {p.title}
-              </h2>
+            {/* Image + overlay header */}
+            <div className="relative h-32 md:h-36 w-full overflow-hidden rounded-t-2xl">
+              {p.coverImageUrl ? (
+                <img
+                  src={p.coverImageUrl}
+                  alt={p.title}
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  loading="lazy"
+                />
+              ) : (
+                <div className="h-full w-full bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900" />
+              )}
 
-              <div className="flex items-center gap-3 text-[11px] text-slate-400">
-                {p.category && (
-                  <span className="rounded-full border border-slate-700/70 bg-slate-900/70 px-2 py-1 text-[10px] uppercase tracking-[0.12em]">
-                    {p.category}
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent" />
+
+              {/* Floating title */}
+              <div className="absolute bottom-2 left-3 right-3 flex justify-between items-end">
+                <div className="space-y-0.5">
+                  <h2 className="text-sm font-semibold text-slate-50">
+                    {p.title}
+                  </h2>
+
+                  <div className="flex items-center gap-2 text-[10px] text-foreground/70">
+                    {p.category && (
+                      <span className="rounded-full border border-card-border/70 bg-card/70 px-2 py-0.5 text-[10px] uppercase tracking-wide text-foreground/80">
+                        {p.category}
+                      </span>
+                    )}
+                    <span>{p.year}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1 rounded-full border border-card-border/70 bg-card/70 px-2 py-0.5 text-[11px] text-foreground/80">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="h-3 w-3 text-cyan-300"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"
+                      />
+                    </svg>
+                    <span>{p.views ?? 0}</span>
                   </span>
-                )}
-                <span>{p.year}</span>
-                <span className="inline-flex items-center gap-1 rounded-full border border-slate-700/70 bg-slate-900/70 px-2 py-1">
-                  <svg
-                    aria-hidden="true"
-                    viewBox="0 0 24 24"
-                    className="h-3 w-3 text-cyan-300"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"
-                    />
-                    <circle cx="12" cy="12" r="2" fill="currentColor" />
-                  </svg>
-                  <span className="text-slate-200">{p.views ?? 0}</span>
-                  <span className="hidden sm:inline">reads</span>
-                </span>
+                  <span className="inline-flex items-center gap-1 rounded-full border border-card-border/70 bg-card/70 px-2 py-0.5 text-[11px] text-foreground/80">
+                    👍 {p.reactions ?? 0}
+                  </span>
+                </div>
               </div>
             </div>
 
-            <p className="mt-2 text-sm text-slate-300">
-              {p.subtitle || p.description}
-            </p>
+            {/* Body */}
+            <div className="p-4 space-y-2.5">
+              <p className="text-sm text-foreground/85 line-clamp-2">
+                {p.subtitle || p.description}
+              </p>
 
-            {p.tags && p.tags.length > 0 && (
-              <div className="mt-3 flex flex-wrap gap-2 text-[11px]">
-                {p.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2 py-1 rounded-full border border-slate-700/70 bg-slate-900/60 text-slate-200"
+              {p.tags && p.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 text-[11px]">
+                  {p.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-2 py-0.5 rounded-full border border-card-border/70 bg-card/70 text-foreground/80 shadow-inner shadow-black/10"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex flex-wrap gap-3 text-xs pt-1">
+                <Link
+                  href={`/projects/${p.slug}`}
+                  className="btn btn-section btn-sm"
+                >
+                  View case study
+                </Link>
+
+                {p.githubUrl && (
+                  <Link
+                    href={p.githubUrl}
+                    target="_blank"
+                    className="btn btn-section btn-sm"
                   >
-                    {tag}
-                  </span>
-                ))}
+                    GitHub Repo
+                  </Link>
+                )}
+                {p.liveUrl && (
+                  <Link
+                    href={p.liveUrl}
+                    target="_blank"
+                    className="btn btn-section btn-sm"
+                  >
+                    Live App
+                  </Link>
+                )}
               </div>
-            )}
-
-            <div className="mt-4 flex flex-wrap gap-3 text-xs">
-              <Link
-                href={`/projects/${p.slug}`}
-                className="px-3 py-1.5 rounded-full bg-cyan-500/90 hover:bg-cyan-400 text-slate-950 font-medium shadow-md shadow-cyan-500/30 transition"
-              >
-                View case study
-              </Link>
-
-              {p.githubUrl && (
-                <Link
-                  href={p.githubUrl}
-                  target="_blank"
-                  className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2 transition"
-                >
-                  GitHub Repo
-                </Link>
-              )}
-              {p.liveUrl && (
-                <Link
-                  href={p.liveUrl}
-                  target="_blank"
-                  className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2 transition"
-                >
-                  Live App
-                </Link>
-              )}
             </div>
           </article>
         ))}
@@ -272,6 +310,7 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
         )}
       </section>
 
+      {/* Footer note */}
       <div className="pt-4 text-xs text-slate-400">
         <p>
           More projects (e.g. SQL notebooks, BI dashboards, and smaller
@@ -286,6 +325,32 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
           .
         </p>
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between text-xs text-slate-300 pt-4">
+          <span>
+            Page {page} of {totalPages}
+          </span>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="rounded-full border border-slate-700 px-3 py-1 disabled:opacity-60 hover:border-cyan-400"
+            >
+              ← Prev
+            </button>
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages}
+              className="rounded-full border border-slate-700 px-3 py-1 disabled:opacity-60 hover:border-cyan-400"
+            >
+              Next →
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
