@@ -18,7 +18,7 @@ const page = {
 export default function PageTransition({ children }: { children: ReactNode }) {
   return (
     <motion.div
-      initial="hidden"
+      initial={false}
       animate="show"
       variants={page}
       className="min-h-full"

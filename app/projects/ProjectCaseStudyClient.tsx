@@ -1,9 +1,8 @@
 "use client";
 
+
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { marked } from "marked";
-import { useEffect, useState } from "react";
 import ShareButtons from "./ShareButtons";
 import TrackedLink from "@/app/components/TrackedLink";
 import ReactionButtons from "./ReactionButtons";
@@ -61,38 +60,19 @@ function formatDate(value: string | Date) {
 
 export default function ProjectCaseStudyClient({
   project,
+  html,
   prevProject,
   nextProject,
   views = 0,
   related = [],
 }: {
   project: Project;
+  html: string;
   prevProject?: NavProject | null;
   nextProject?: NavProject | null;
   views?: number;
   related?: NavProject[];
 }) {
-  const [html, setHtml] = useState<string | null>(null);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    async function renderMarkdown() {
-      if (project.content && project.content.trim().length > 0) {
-        const parsed = await marked(project.content); // resolves to string
-        if (isMounted) setHtml(parsed);
-      } else {
-        if (isMounted) setHtml(null);
-      }
-    }
-
-    renderMarkdown();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [project.content]);
-
   const fallbackParagraphs =
     !project.content || project.content.trim().length === 0
       ? project.description
@@ -109,37 +89,8 @@ export default function ProjectCaseStudyClient({
   const publishedLabel = formatDate(project.createdAt);
   const updatedLabel = formatDate(project.updatedAt);
 
-  // 🔧 JSON-LD structured data
-  const baseUrl = "https://predicta.dev";
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: project.title,
-    description: project.subtitle || project.description,
-    datePublished: new Date(project.createdAt).toISOString(),
-    dateModified: new Date(project.updatedAt).toISOString(),
-    author: {
-      "@type": "Person",
-      name: "George Iordanous",
-      url: baseUrl,
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `${baseUrl}/projects/${project.slug}`,
-    },
-    url: `${baseUrl}/projects/${project.slug}`,
-    inLanguage: "en-GB",
-    keywords: [...(project.tags ?? []), ...(project.techStack ?? [])].join(", "),
-  };
-
   return (
     <>
-      {/* JSON-LD for SEO */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-
       <motion.div
         className="max-w-5xl mx-auto px-4 py-10 space-y-8"
         initial="hidden"
@@ -386,7 +337,7 @@ export default function ProjectCaseStudyClient({
           </div>
           {related && related.length > 0 && (
             <div className="pt-3">
-              <RelatedProjects currentSlug={project.slug} related={related} />
+              <RelatedProjects related={related} />
             </div>
           )}
         </motion.section>

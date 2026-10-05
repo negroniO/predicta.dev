@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { marked } from "marked";
+import { useId, useState } from "react";
+import { renderMarkdown } from "@/app/lib/content";
 
 type MarkdownEditorWithPreviewProps = {
   name: string;
@@ -16,17 +16,19 @@ export default function MarkdownEditorWithPreview({
   initialValue = "",
   rows = 16,
 }: MarkdownEditorWithPreviewProps) {
+  const inputId = useId();
   const [value, setValue] = useState(initialValue);
 
   return (
     <div className="md:col-span-2 space-y-2">
-      <label className="block text-slate-300 text-xs">{label}</label>
+      <label htmlFor={inputId} className="block text-slate-300 text-xs">{label}</label>
 
       {/* Editor + Preview grid */}
       <div className="grid gap-3 md:grid-cols-2">
         {/* Editor */}
         <div className="space-y-1">
           <textarea
+            id={inputId}
             name={name}
             rows={rows}
             value={value}
@@ -46,7 +48,7 @@ export default function MarkdownEditorWithPreview({
           {value.trim() ? (
             <div
               className="prose prose-invert prose-sm max-w-none prose-headings:text-slate-100 prose-p:text-slate-300 prose-li:text-slate-300 prose-code:text-cyan-300"
-              dangerouslySetInnerHTML={{ __html: marked(value) }}
+              dangerouslySetInnerHTML={{ __html: renderMarkdown(value) }}
             />
           ) : (
             <p className="text-[11px] text-slate-500">

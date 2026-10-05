@@ -3,11 +3,10 @@
 import Link from "next/link";
 
 type Props = {
-  currentSlug: string;
   related: { slug: string; title: string }[];
 };
 
-export default function RelatedProjects({ currentSlug, related }: Props) {
+export default function RelatedProjects({ related }: Props) {
   if (!related.length) return null;
   return (
     <div className="space-y-2">

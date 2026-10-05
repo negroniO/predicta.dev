@@ -1,9 +1,10 @@
+export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { Mail, Linkedin, Github } from "lucide-react";
 import PageTransition from "../components/PageTransition";
 import TrackedContactLink from "./TrackedContactLink";
 import { prisma } from "@/app/lib/prisma";
-import { marked } from "marked";
+import { renderMarkdown } from "@/app/lib/content";
 
 export async function generateMetadata() {
   const page = await prisma.page.findFirst({
@@ -12,7 +13,7 @@ export async function generateMetadata() {
   });
 
   return {
-    title: page?.title ?? "Contact | predicta.dev",
+    title: page?.title ?? "Contact",
     description:
       page?.excerpt ??
       "Contact George Iordanous – FP&A, data analytics, and machine learning for finance and payments.",
@@ -30,7 +31,7 @@ export default async function ContactPage() {
     page?.excerpt ??
     "You can reach me via email or LinkedIn – I'll usually respond within a couple of days.";
   const contentHtml = page?.content
-    ? await marked(page.content)
+    ? renderMarkdown(page.content)
     : null;
 
   return (

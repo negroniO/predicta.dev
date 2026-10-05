@@ -1,9 +1,8 @@
+import AdminLink from "../../components/AdminLink";
+import { requireAdminPage } from "@/app/lib/admin";
 // app/admin/edit/[slug]/page.tsx
 import { prisma } from "@/app/lib/prisma";
-import { notFound, redirect } from "next/navigation";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth";
-import Link from "next/link";
+import { notFound } from "next/navigation";
 import MarkdownEditorWithPreview from "@/app/components/MarkdownEditorWithPreview";
 import {
   FormWithSubmitState,
@@ -23,11 +22,7 @@ export default async function EditProjectPage({
 }) {
   const { slug } = await params;
 
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    redirect(`/api/auth/signin?callbackUrl=/admin/edit/${slug}`);
-  }
+  await requireAdminPage(`/admin/edit/${slug}`);
 
   const project = await prisma.project.findUnique({
     where: { slug },
@@ -53,12 +48,12 @@ export default async function EditProjectPage({
             Editing <span className="font-mono">{project.slug}</span>
           </p>
         </div>
-        <Link
+        <AdminLink
           href="/admin"
           className="text-xs text-cyan-300 hover:text-cyan-200 underline underline-offset-2"
         >
           ← Back to admin
-        </Link>
+        </AdminLink>
       </header>
 
       <section className="rounded-2xl border border-slate-700/70 bg-slate-900/60 p-4 space-y-4 text-xs">
@@ -70,10 +65,13 @@ export default async function EditProjectPage({
           className="grid gap-4 md:grid-cols-2"
         >
           <input type="hidden" name="_action" value="update" />
+          <input type="hidden" name="updatedAt" value={project.updatedAt.toISOString()} />
 
           <div className="space-y-1">
-            <label className="block text-slate-300">Title *</label>
+            <label htmlFor="editor-title" className="block text-slate-300">Title *</label>
             <input
+              id="editor-title"
+
               name="title"
               defaultValue={project.title}
               required
@@ -90,8 +88,10 @@ export default async function EditProjectPage({
           />
 
           <div className="space-y-1 md:col-span-2">
-            <label className="block text-slate-300">Subtitle</label>
+            <label htmlFor="editor-subtitle" className="block text-slate-300">Subtitle</label>
             <input
+              id="editor-subtitle"
+
               name="subtitle"
               defaultValue={project.subtitle ?? ""}
               className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-xs focus:border-cyan-400 outline-none"
@@ -99,8 +99,10 @@ export default async function EditProjectPage({
           </div>
 
           <div className="space-y-1 md:col-span-2">
-            <label className="block text-slate-300">Description</label>
+            <label htmlFor="editor-description" className="block text-slate-300">Description</label>
             <textarea
+              id="editor-description"
+
               name="description"
               defaultValue={project.description}
               rows={4}
@@ -116,21 +118,25 @@ export default async function EditProjectPage({
           />
 
           <div className="space-y-1">
-            <label className="block text-slate-300">Status *</label>
+            <label htmlFor="editor-status" className="block text-slate-300">Status *</label>
             <select
+              id="editor-status"
+
               name="status"
               defaultValue={project.status}
               className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-xs focus:border-cyan-400 outline-none"
             >
-              <option value="Completed">Completed</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Draft">Draft</option>
+              <option value="Completed">Completed — public</option>
+              <option value="In Progress">In Progress — public</option>
+              <option value="Draft">Draft — private</option>
             </select>
           </div>
 
           <div className="space-y-1">
-            <label className="block text-slate-300">Year</label>
+            <label htmlFor="editor-year" className="block text-slate-300">Year</label>
             <input
+              id="editor-year"
+
               name="year"
               type="number"
               defaultValue={project.year}
@@ -140,8 +146,10 @@ export default async function EditProjectPage({
 
           {/* Category (for ML / Apps / Articles etc.) */}
           <div className="space-y-1">
-            <label className="block text-slate-300">Category</label>
+            <label htmlFor="editor-category" className="block text-slate-300">Category</label>
             <select
+              id="editor-category"
+
               name="category"
               defaultValue={project.categoryId ?? ""}
               className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-xs focus:border-cyan-400 outline-none"
@@ -181,8 +189,10 @@ export default async function EditProjectPage({
           />
 
           <div className="space-y-1">
-            <label className="block text-slate-300">Sort Order</label>
+            <label htmlFor="editor-sortOrder" className="block text-slate-300">Sort Order</label>
             <input
+              id="editor-sortOrder"
+
               name="sortOrder"
               type="number"
               defaultValue={project.sortOrder}
@@ -191,8 +201,10 @@ export default async function EditProjectPage({
           </div>
 
           <div className="space-y-1">
-            <label className="block text-slate-300">GitHub URL</label>
+            <label htmlFor="editor-githubUrl" className="block text-slate-300">GitHub URL</label>
             <input
+              id="editor-githubUrl"
+
               name="githubUrl"
               defaultValue={project.githubUrl ?? ""}
               className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-xs focus:border-cyan-400 outline-none"
@@ -200,8 +212,10 @@ export default async function EditProjectPage({
           </div>
 
           <div className="space-y-1">
-            <label className="block text-slate-300">Live URL</label>
+            <label htmlFor="editor-liveUrl" className="block text-slate-300">Live URL</label>
             <input
+              id="editor-liveUrl"
+
               name="liveUrl"
               defaultValue={project.liveUrl ?? ""}
               className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-xs focus:border-cyan-400 outline-none"
@@ -234,9 +248,10 @@ export default async function EditProjectPage({
           action={`/api/admin/projects/${project.slug}`}
           method="POST"
           className="pt-2"
-          disableOnSubmit={false}
+          warnUnsaved={false}
         >
           <input type="hidden" name="_action" value="delete" />
+          <input type="hidden" name="updatedAt" value={project.updatedAt.toISOString()} />
           <ConfirmDeleteButton
             className="text-xs text-red-400 hover:text-red-300 underline underline-offset-2"
             message={`Delete project "${project.title}"?`}

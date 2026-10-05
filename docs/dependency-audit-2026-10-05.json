@@ -1,0 +1,559 @@
+{
+  "date": "2026-10-05",
+  "lockfileSha256": "7c609e294f6846b01bce9c7a35d7815d447789d3f6173433060c281d435e55c9",
+  "allDependencies": {
+    "info": 0,
+    "low": 1,
+    "moderate": 2,
+    "high": 21,
+    "critical": 0,
+    "total": 24
+  },
+  "productionResolution": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 4,
+    "critical": 0,
+    "total": 4
+  },
+  "findings": [
+    {
+      "package": "@babel/core",
+      "severity": "low",
+      "productionResolution": false,
+      "versions": [
+        "7.28.5"
+      ],
+      "via": [
+        {
+          "title": "@babel/core: Arbitrary File Read via sourceMappingURL Comment",
+          "url": "https://github.com/advisories/GHSA-4x5r-pxfx-6jf8",
+          "severity": "low",
+          "range": "<=7.29.0"
+        }
+      ],
+      "registrySuggestedFix": true
+    },
+    {
+      "package": "@humanfs/node",
+      "severity": "moderate",
+      "productionResolution": false,
+      "versions": [
+        "0.16.7"
+      ],
+      "via": [
+        {
+          "title": "humanfs: Recursive copy follows symlinked files and copies data from outside the source tree",
+          "url": "https://github.com/advisories/GHSA-p498-v437-472g",
+          "severity": "moderate",
+          "range": "<0.16.8"
+        }
+      ],
+      "registrySuggestedFix": true
+    },
+    {
+      "package": "@next/eslint-plugin-next",
+      "severity": "high",
+      "productionResolution": false,
+      "versions": [
+        "16.3.8"
+      ],
+      "via": [
+        "fast-glob"
+      ],
+      "registrySuggestedFix": {
+        "name": "eslint-config-next",
+        "version": "14.2.35",
+        "isSemVerMajor": true
+      }
+    },
+    {
+      "package": "@prisma/config",
+      "severity": "high",
+      "productionResolution": true,
+      "versions": [
+        "6.19.0"
+      ],
+      "via": [
+        "deepmerge-ts",
+        "effect"
+      ],
+      "registrySuggestedFix": {
+        "name": "prisma",
+        "version": "6.12.0",
+        "isSemVerMajor": true
+      }
+    },
+    {
+      "package": "@typescript-eslint/eslint-plugin",
+      "severity": "high",
+      "productionResolution": false,
+      "versions": [
+        "8.47.0"
+      ],
+      "via": [
+        "@typescript-eslint/type-utils",
+        "@typescript-eslint/utils"
+      ],
+      "registrySuggestedFix": true
+    },
+    {
+      "package": "@typescript-eslint/parser",
+      "severity": "high",
+      "productionResolution": false,
+      "versions": [
+        "8.47.0"
+      ],
+      "via": [
+        "@typescript-eslint/typescript-estree"
+      ],
+      "registrySuggestedFix": true
+    },
+    {
+      "package": "@typescript-eslint/type-utils",
+      "severity": "high",
+      "productionResolution": false,
+      "versions": [
+        "8.47.0"
+      ],
+      "via": [
+        "@typescript-eslint/typescript-estree",
+        "@typescript-eslint/utils"
+      ],
+      "registrySuggestedFix": true
+    },
+    {
+      "package": "@typescript-eslint/typescript-estree",
+      "severity": "high",
+      "productionResolution": false,
+      "versions": [
+        "8.47.0"
+      ],
+      "via": [
+        "fast-glob"
+      ],
+      "registrySuggestedFix": true
+    },
+    {
+      "package": "@typescript-eslint/utils",
+      "severity": "high",
+      "productionResolution": false,
+      "versions": [
+        "8.47.0"
+      ],
+      "via": [
+        "@typescript-eslint/typescript-estree"
+      ],
+      "registrySuggestedFix": true
+    },
+    {
+      "package": "ajv",
+      "severity": "moderate",
+      "productionResolution": false,
+      "versions": [
+        "6.12.6"
+      ],
+      "via": [
+        {
+          "title": "ajv has ReDoS when using `$data` option",
+          "url": "https://github.com/advisories/GHSA-2g4f-4pwh-qvx6",
+          "severity": "moderate",
+          "range": "<6.14.0"
+        }
+      ],
+      "registrySuggestedFix": true
+    },
+    {
+      "package": "brace-expansion",
+      "severity": "high",
+      "productionResolution": false,
+      "versions": [
+        "1.1.12",
+        "2.0.2"
+      ],
+      "via": [
+        {
+          "title": "brace-expansion: Zero-step sequence causes process hang and memory exhaustion",
+          "url": "https://github.com/advisories/GHSA-f886-m6hf-6m8v",
+          "severity": "moderate",
+          "range": "<1.1.13"
+        },
+        {
+          "title": "brace-expansion: Zero-step sequence causes process hang and memory exhaustion",
+          "url": "https://github.com/advisories/GHSA-f886-m6hf-6m8v",
+          "severity": "moderate",
+          "range": ">=2.0.0 <2.0.3"
+        },
+        {
+          "title": "brace-expansion: DoS via exponential-time expansion of consecutive non-expanding {} groups",
+          "url": "https://github.com/advisories/GHSA-3jxr-9vmj-r5cp",
+          "severity": "high",
+          "range": ">=2.0.0 <2.1.2"
+        },
+        {
+          "title": "brace-expansion: DoS via exponential-time expansion of consecutive non-expanding {} groups",
+          "url": "https://github.com/advisories/GHSA-3jxr-9vmj-r5cp",
+          "severity": "high",
+          "range": "<1.1.16"
+        },
+        {
+          "title": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+          "url": "https://github.com/advisories/GHSA-mh99-v99m-4gvg",
+          "severity": "high",
+          "range": "<1.1.17"
+        },
+        {
+          "title": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+          "url": "https://github.com/advisories/GHSA-mh99-v99m-4gvg",
+          "severity": "high",
+          "range": ">=2.0.0 <2.1.3"
+        },
+        {
+          "title": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+          "url": "https://github.com/advisories/GHSA-rgw5-rvv9-x895",
+          "severity": "high",
+          "range": ">=2.0.0 <2.1.4"
+        },
+        {
+          "title": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+          "url": "https://github.com/advisories/GHSA-rgw5-rvv9-x895",
+          "severity": "high",
+          "range": "<1.1.18"
+        },
+        {
+          "title": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+          "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr",
+          "severity": "moderate",
+          "range": "<1.1.21"
+        },
+        {
+          "title": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+          "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr",
+          "severity": "moderate",
+          "range": ">=2.0.0 <2.1.7"
+        },
+        {
+          "title": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+          "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7",
+          "severity": "high",
+          "range": "<1.1.20"
+        },
+        {
+          "title": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+          "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7",
+          "severity": "high",
+          "range": ">=2.0.0 <2.1.6"
+        },
+        {
+          "title": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+          "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p",
+          "severity": "high",
+          "range": "<1.1.19"
+        },
+        {
+          "title": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+          "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p",
+          "severity": "high",
+          "range": ">=2.0.0 <2.1.5"
+        }
+      ],
+      "registrySuggestedFix": true
+    },
+    {
+      "package": "braces",
+      "severity": "high",
+      "productionResolution": false,
+      "versions": [
+        "3.0.3"
+      ],
+      "via": [
+        {
+          "title": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+          "url": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+          "severity": "high",
+          "range": "<=3.0.3"
+        }
+      ],
+      "registrySuggestedFix": {
+        "name": "eslint-config-next",
+        "version": "14.2.35",
+        "isSemVerMajor": true
+      }
+    },
+    {
+      "package": "browserslist",
+      "severity": "high",
+      "productionResolution": false,
+      "versions": [
+        "4.28.0"
+      ],
+      "via": [
+        {
+          "title": "Browserslist: Unbounded memory growth (no cache eviction) via distinct query results, leading to eventual OOM",
+          "url": "https://github.com/advisories/GHSA-c83g-rgw3-j3cx",
+          "severity": "high",
+          "range": "<=4.28.6"
+        },
+        {
+          "title": "Browserslist: Uncaught crash / prototype write via untrusted browserslist-stats.json custom stats (normalizeStats)",
+          "url": "https://github.com/advisories/GHSA-73wf-gq98-2v4g",
+          "severity": "high",
+          "range": "<=4.28.6"
+        }
+      ],
+      "registrySuggestedFix": true
+    },
+    {
+      "package": "deepmerge-ts",
+      "severity": "high",
+      "productionResolution": true,
+      "versions": [
+        "7.1.5"
+      ],
+      "via": [
+        {
+          "title": "DeepmergeTS has stack exhaustion when merging recursive object graphs",
+          "url": "https://github.com/advisories/GHSA-ggr8-5vv4-36mx",
+          "severity": "high",
+          "range": "<8.0.0"
+        }
+      ],
+      "registrySuggestedFix": {
+        "name": "prisma",
+        "version": "6.12.0",
+        "isSemVerMajor": true
+      }
+    },
+    {
+      "package": "effect",
+      "severity": "high",
+      "productionResolution": true,
+      "versions": [
+        "3.18.4"
+      ],
+      "via": [
+        {
+          "title": "Effect `AsyncLocalStorage` context lost/contaminated inside Effect fibers under concurrent load with RPC",
+          "url": "https://github.com/advisories/GHSA-38f7-945m-qr2g",
+          "severity": "high",
+          "range": "<3.20.0"
+        }
+      ],
+      "registrySuggestedFix": {
+        "name": "prisma",
+        "version": "6.12.0",
+        "isSemVerMajor": true
+      }
+    },
+    {
+      "package": "eslint-config-next",
+      "severity": "high",
+      "productionResolution": false,
+      "versions": [
+        "16.3.8"
+      ],
+      "via": [
+        "@next/eslint-plugin-next"
+      ],
+      "registrySuggestedFix": {
+        "name": "eslint-config-next",
+        "version": "14.2.35",
+        "isSemVerMajor": true
+      }
+    },
+    {
+      "package": "fast-glob",
+      "severity": "high",
+      "productionResolution": false,
+      "versions": [
+        "3.3.1",
+        "3.3.3"
+      ],
+      "via": [
+        "micromatch"
+      ],
+      "registrySuggestedFix": {
+        "name": "eslint-config-next",
+        "version": "14.2.35",
+        "isSemVerMajor": true
+      }
+    },
+    {
+      "package": "flatted",
+      "severity": "high",
+      "productionResolution": false,
+      "versions": [
+        "3.3.3"
+      ],
+      "via": [
+        {
+          "title": "flatted vulnerable to unbounded recursion DoS in parse() revive phase",
+          "url": "https://github.com/advisories/GHSA-25h7-pfq9-p65f",
+          "severity": "high",
+          "range": "<3.4.0"
+        },
+        {
+          "title": "Prototype Pollution via parse() in NodeJS flatted",
+          "url": "https://github.com/advisories/GHSA-rf6f-7fwh-wjgh",
+          "severity": "high",
+          "range": "<=3.4.1"
+        }
+      ],
+      "registrySuggestedFix": true
+    },
+    {
+      "package": "js-yaml",
+      "severity": "high",
+      "productionResolution": false,
+      "versions": [
+        "4.1.1"
+      ],
+      "via": [
+        {
+          "title": "JS-YAML: Quadratic-complexity DoS in merge key handling via repeated aliases",
+          "url": "https://github.com/advisories/GHSA-h67p-54hq-rp68",
+          "severity": "moderate",
+          "range": ">=4.0.0 <=4.1.1"
+        },
+        {
+          "title": "js-yaml: YAML merge-key chains can force quadratic CPU consumption",
+          "url": "https://github.com/advisories/GHSA-52cp-r559-cp3m",
+          "severity": "high",
+          "range": ">=4.0.0 <4.3.0"
+        },
+        {
+          "title": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) \u2014 CVE-2026-59870 fix not backported",
+          "url": "https://github.com/advisories/GHSA-5p4m-2wfm-xmqj",
+          "severity": "high",
+          "range": ">=4.0.0 <4.3.1"
+        },
+        {
+          "title": "js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources",
+          "url": "https://github.com/advisories/GHSA-2883-xcg3-v3hh",
+          "severity": "high",
+          "range": ">=4.0.0 <4.3.2"
+        }
+      ],
+      "registrySuggestedFix": true
+    },
+    {
+      "package": "micromatch",
+      "severity": "high",
+      "productionResolution": false,
+      "versions": [
+        "4.0.8"
+      ],
+      "via": [
+        "braces"
+      ],
+      "registrySuggestedFix": {
+        "name": "eslint-config-next",
+        "version": "14.2.35",
+        "isSemVerMajor": true
+      }
+    },
+    {
+      "package": "minimatch",
+      "severity": "high",
+      "productionResolution": false,
+      "versions": [
+        "3.1.2",
+        "9.0.5"
+      ],
+      "via": [
+        {
+          "title": "minimatch has a ReDoS via repeated wildcards with non-matching literal in pattern",
+          "url": "https://github.com/advisories/GHSA-3ppc-4f35-3m26",
+          "severity": "high",
+          "range": "<3.1.3"
+        },
+        {
+          "title": "minimatch has a ReDoS via repeated wildcards with non-matching literal in pattern",
+          "url": "https://github.com/advisories/GHSA-3ppc-4f35-3m26",
+          "severity": "high",
+          "range": ">=9.0.0 <9.0.6"
+        },
+        {
+          "title": "minimatch has ReDoS: matchOne() combinatorial backtracking via multiple non-adjacent GLOBSTAR segments",
+          "url": "https://github.com/advisories/GHSA-7r86-cg39-jmmj",
+          "severity": "high",
+          "range": "<3.1.3"
+        },
+        {
+          "title": "minimatch has ReDoS: matchOne() combinatorial backtracking via multiple non-adjacent GLOBSTAR segments",
+          "url": "https://github.com/advisories/GHSA-7r86-cg39-jmmj",
+          "severity": "high",
+          "range": ">=9.0.0 <9.0.7"
+        },
+        {
+          "title": "minimatch ReDoS: nested *() extglobs generate catastrophically backtracking regular expressions",
+          "url": "https://github.com/advisories/GHSA-23c5-xmqv-rm74",
+          "severity": "high",
+          "range": "<3.1.4"
+        },
+        {
+          "title": "minimatch ReDoS: nested *() extglobs generate catastrophically backtracking regular expressions",
+          "url": "https://github.com/advisories/GHSA-23c5-xmqv-rm74",
+          "severity": "high",
+          "range": ">=9.0.0 <9.0.7"
+        }
+      ],
+      "registrySuggestedFix": true
+    },
+    {
+      "package": "picomatch",
+      "severity": "high",
+      "productionResolution": false,
+      "versions": [
+        "2.3.1"
+      ],
+      "via": [
+        {
+          "title": "Picomatch: Method Injection in POSIX Character Classes causes incorrect Glob Matching",
+          "url": "https://github.com/advisories/GHSA-3v7f-55p6-f55p",
+          "severity": "moderate",
+          "range": "<2.3.2"
+        },
+        {
+          "title": "Picomatch has a ReDoS vulnerability via extglob quantifiers",
+          "url": "https://github.com/advisories/GHSA-c2c7-rcm5-vvqj",
+          "severity": "high",
+          "range": "<2.3.2"
+        }
+      ],
+      "registrySuggestedFix": true
+    },
+    {
+      "package": "prisma",
+      "severity": "high",
+      "productionResolution": true,
+      "versions": [
+        "6.19.0"
+      ],
+      "via": [
+        "@prisma/config"
+      ],
+      "registrySuggestedFix": {
+        "name": "prisma",
+        "version": "6.12.0",
+        "isSemVerMajor": true
+      }
+    },
+    {
+      "package": "typescript-eslint",
+      "severity": "high",
+      "productionResolution": false,
+      "versions": [
+        "8.47.0"
+      ],
+      "via": [
+        "@typescript-eslint/eslint-plugin",
+        "@typescript-eslint/parser",
+        "@typescript-eslint/typescript-estree",
+        "@typescript-eslint/utils"
+      ],
+      "registrySuggestedFix": true
+    }
+  ]
+}

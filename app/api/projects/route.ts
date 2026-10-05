@@ -1,21 +1,26 @@
-// app/api/projects/route.ts
-export const runtime = "nodejs"; // ensure Prisma runs in Node, not Edge
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/app/lib/prisma";
+import { apiError, positiveInt } from "@/app/lib/api";
+import { publicProjectWhere } from "@/app/lib/public-projects";
 
-import { NextResponse } from "next/server";
-import { prisma } from "../../lib/prisma"; // from app/api/projects → app/lib/prisma
-
-export async function GET() {
+export const runtime = "nodejs";
+export async function GET(req: NextRequest) {
   try {
+    const limit = positiveInt(req.nextUrl.searchParams.get("limit"), 50, 100);
+    const cursor = positiveInt(req.nextUrl.searchParams.get("cursor"), 0, 2_000_000_000);
     const projects = await prisma.project.findMany({
-      orderBy: [{ sortOrder: "asc" }, { year: "desc" }],
+      where: publicProjectWhere,
+      orderBy: [{ sortOrder: "asc" }, { year: "desc" }, { id: "asc" }],
+      take: limit + 1,
+      ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+      select: { id: true, slug: true, title: true, subtitle: true, description: true, year: true,
+        status: true, featured: true, tags: true, techStack: true, githubUrl: true, liveUrl: true,
+        coverImageUrl: true, categoryId: true, sortOrder: true, createdAt: true, updatedAt: true },
     });
-
-    return NextResponse.json(projects);
-  } catch (error) {
-    console.error("[GET /api/projects] ERROR:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
-  }
+    const hasNext = projects.length > limit;
+    const page = projects.slice(0, limit);
+    return NextResponse.json(page, { headers: {
+      "Cache-Control": "no-store", ...(hasNext ? { "X-Next-Cursor": String(page[page.length - 1].id) } : {}),
+    } });
+  } catch (error) { return apiError(error, "project_list"); }
 }

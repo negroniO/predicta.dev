@@ -1,6 +1,7 @@
+export const dynamic = "force-dynamic";
 import { prisma } from "@/app/lib/prisma";
 import PageTransition from "@/app/components/PageTransition";
-import { marked } from "marked";
+import { renderMarkdown } from "@/app/lib/content";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -44,7 +45,7 @@ export default async function DynamicPage({
     notFound();
   }
 
-  const html = entry.content ? await marked(entry.content) : null;
+  const html = entry.content ? renderMarkdown(entry.content) : null;
 
   return (
     <PageTransition>

@@ -5,6 +5,7 @@ import {
   motion,
   AnimatePresence,
   useInView,
+  useReducedMotion,
   type Variants,
 } from "framer-motion";
 import Link from "next/link";
@@ -41,52 +42,39 @@ const cardVariants: Variants = {
 };
 
 const FeaturedRowCarousel: React.FC<Props> = ({ projects }) => {
-  if (!projects.length) return null;
 
   const PAGE_SIZE = 3;
   const pageCount = Math.max(1, Math.ceil(projects.length / PAGE_SIZE));
 
   const [page, setPage] = useState(0);
   const [isHover, setIsHover] = useState(false);
-  const [entered, setEntered] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   // 👇 Observe the card row area
   const rowRef = useRef<HTMLDivElement | null>(null);
   const isInView = useInView(rowRef, {
-    once: true,      // only trigger the first time it comes into view
+    once: false,     // stop rotating while the section is off screen
     amount: 0.5,     // require ~50% of the row visible
   });
 
-  // Mark once the user has scrolled at least a bit after load
+  // Keep the first cards visible in server HTML; only autoplay needs visibility.
   useEffect(() => {
-    const onScroll = () => setHasScrolled(true);
-    window.addEventListener("scroll", onScroll, { once: true, passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // Gate rendering until we've actually entered the viewport
-  useEffect(() => {
-    if (!isInView || !hasScrolled) return;
-    const id = window.setTimeout(() => setEntered(true), 360);
-    return () => window.clearTimeout(id);
-  }, [isInView, hasScrolled]);
-
-  // Autoplay only after the row has been seen at least once
-  useEffect(() => {
-    if (!entered) return;
-    if (pageCount <= 1) return;
-    if (isHover) return;
+    if (!isInView || pageCount <= 1 || isHover || isFocused || paused || reduceMotion) return;
 
     const id = window.setInterval(() => {
       setPage((prev) => (prev + 1) % pageCount);
     }, AUTO_DELAY_MS);
 
     return () => window.clearInterval(id);
-  }, [pageCount, isHover, entered]);
+  }, [pageCount, isHover, isFocused, paused, reduceMotion, isInView]);
+
+  if (!projects.length) return null;
 
   // Compute the visible 3 projects for the current "page"
-  const start = page * PAGE_SIZE;
+  const currentPage = Math.min(page, pageCount - 1);
+  const start = currentPage * PAGE_SIZE;
   let visible = projects.slice(start, start + PAGE_SIZE);
 
   // Wrap around if needed on last page
@@ -99,26 +87,29 @@ const FeaturedRowCarousel: React.FC<Props> = ({ projects }) => {
       className="w-full"
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setIsFocused(false); }}
+      aria-label="Featured projects"
+      aria-roledescription="carousel"
     >
       {/* Sentinel to trigger in-view without showing empty space */}
       <div ref={rowRef} className="h-px w-full" />
 
-      {/* Cards only render once we’ve entered the viewport */}
-      {entered && (
+      {/* The first cards are available without scrolling or JavaScript. */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={page}
-            initial={{ opacity: 0, x: 120 }}
+            key={currentPage}
+            initial={false}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -80 }}
-            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+            exit={reduceMotion ? undefined : { opacity: 0, x: -80 }}
+            transition={{ duration: reduceMotion ? 0 : 0.55, ease: [0.16, 1, 0.3, 1] }}
             className="grid gap-4 md:gap-5 md:grid-cols-3"
           >
             {visible.map((project, index) => (
               <motion.article
                 key={project.id}
                 variants={cardVariants}
-                initial="hidden"
+                initial={false}
                 animate="show"
                 custom={index} // drives the 1→2→3 cascading delay
                 className="group rounded-2xl border border-card-border/80 bg-card/80 shadow-[0_10px_30px_-18px_rgba(34,211,238,0.25)] px-4 py-3 sm:px-5 sm:py-4 flex flex-col justify-between hover:-translate-y-1 hover:shadow-[0_15px_50px_-16px_rgba(34,211,238,0.35)] transition-transform transition-shadow duration-300 min-h-[220px]"
@@ -156,24 +147,26 @@ const FeaturedRowCarousel: React.FC<Props> = ({ projects }) => {
             ))}
           </motion.div>
         </AnimatePresence>
-      )}
 
-      {/* Pagination dots – only shown after row has actually appeared */}
-      {isInView && pageCount > 1 && (
+      {pageCount > 1 && (
         <div className="mt-4 flex justify-center gap-2">
           {Array.from({ length: pageCount }).map((_, i) => (
             <button
               key={i}
               type="button"
-              onClick={() => setPage(i)}
-              className={`h-1.5 rounded-full transition-all ${
-                i === page
+              onClick={() => { setPage(i); setPaused(true); }}
+              aria-pressed={i === currentPage}
+              className={`min-h-6 min-w-6 rounded-full transition-all ${
+                i === currentPage
                   ? "w-5 bg-cyan-400"
                   : "w-2 bg-slate-600/70 hover:bg-slate-400/80"
               }`}
               aria-label={`Go to featured project set ${i + 1}`}
             />
           ))}
+          <button type="button" onClick={() => setPaused((value) => !value)} className="text-xs text-cyan-300 underline px-2 motion-reduce:hidden" aria-label={paused ? "Resume featured project rotation" : "Pause featured project rotation"}>
+              {paused ? "Resume" : "Pause"}
+          </button>
         </div>
       )}
     </section>

@@ -1,46 +1,17 @@
-import { NextRequest, NextResponse } from "next/server";
+import { authorizeAdminRequest } from "@/app/lib/admin";
+import { adminSuccess, apiError, ApiError, positiveInt } from "@/app/lib/api";
 import { prisma } from "@/app/lib/prisma";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export const runtime = "nodejs";
-
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.redirect("/api/auth/signin?callbackUrl=/admin", { status: 302 });
-  }
-
-  const { id } = await params;
-  const categoryId = parseInt(id, 10);
-
-  if (!categoryId || Number.isNaN(categoryId)) {
-    const url = new URL("/admin?error=bad_category_id", req.url);
-    return NextResponse.redirect(url, { status: 302 });
-  }
-
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const denied = await authorizeAdminRequest(req);
+  if (denied) return denied;
   try {
-    const inUse = await prisma.project.count({
-      where: { categoryId },
-    });
-
-    if (inUse > 0) {
-      const url = new URL("/admin?error=category_in_use", req.url);
-      return NextResponse.redirect(url, { status: 302 });
-    }
-
-    await prisma.category.delete({
-      where: { id: categoryId },
-    });
-
-    const url = new URL("/admin?category_deleted=1", req.url);
-    return NextResponse.redirect(url, { status: 302 });
-  } catch (error) {
-    console.error("[DELETE category] error", error);
-    const url = new URL("/admin?error=category_delete_failed", req.url);
-    return NextResponse.redirect(url, { status: 302 });
-  }
+    const categoryId = positiveInt((await params).id, 0, 2_000_000_000);
+    await prisma.$transaction(async (tx) => {
+      if (await tx.project.count({ where: { categoryId } })) throw new ApiError("category_in_use", 409);
+      await tx.category.delete({ where: { id: categoryId } });
+    }, { isolationLevel: "Serializable" });
+    return adminSuccess(req, "/admin?category_deleted=1");
+  } catch (error) { return apiError(error, "category_delete"); }
 }

@@ -1,9 +1,9 @@
+import { publicProjectWhere } from "@/app/lib/public-projects";
 import { ImageResponse } from "next/og";
 import { prisma } from "@/app/lib/prisma";
 
 export const runtime = "nodejs";
-export const alt = "predicta.dev project";
-export const size = {
+const size = {
   width: 1200,
   height: 630,
 };
@@ -13,14 +13,16 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const project = await prisma.project.findUnique({
-    where: { slug },
+  const project = await prisma.project.findFirst({
+    where: { slug, ...publicProjectWhere },
     select: {
       title: true,
       subtitle: true,
       category: { select: { name: true } },
     },
   });
+
+  if (!project) return new Response("Not found", { status: 404 });
 
   const title = project?.title ?? "predicta.dev";
   const subtitle =

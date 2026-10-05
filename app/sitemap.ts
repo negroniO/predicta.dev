@@ -1,25 +1,28 @@
+export const dynamic = "force-dynamic";
+import { publicProjectWhere } from "@/app/lib/public-projects";
 import { prisma } from "@/app/lib/prisma";
 import type { MetadataRoute } from "next";
 
-const site = "https://predicta.dev";
+import { SITE_URL as site } from "@/app/lib/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [projects, pages] = await Promise.all([
     prisma.project.findMany({
+      where: publicProjectWhere,
       select: { slug: true, updatedAt: true },
       orderBy: [{ sortOrder: "asc" }, { year: "desc" }],
     }),
     prisma.page.findMany({
-      where: { status: "published" },
+      where: { status: "published", slug: { notIn: ["admin", "api", "projects"] } },
       select: { slug: true, updatedAt: true },
     }),
   ]);
 
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: `${site}/`, lastModified: new Date() },
-    { url: `${site}/projects`, lastModified: new Date() },
-    { url: `${site}/about`, lastModified: new Date() },
-    { url: `${site}/contact`, lastModified: new Date() },
+    { url: `${site}/` },
+    { url: `${site}/projects` },
+    { url: `${site}/about` },
+    { url: `${site}/contact` },
   ];
 
   const projectRoutes: MetadataRoute.Sitemap = projects.map((p) => ({
@@ -32,5 +35,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: p.updatedAt,
   }));
 
-  return [...staticRoutes, ...projectRoutes, ...pageRoutes];
+  return [...new Map([...staticRoutes, ...projectRoutes, ...pageRoutes].map((entry) => [entry.url, entry])).values()];
 }

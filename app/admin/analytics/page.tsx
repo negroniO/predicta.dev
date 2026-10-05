@@ -1,11 +1,12 @@
+import { referrerLabel } from "@/app/lib/export-format";
+import { requireAdminPage } from "@/app/lib/admin";
 // app/admin/analytics/page.tsx
-import { prisma } from "@/app/lib/prisma";
+import { analyticsRange, getAnalytics } from "@/app/lib/analytics";
 import Link from "next/link";
 import AdminTabs from "../components/AdminTabs";
-import { clampDateRange } from "@/app/lib/validation";
 
 export const metadata = {
-  title: "Analytics | predicta.dev",
+  title: "Analytics",
   description:
     "Lightweight analytics for project views on predicta.dev – views, referrers, devices.",
 };
@@ -25,118 +26,15 @@ type SearchParams = { [key: string]: string | string[] | undefined };
 export default async function AdminAnalyticsPage({
   searchParams,
 }: {
-  searchParams?: SearchParams;
+  searchParams?: Promise<SearchParams>;
 }) {
-  const params = searchParams ?? {};
+  await requireAdminPage("/admin/analytics");
+  const params = (await searchParams) ?? {};
   const startParam = typeof params.start === "string" ? params.start : null;
   const endParam = typeof params.end === "string" ? params.end : null;
 
-  let start = startParam
-    ? new Date(startParam)
-    : (() => {
-        const d = new Date();
-        d.setDate(d.getDate() - 30);
-        return d;
-      })();
-  let end = endParam ? new Date(endParam) : new Date();
-
-  if (Number.isNaN(start.getTime())) {
-    start.setDate(start.getDate() - 30);
-  }
-  if (Number.isNaN(end.getTime())) {
-    end.setTime(Date.now());
-  }
-  end.setHours(23, 59, 59, 999);
-  ({ start, end } = clampDateRange(start, end, 90));
-
-  const [
-    totalViewsAgg,
-    uniqueVisitorsGroups,
-    recentViews,
-    topReferrers,
-    topDevices,
-    last30,
-    contactClicks,
-    reactionCounts,
-    projects,
-  ] = await Promise.all([
-    // Total views
-    prisma.projectView.aggregate({
-      _count: { _all: true },
-    }),
-
-    // Unique visitors (group by visitorId)
-    prisma.projectView.groupBy({
-      by: ["visitorId"],
-      where: { visitorId: { not: null } },
-    }),
-
-    // Recent views
-    prisma.projectView.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 20,
-      include: {
-        project: {
-          select: {
-            slug: true,
-            title: true,
-          },
-        },
-      },
-    }),
-
-    // Top referrers
-    prisma.projectView.groupBy({
-      by: ["referrer"],
-      where: { referrer: { not: null } },
-      _count: { referrer: true },
-      orderBy: {
-        _count: {
-          // sort by count of non-null referrer values
-          referrer: "desc",
-        },
-      },
-      take: 10,
-    }),
-
-    // Top devices
-    prisma.projectView.groupBy({
-      by: ["deviceType"],
-      _count: { deviceType: true },
-      orderBy: {
-        _count: {
-          deviceType: "desc",
-        },
-      },
-      take: 10,
-    }),
-
-    // Last 30 days raw to chart
-    prisma.projectView.findMany({
-      where: { createdAt: { gte: start, lte: end } },
-      select: { createdAt: true, deviceType: true, referrer: true },
-    }),
-
-    // Contact clicks
-    prisma.contactClick.groupBy({
-      by: ["href"],
-      _count: { href: true },
-      orderBy: { _count: { href: "desc" } },
-    }),
-
-    prisma.projectReaction.groupBy({
-      by: ["projectId", "kind"],
-      _count: { kind: true },
-    }),
-
-    prisma.project.findMany({
-      orderBy: [{ sortOrder: "asc" }, { year: "desc" }],
-      select: { id: true, slug: true, title: true },
-    }),
-  ]);
-
-  const totalViews = totalViewsAgg._count._all;
-  const uniqueVisitors = uniqueVisitorsGroups.length;
+  const { start, end } = analyticsRange(startParam, endParam);
+  const { totalViews, uniqueVisitors, recentViews, dailyViews, deviceCounts, referrerCounts, contactClicks, reactionCounts, projects } = await getAnalytics(start, end);
   const byDay = new Map<string, number>();
   const deviceBuckets = new Map<string, number>();
   const referrerBuckets = new Map<string, number>();
@@ -149,22 +47,17 @@ export default async function AdminAnalyticsPage({
   );
   for (let i = dayCount - 1; i >= 0; i--) {
     const d = new Date(end);
-    d.setDate(d.getDate() - i);
+    d.setUTCDate(d.getUTCDate() - i);
     const key = d.toISOString().slice(0, 10);
     dayLabels.push(key);
     byDay.set(key, 0);
   }
 
-  last30.forEach((row) => {
-    const key = row.createdAt.toISOString().slice(0, 10);
-    byDay.set(key, (byDay.get(key) ?? 0) + 1);
-    const device = row.deviceType ?? "Unknown";
-    deviceBuckets.set(device, (deviceBuckets.get(device) ?? 0) + 1);
-    const ref =
-      row.referrer && row.referrer.trim().length > 0
-        ? new URL(row.referrer).hostname || row.referrer
-        : "direct";
-    referrerBuckets.set(ref, (referrerBuckets.get(ref) ?? 0) + 1);
+  dailyViews.forEach((row) => byDay.set(row.day.toISOString().slice(0, 10), Number(row.views)));
+  deviceCounts.forEach((row) => deviceBuckets.set(row.deviceType ?? "Unknown", row._count._all));
+  referrerCounts.forEach((row) => {
+    const ref = referrerLabel(row.referrer);
+    referrerBuckets.set(ref, (referrerBuckets.get(ref) ?? 0) + row._count._all);
   });
 
   const maxDay = Math.max(...Array.from(byDay.values()), 1);
@@ -236,7 +129,7 @@ export default async function AdminAnalyticsPage({
       <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
         <div className="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-4">
           <p className="text-[11px] uppercase tracking-[0.16em] text-slate-500">
-            Total views
+            Views in selected period
           </p>
           <p className="mt-1 text-xl font-semibold text-slate-50">
             {totalViews}
@@ -245,7 +138,7 @@ export default async function AdminAnalyticsPage({
 
         <div className="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-4">
           <p className="text-[11px] uppercase tracking-[0.16em] text-slate-500">
-            Unique visitors
+            Unique visitor IDs in selected period
           </p>
           <p className="mt-1 text-xl font-semibold text-slate-50">
             {uniqueVisitors}
@@ -362,7 +255,7 @@ export default async function AdminAnalyticsPage({
         {/* Top referrers */}
         <div className="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-4 space-y-3">
           <h2 className="text-sm font-semibold text-slate-100">
-            Top referrers
+            Top referrers (100 most frequent stored URLs)
           </h2>
           <div className="space-y-2">
             {Array.from(referrerBuckets.entries())
@@ -388,7 +281,7 @@ export default async function AdminAnalyticsPage({
                 </div>
               ))}
 
-            {topReferrers.length === 0 && (
+            {referrerBuckets.size === 0 && (
               <p className="text-[11px] text-slate-500">
                 No referrer data yet.
               </p>
@@ -424,7 +317,7 @@ export default async function AdminAnalyticsPage({
                 </div>
               ))}
 
-            {topDevices.length === 0 && (
+            {deviceBuckets.size === 0 && (
               <p className="text-[11px] text-slate-500">
                 No device info tracked yet.
               </p>
@@ -435,7 +328,7 @@ export default async function AdminAnalyticsPage({
 
       {/* Contact clicks */}
       <section className="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-4 space-y-3 text-xs">
-        <h2 className="text-sm font-semibold text-slate-100">Contact clicks</h2>
+        <h2 className="text-sm font-semibold text-slate-100">Contact clicks (top 50 in selected period)</h2>
         <div className="space-y-2">
           {contactClicks.map((c) => (
             <div
@@ -454,8 +347,8 @@ export default async function AdminAnalyticsPage({
 
       <div className="pt-4 text-[11px] text-slate-500">
         <p>
-          All data is anonymous and stored in your own Postgres via Prisma. No
-          cookies, no third-party trackers.
+          Dates use UTC. Views use browser-generated visitor IDs; reactions use a cookie.
+          Reaction totals count current reactions last changed within this period.
         </p>
       </div>
     </div>

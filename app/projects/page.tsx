@@ -1,10 +1,12 @@
+export const dynamic = "force-dynamic";
+import { publicProjectWhere } from "@/app/lib/public-projects";
 // app/projects/page.tsx
 import { prisma } from "@/app/lib/prisma";
 import PageTransition from "../components/PageTransition";
 import ProjectsPageClient from "./ProjectsPageClient";
 
 export const metadata = {
-  title: "Projects | predicta.dev",
+  title: "Projects",
   description:
     "Projects by George Iordanous – payment recovery ML, collections analytics, DSO forecasting, and SQL/BI work in finance and payments.",
   alternates: {
@@ -14,6 +16,7 @@ export const metadata = {
 
 export default async function ProjectsPage() {
   const projects = await prisma.project.findMany({
+      where: publicProjectWhere,
       orderBy: [{ sortOrder: "asc" }, { year: "desc" }],
       include: {
         category: true,

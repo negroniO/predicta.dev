@@ -1,24 +1,28 @@
+import { apiError, textField } from "@/app/lib/api";
+import { authorizeAdminRequest } from "@/app/lib/admin";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 
 export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {
+  const denied = await authorizeAdminRequest(req);
+  if (denied) return denied;
+  try {
   const { searchParams } = new URL(req.url);
-  const slug = searchParams.get("slug")?.trim();
+  const slug = textField(searchParams.get("slug"), "slug", 160);
   const type = searchParams.get("type");
-  const current = searchParams.get("current")?.trim() || null;
+  const current = textField(searchParams.get("current"), "current", 160) || null;
 
   if (!slug || !type) {
     return NextResponse.json({ available: false }, { status: 400 });
   }
 
-  try {
     if (type === "project") {
       const exists = await prisma.project.findFirst({
         where: {
           slug,
-          ...(current ? { slug: { not: current } } : {}),
+          ...(current ? { NOT: { slug: current } } : {}),
         },
         select: { id: true },
       });
@@ -29,7 +33,7 @@ export async function GET(req: NextRequest) {
       const exists = await prisma.category.findFirst({
         where: {
           slug,
-          ...(current ? { slug: { not: current } } : {}),
+          ...(current ? { NOT: { slug: current } } : {}),
         },
         select: { id: true },
       });
@@ -40,7 +44,7 @@ export async function GET(req: NextRequest) {
       const exists = await prisma.page.findFirst({
         where: {
           slug,
-          ...(current ? { slug: { not: current } } : {}),
+          ...(current ? { NOT: { slug: current } } : {}),
         },
         select: { id: true },
       });
@@ -49,7 +53,6 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ available: false }, { status: 400 });
   } catch (error) {
-    console.error("[VALIDATE slug] error", error);
-    return NextResponse.json({ available: false }, { status: 500 });
+    return apiError(error, "slug_validation");
   }
 }

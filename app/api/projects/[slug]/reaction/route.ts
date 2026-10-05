@@ -1,8 +1,11 @@
+import { publicProjectWhere } from "@/app/lib/public-projects";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 import { randomUUID } from "crypto";
-import { rateLimit } from "@/app/lib/rateLimit";
+import { enforceRateLimit } from "@/app/lib/rateLimit";
+import { apiError, ApiError, readJson, textField } from "@/app/lib/api";
+import { isValidSlug } from "@/app/lib/validation";
 
 export const runtime = "nodejs";
 
@@ -11,11 +14,11 @@ const COOKIE_NAME = "predicta_vid";
 async function getOrSetVisitorId() {
   const store = await cookies();
   let vid = store.get(COOKIE_NAME)?.value;
-  if (!vid) {
+  if (!vid || !/^[a-f0-9-]{36}$/i.test(vid)) {
     vid = randomUUID();
     store.set(COOKIE_NAME, vid, {
       httpOnly: true,
-      secure: true,
+      secure: new URL(process.env.NEXTAUTH_URL || "https://predicta.dev").protocol === "https:",
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 365, // 1 year
       path: "/",
@@ -28,15 +31,17 @@ export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
+  try {
   const { slug } = await params;
+  if (!isValidSlug(slug) || slug.length > 160) throw new ApiError("invalid_slug");
   const vid = await getOrSetVisitorId();
 
-  const project = await prisma.project.findUnique({
-    where: { slug },
+  const project = await prisma.project.findFirst({
+    where: { slug, ...publicProjectWhere },
     select: { id: true },
   });
   if (!project) {
-    return NextResponse.json({ ok: false, error: "not_found" }, { status: 404 });
+    throw new ApiError("not_found", 404);
   }
 
   const [mine, counts] = await Promise.all([
@@ -59,6 +64,7 @@ export async function GET(
     dislikeCount,
     mine: mine?.kind ?? null,
   });
+  } catch (error) { return apiError(error, "reaction_read"); }
 }
 
 export async function POST(
@@ -66,28 +72,22 @@ export async function POST(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const ip =
-      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-      req.headers.get("x-real-ip") ||
-      "unknown";
-    const ok = await rateLimit(`react:${ip}`, 60, 60);
-    if (!ok) {
-      return NextResponse.json({ ok: false, error: "rate_limited" }, { status: 429 });
-    }
-
+    await enforceRateLimit(req, "reaction", 60);
     const { slug } = await params;
-    const { kind } = (await req.json()) as { kind?: string };
+    const body = await readJson(req);
+    const kind = textField(body.kind, "kind", 10, true);
+    if (!isValidSlug(slug) || slug.length > 160) throw new ApiError("invalid_slug");
     if (kind !== "like" && kind !== "dislike") {
-      return NextResponse.json({ ok: false, error: "bad_kind" }, { status: 400 });
+      throw new ApiError("bad_kind");
     }
 
     const vid = await getOrSetVisitorId();
-    const project = await prisma.project.findUnique({
-      where: { slug },
+    const project = await prisma.project.findFirst({
+      where: { slug, ...publicProjectWhere },
       select: { id: true },
     });
     if (!project) {
-      return NextResponse.json({ ok: false, error: "not_found" }, { status: 404 });
+      throw new ApiError("not_found", 404);
     }
 
     await prisma.projectReaction.upsert({
@@ -112,7 +112,6 @@ export async function POST(
       mine: kind,
     });
   } catch (error) {
-    console.error("[PROJECT reaction] error", error);
-    return NextResponse.json({ ok: false, error: "server_error" }, { status: 500 });
+    return apiError(error, "reaction");
   }
 }

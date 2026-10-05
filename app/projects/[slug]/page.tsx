@@ -1,3 +1,8 @@
+import { SITE_URL } from "@/app/lib/site";
+export const dynamic = "force-dynamic";
+import { serializeJsonLd } from "@/app/lib/json-ld";
+import { renderMarkdown } from "@/app/lib/content";
+import { publicProjectWhere } from "@/app/lib/public-projects";
 // app/projects/[slug]/page.tsx
 import { prisma } from "@/app/lib/prisma";
 import { notFound } from "next/navigation";
@@ -12,22 +17,22 @@ export async function generateMetadata({
 }) {
   const { slug } = await params;
 
-  const project = await prisma.project.findUnique({
-    where: { slug },
+  const project = await prisma.project.findFirst({
+    where: { slug, ...publicProjectWhere },
     select: { title: true, subtitle: true, coverImageUrl: true },
   });
 
   if (!project) {
-    return { title: "Project not found | predicta.dev" };
+    return { title: "Project not found" };
   }
 
   return {
-    title: `${project.title} | predicta.dev`,
+    title: project.title,
     description: project.subtitle ?? "Project case study on predicta.dev",
     openGraph: {
       title: `${project.title} | predicta.dev`,
       description: project.subtitle ?? "Project case study on predicta.dev",
-      url: `https://predicta.dev/projects/${slug}`,
+      url: `${SITE_URL}/projects/${slug}`,
       images: project.coverImageUrl
         ? [{ url: project.coverImageUrl, width: 1200, height: 630, alt: project.title }]
         : undefined,
@@ -60,8 +65,8 @@ export default async function ProjectPage({
   const { slug } = await params;
 
   const [project, ordered] = await Promise.all([
-    prisma.project.findUnique({
-      where: { slug },
+    prisma.project.findFirst({
+      where: { slug, ...publicProjectWhere },
       select: {
         id: true,
         slug: true,
@@ -85,6 +90,7 @@ export default async function ProjectPage({
       },
     }),
     prisma.project.findMany({
+      where: publicProjectWhere,
       orderBy: [{ sortOrder: "asc" }, { year: "desc" }],
       select: { slug: true, title: true, tags: true, category: { select: { name: true } } },
     }),
@@ -125,7 +131,7 @@ export default async function ProjectPage({
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([
+          __html: serializeJsonLd([
             {
               "@context": "https://schema.org",
               "@type": "BreadcrumbList",
@@ -134,28 +140,34 @@ export default async function ProjectPage({
                   "@type": "ListItem",
                   position: 1,
                   name: "Home",
-                  item: "https://predicta.dev/",
+                  item: `${SITE_URL}/`,
                 },
                 {
                   "@type": "ListItem",
                   position: 2,
                   name: "Projects",
-                  item: "https://predicta.dev/projects",
+                  item: `${SITE_URL}/projects`,
                 },
                 {
                   "@type": "ListItem",
                   position: 3,
                   name: project.title,
-                  item: `https://predicta.dev/projects/${slug}`,
+                  item: `${SITE_URL}/projects/${slug}`,
                 },
               ],
             },
             {
               "@context": "https://schema.org",
-              "@type": "CreativeWork",
-              name: project.title,
+              "@type": "Article",
+              headline: project.title,
+              datePublished: project.createdAt.toISOString(),
+              dateModified: project.updatedAt.toISOString(),
+              author: { "@type": "Person", name: "George Iordanous", url: SITE_URL },
+              mainEntityOfPage: `${SITE_URL}/projects/${slug}`,
+              inLanguage: "en-GB",
+              keywords: [...project.tags, ...project.techStack].join(", "),
               description: project.subtitle || project.description || undefined,
-              url: `https://predicta.dev/projects/${slug}`,
+              url: `${SITE_URL}/projects/${slug}`,
               image: project.coverImageUrl || undefined,
             },
           ]),
@@ -165,10 +177,11 @@ export default async function ProjectPage({
       <TrackProjectView slug={slug} />
       <ReadingProgress />
       <ProjectCaseStudyClient
+        html={renderMarkdown(project.content || "")}
         project={{
           ...projectForClient,
           readingTime,
-        } as any}
+        }}
         prevProject={prevProject}
         nextProject={nextProject}
         views={views}

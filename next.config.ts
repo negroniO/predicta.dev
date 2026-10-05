@@ -1,15 +1,22 @@
 import type { NextConfig } from "next";
 
+const storageHost = process.env.NEXT_PUBLIC_SUPABASE_URL
+  ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
+  : undefined;
+
 const nextConfig: NextConfig = {
+  distDir: process.env.NODE_ENV === "development" && process.env.PREDICTA_LOCAL_PREVIEW === "1" ? ".next-local" : ".next",
   reactCompiler: true,
+  turbopack: { root: process.cwd() },
   images: {
-    remotePatterns: [
+    remotePatterns: storageHost ? [
       {
         protocol: "https",
-        hostname: "*.supabase.co",
-        pathname: "/storage/v1/object/public/**",
+        hostname: storageHost,
+        pathname: "/storage/v1/object/public/project-images/**",
+        search: "",
       },
-    ],
+    ] : [],
   },
   async headers() {
     return [
@@ -20,7 +27,9 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+              `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}`,
+              "object-src 'none'",
+              "base-uri 'self'",
               "style-src 'self' 'unsafe-inline' https:",
               "img-src 'self' data: https:",
               "font-src 'self' data: https:",

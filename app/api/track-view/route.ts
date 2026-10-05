@@ -1,6 +1,9 @@
-// app/api/track-view/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
+import { publicProjectWhere } from "@/app/lib/public-projects";
+import { apiError, ApiError, readJson, textField, referrerOrigin } from "@/app/lib/api";
+import { isValidSlug } from "@/app/lib/validation";
+import { enforceRateLimit } from "@/app/lib/rateLimit";
 
 export const runtime = "nodejs";
 
@@ -19,88 +22,18 @@ function getDeviceType(
 
 export async function POST(req: NextRequest) {
   try {
-    let body: {
-      slug?: string;
-      path?: string;
-      visitorId?: string;
-      referrer?: string | null;
-    };
-
-    try {
-      body = (await req.json()) || {};
-    } catch (e) {
-      console.error("[track-view] Failed to parse JSON body", e);
-      return NextResponse.json(
-        { error: "Invalid JSON body" },
-        { status: 400 }
-      );
-    }
-
-    const { slug, path, visitorId, referrer: bodyReferrer } = body;
-
-    if (!slug) {
-      return NextResponse.json({ error: "Missing slug" }, { status: 400 });
-    }
-
-    const project = await prisma.project.findUnique({
-      where: { slug },
-      select: { id: true },
-    });
-
-    if (!project) {
-      return NextResponse.json(
-        { error: `Project not found for slug: ${slug}` },
-        { status: 404 }
-      );
-    }
-
-    const userAgent = req.headers.get("user-agent");
-    const deviceType = getDeviceType(userAgent);
-    const headerReferrer =
-      req.headers.get("referer") || req.headers.get("referrer") || null;
-
-    const finalReferrer = bodyReferrer || headerReferrer;
-
-    // 🔍 Log what we're about to insert (only in dev)
-    if (process.env.NODE_ENV !== "production") {
-      console.log("[track-view] creating ProjectView", {
-        projectId: project.id,
-        path: path || `/projects/${slug}`,
-        userAgent,
-        referrer: finalReferrer,
-        visitorId: visitorId || null,
-        deviceType,
-      });
-    }
-
-    await prisma.projectView.create({
-      data: {
-        projectId: project.id,
-        path: path || `/projects/${slug}`,
-        userAgent,
-        referrer: finalReferrer,
-        visitorId: visitorId || null,
-        deviceType,
-      },
-    });
-
+    await enforceRateLimit(req, "view", 120);
+    const body = await readJson(req);
+    const slug = textField(body.slug, "slug", 160, true);
+    if (!isValidSlug(slug)) throw new ApiError("invalid_slug");
+    const path = textField(body.path, "path", 2048) || `/projects/${slug}`;
+    if (!path.startsWith("/") || path.startsWith("//")) throw new ApiError("invalid_path");
+    const visitorId = textField(body.visitorId, "visitorId", 100) || null;
+    const userAgent = textField(req.headers.get("user-agent"), "userAgent", 1024) || null;
+    const referrer = referrerOrigin(body.referrer ?? req.headers.get("referer"));
+    const project = await prisma.project.findFirst({ where: { slug, ...publicProjectWhere }, select: { id: true } });
+    if (!project) throw new ApiError("not_found", 404);
+    await prisma.projectView.create({ data: { projectId: project.id, path, visitorId, userAgent, referrer, deviceType: getDeviceType(userAgent) } });
     return NextResponse.json({ ok: true });
-  } catch (error: any) {
-    console.error("[POST /api/track-view] error", error);
-
-    // In dev, return more info so you can see the real issue
-    if (process.env.NODE_ENV !== "production") {
-      return NextResponse.json(
-        {
-          error: "Internal error",
-          message: error?.message,
-          name: error?.name,
-          code: (error as any)?.code,
-        },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
-  }
+  } catch (error) { return apiError(error, "track_view"); }
 }

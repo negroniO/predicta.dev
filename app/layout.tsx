@@ -1,3 +1,5 @@
+import { SITE_URL } from "@/app/lib/site";
+import { serializeJsonLd } from "@/app/lib/json-ld";
 import "./globals.css";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -7,7 +9,7 @@ import { Analytics } from "@vercel/analytics/react";  // 👈 NEW
 import type { Viewport } from "next";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://predicta.dev"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "predicta.dev | Data & Finance Analytics",
     template: "%s | predicta.dev",
@@ -18,7 +20,7 @@ export const metadata: Metadata = {
     title: "predicta.dev | Data & Finance Analytics",
     description:
       "Predicta – FP&A, collections, and machine learning projects in finance and payments by George Iordanous.",
-    url: "https://predicta.dev",
+    url: SITE_URL,
     siteName: "predicta.dev",
     images: [
       {
@@ -77,17 +79,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen bg-[color:var(--background)] text-foreground">
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-slate-950 focus:px-4 focus:py-2 focus:text-cyan-300">Skip to content</a>
         {/* Schema.org JSON-LD for SEO */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
+            __html: serializeJsonLd({
               "@context": "https://schema.org",
               "@type": "Person",
               name: "George Iordanous",
               jobTitle: "FP&A Analyst / Data Analytics",
-              url: "https://predicta.dev",
-              image: "https://predicta.dev/logo.svg",
+              url: SITE_URL,
+              image: `${SITE_URL}/logo.svg`,
               sameAs: [
                 "https://www.linkedin.com/in/george-iordanous",
                 "https://github.com/negroniO",
@@ -129,7 +132,7 @@ export default function RootLayout({
                 <span>predicta.dev</span>
               </Link>
 
-              <nav className="flex gap-4 text-sm text-slate-300">
+              <nav aria-label="Main navigation" className="flex gap-4 text-sm text-slate-300">
                 <Link
                   href="/"
                   className="hover:text-cyan-300 transition-colors duration-150"
@@ -158,7 +161,7 @@ export default function RootLayout({
             </div>
           </header>
 
-          <main className="flex-1">{children}</main>
+          <main id="main-content" tabIndex={-1} className="flex-1">{children}</main>
 
           <footer className="border-t border-slate-800/70 bg-slate-900/70 backdrop-blur-md">
             <div className="max-w-5xl mx-auto px-4 py-4 text-xs text-slate-400 flex justify-between">
