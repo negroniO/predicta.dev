@@ -7,6 +7,9 @@
   },
   "scripts": {
     "dev": "dotenv -e .env.local -- next dev",
+    "dev:local": "node scripts/dev-local.mjs",
+    "local:admin": "node scripts/open-local-admin.mjs",
+    "local:stop": "docker compose -f compose.local.yml -p predicta-local down",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

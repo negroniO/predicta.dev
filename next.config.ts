@@ -5,6 +5,7 @@ const storageHost = process.env.NEXT_PUBLIC_SUPABASE_URL
   : undefined;
 
 const nextConfig: NextConfig = {
+  distDir: process.env.NODE_ENV === "development" && process.env.PREDICTA_LOCAL_PREVIEW === "1" ? ".next-local" : ".next",
   reactCompiler: true,
   turbopack: { root: process.cwd() },
   images: {

@@ -4,6 +4,26 @@ Portfolio and content management application built with Next.js, React, Prisma/P
 
 ## Local setup
 
+For an isolated preview with sample data, use Node 22 and Docker Desktop:
+
+```bash
+npm run dev:local
+```
+
+Open **http://127.0.0.1:3001**. This starts separate PostgreSQL 17 and Redis containers, applies the four migrations, adds sample projects without overwriting existing local edits, and runs Next.js using `.next-local`. It explicitly overrides production endpoints and preserves your environment files. An existing app on port 3000 can keep running.
+
+To try the admin editor without configuring GitHub OAuth:
+
+```bash
+npm run local:admin
+```
+
+This opens a separate Google Chrome window with an eight-hour session for a test administrator in the local database. It uses the normal authentication/authorization checks; no login bypass is added to the app. Close that window to end the session. Real GitHub sign-in and cover uploads are not configured in this isolated preview; the public pages, local analytics, reactions, subscriptions and admin text editing use local services.
+
+Stop the development server with Ctrl+C. Stop its database/Redis containers with `npm run local:stop`; local content is kept in a Docker volume for the next session. Integration tests use different services and ports. Preview browser profiles and build output are Git-ignored.
+
+For manually configured local development:
+
 Use Node 22.12+ (22.x) and a development PostgreSQL database. Preserve any existing environment files; use `.env.example` as a template for missing settings in `.env.local`.
 
 ```bash
