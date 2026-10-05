@@ -86,3 +86,13 @@ npm run audit:dependencies
 ```
 
 The command deliberately fails on the currently unresolved high findings. CI also blocks newly detected critical dependency findings. The integration suite now verifies health behavior during Redis outages and when both dependencies are unavailable.
+
+## Live database audit
+
+The [2026-10-05 read-only audit](docs/live-database-audit-2026-10-05.md) found migration-history drift, one missing legacy column and three missing indexes. These were subsequently fixed with explicit owner approval; the [production execution record](docs/production-db-reconciliation-2026-10-05.md) confirms zero schema drift, four matching migrations and preserved application data. The original audit describes the pre-change state.
+
+Repeat with `node scripts/audit-db.mjs` after configuring `AUDIT_DATABASE_URL` in the ignored `.env.audit.local` file. The runner requires `psql`, accepts only the dedicated audit login, uses read-only transactions/timeouts, and writes sanitized catalog/aggregate evidence to `/tmp/predicta-live-db-audit.json`. It does not read `.env` or apply repairs.
+
+The [reconciliation rehearsal](docs/db-reconciliation-rehearsal-2026-10-05.md) passed against a live application snapshot restored into disposable PostgreSQL 17, preserving all original records and sequence values. Run `node scripts/rehearse-db-reconciliation.mjs --fixture-only` for the local synthetic test or `--restore-backup BACKUP_ID` for a retained historical snapshot. Neither mode writes to production. The old live-export rehearsal now refuses to run because the production drift it tested has been resolved.
+
+The [retained encrypted backups and recovery procedure](docs/production-db-reconciliation-2026-10-05.md) document the pre-change recovery copies under ignored `.local-backups/`. Keep the ignored `.env.recovery-key.local` file as well as the archives. Production database reconciliation is complete; application deployment and real OAuth/storage staging checks remain separate work.

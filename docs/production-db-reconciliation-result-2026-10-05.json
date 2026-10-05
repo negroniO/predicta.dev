@@ -1,0 +1,118 @@
+{
+  "startedAt": "2026-10-05T17:21:02.469Z",
+  "authorization": "Owner explicitly approved the reviewed three-step production reconciliation in chat",
+  "stages": {
+    "reviewedSourceAndRecovery": {
+      "backupId": "23c29ee3-b4f0-487f-8da2-d358821c29e0",
+      "archiveSha256": "b5ecfadf8240ff72820d2ec41d889ac23387d840ef837eb895b787498274214a",
+      "capturedAt": "2026-10-05T17:12:25.252Z"
+    },
+    "targetAndTLS": {
+      "sameAuditedTarget": true,
+      "ownerLoginConfirmedReadOnly": true,
+      "explicitTransactionTimeoutsVerified": true
+    },
+    "before": {
+      "rowCounts": {
+        "Account": 1,
+        "Category": 0,
+        "ContactClick": 8,
+        "NewsletterSubscriber": 2,
+        "Page": 1,
+        "Project": 3,
+        "ProjectReaction": 1,
+        "ProjectView": 208,
+        "Session": 10,
+        "Testimonial": 0,
+        "User": 1,
+        "VerificationToken": 0
+      },
+      "recordedMigrations": 2,
+      "orphanRelationships": 0
+    },
+    "boundedIndexTransactionRehearsed": true,
+    "exactApprovedDrift": true,
+    "nullableColumnCommitted": true,
+    "thirdMigrationStateEquivalent": true,
+    "thirdMigrationResolved": true,
+    "indexTransactionCommitted": true,
+    "indexMigrationResolvedAndDeployVerified": true,
+    "finalVerification": {
+      "emptySchemaDiff": true,
+      "matchingMigrations": 4,
+      "indexes": [
+        {
+          "name": "ContactClick_createdAt_idx",
+          "valid": true,
+          "ready": true
+        },
+        {
+          "name": "ProjectReaction_updatedAt_idx",
+          "valid": true,
+          "ready": true
+        },
+        {
+          "name": "Project_categoryId_idx",
+          "valid": true,
+          "ready": true
+        }
+      ],
+      "oldMigrationHistoryPreserved": true,
+      "grantsAndRLSUnchanged": true,
+      "orphanRelationships": 0,
+      "originalApplicationFieldsUnchanged": true,
+      "sequencesUnchanged": true,
+      "rowCounts": {
+        "Account": 1,
+        "Category": 0,
+        "ContactClick": 8,
+        "NewsletterSubscriber": 2,
+        "Page": 1,
+        "Project": 3,
+        "ProjectReaction": 1,
+        "ProjectView": 208,
+        "Session": 10,
+        "Testimonial": 0,
+        "User": 1,
+        "VerificationToken": 0
+      }
+    },
+    "productionReadSmoke": {
+      "projects": 3,
+      "pages": 1,
+      "legacyScalarAndRelationsReadable": true,
+      "writesPerformed": false
+    }
+  },
+  "productionMutationStarted": true,
+  "sourceSha256": {
+    "prisma/schema.prisma": "9477d0ddd9ebefbd1c6a545a681d7692f5bc4f10447305c386e4fc848a7260cf",
+    "prisma/migrations/20251125153248_init/migration.sql": "1dc9117d3d861db0fccc5fc69753e8309392eb8d0af5d2a982bfa2fe52575d6f",
+    "prisma/migrations/20251125190038_add_newsletter_testimonials/migration.sql": "48f3d20d2f3cfbb279cd3f58634ddaff35e682f8428320e1ca46aae8ff2ffc9d",
+    "prisma/migrations/20261003120000_reconcile_application_models/migration.sql": "6eed46a581f33717dbaec8a7bcc360294eebdef005329e34f5040e961e51bfa8",
+    "prisma/migrations/20261005120000_query_indexes/migration.sql": "f09461c7eee84d87580acf362a44cabe0ccef3982823e2c6c453eb734ba4d374",
+    "docs/sql/production-legacy-column.sql": "4b0e5ba7ebfc60e40a33fd65dac2f0f0537b3e0d42e8c5e3960bb00aea9c6a00",
+    "docs/sql/live-schema-reconciliation-review.sql": "aeec0a0214ce3982a2a03c095d0e8104d7ecd3d22203a0f5010f89525f6a326e"
+  },
+  "connectionChecks": {
+    "auditRole": "predicta_audit",
+    "ownerRole": "postgres",
+    "sameDatabase": true,
+    "auditReadOnly": "on",
+    "ownerReadOnly": "on",
+    "auditTLS": true,
+    "ownerTLS": true
+  },
+  "startupOptionsHonored": false,
+  "prismaConnectionChecks": {
+    "role": "postgres",
+    "readOnly": "on",
+    "tls": true,
+    "lockTimeout": "2s",
+    "statementTimeout": "30s"
+  },
+  "success": true,
+  "containerRemoved": true,
+  "networkRemoved": true,
+  "finishedAt": "2026-10-05T17:22:01.014Z"
+}

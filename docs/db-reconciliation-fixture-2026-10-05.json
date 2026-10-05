@@ -1,0 +1,61 @@
+{
+  "mode": "synthetic fixture (not a production restore)",
+  "startedAt": "2026-10-05T16:16:54.343Z",
+  "productionWrites": false,
+  "checks": {
+    "sequenceGrantFixture": {
+      "readableSequences": 8,
+      "grantsAdvanceOrSet": false
+    },
+    "fixtureSnapshotRestore": {
+      "originalFieldsAndSequencesEqual": true
+    },
+    "restored": {
+      "version": "17.6",
+      "network": "dedicated bridge, masquerading disabled, loopback port only",
+      "storage": "disposable tmpfs"
+    },
+    "restoredHistory": {
+      "matchingMigrations": 2
+    },
+    "expectedFourDifferences": true,
+    "reviewSQLRollback": true,
+    "fullThirdMigrationEquivalent": {
+      "physicalSchema": true,
+      "outstandingCategoryBackfill": 0
+    },
+    "finalSchemaAndStatus": true,
+    "dataPreservation": {
+      "tables": 12,
+      "allOriginalFieldsEqual": true,
+      "allSequenceValuesEqual": true,
+      "oldMigrationChecksumsEqual": true,
+      "secondDeployNoOp": true,
+      "rowCounts": {
+        "Account": 1,
+        "Category": 0,
+        "ContactClick": 1,
+        "NewsletterSubscriber": 1,
+        "Page": 1,
+        "Project": 2,
+        "ProjectReaction": 1,
+        "ProjectView": 2,
+        "Session": 1,
+        "Testimonial": 0,
+        "User": 1,
+        "VerificationToken": 0
+      }
+    },
+    "generatedClientSmoke": {
+      "scalarAndRelationReads": true,
+      "localDraftCreateUpdateDelete": true,
+      "reactionAndViewCascade": true,
+      "originalRowsPreserved": true,
+      "note": "Rolled-back INSERTs consume local sequence values; preservation above was checked before this disposable smoke test."
+    }
+  },
+  "success": true,
+  "containerRemoved": true,
+  "networkRemoved": true,
+  "finishedAt": "2026-10-05T16:17:08.215Z"
+}

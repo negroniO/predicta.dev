@@ -1,0 +1,89 @@
+{
+  "mode": "live read-only snapshot",
+  "startedAt": "2026-10-05T17:12:12.744Z",
+  "productionWrites": false,
+  "checks": {
+    "exportPreflight": {
+      "role": "predicta_audit",
+      "read_only": "on",
+      "tls": true,
+      "elevated": false,
+      "unsafe_tables": 0,
+      "unreadable_sequences": 0,
+      "user_functions": 0,
+      "user_triggers": 0
+    },
+    "snapshot": {
+      "bytes": 44498,
+      "sha256": "b5ecfadf8240ff72820d2ec41d889ac23387d840ef837eb895b787498274214a",
+      "scope": "public schema, data and sequences; owner/ACL omitted",
+      "capturedAt": "2026-10-05T17:12:25.252Z",
+      "persistedToDisk": false
+    },
+    "retainedBackup": {
+      "id": "23c29ee3-b4f0-487f-8da2-d358821c29e0",
+      "path": ".local-backups/23c29ee3-b4f0-487f-8da2-d358821c29e0.json",
+      "archiveSha256": "b5ecfadf8240ff72820d2ec41d889ac23387d840ef837eb895b787498274214a",
+      "archiveBytes": 44498,
+      "encrypted": true,
+      "keyFile": ".env.recovery-key.local",
+      "decryptedChecksumMatches": true
+    },
+    "restored": {
+      "version": "17.6",
+      "network": "dedicated bridge, masquerading disabled, loopback port only",
+      "storage": "disposable tmpfs"
+    },
+    "restoredHistory": {
+      "matchingMigrations": 2
+    },
+    "expectedFourDifferences": true,
+    "reviewSQLRollback": true,
+    "fullThirdMigrationEquivalent": {
+      "physicalSchema": true,
+      "outstandingCategoryBackfill": 0
+    },
+    "finalSchemaAndStatus": true,
+    "dataPreservation": {
+      "tables": 12,
+      "allOriginalFieldsEqual": true,
+      "allSequenceValuesEqual": true,
+      "oldMigrationChecksumsEqual": true,
+      "secondDeployNoOp": true,
+      "rowCounts": {
+        "Account": 1,
+        "Category": 0,
+        "ContactClick": 8,
+        "NewsletterSubscriber": 2,
+        "Page": 1,
+        "Project": 3,
+        "ProjectReaction": 1,
+        "ProjectView": 208,
+        "Session": 10,
+        "Testimonial": 0,
+        "User": 1,
+        "VerificationToken": 0
+      }
+    },
+    "generatedClientSmoke": {
+      "scalarAndRelationReads": true,
+      "localDraftCreateUpdateDelete": true,
+      "reactionAndViewCascade": true,
+      "originalRowsPreserved": true,
+      "note": "Rolled-back INSERTs consume local sequence values; preservation above was checked before this disposable smoke test."
+    }
+  },
+  "sourceSha256": {
+    "prisma/schema.prisma": "9477d0ddd9ebefbd1c6a545a681d7692f5bc4f10447305c386e4fc848a7260cf",
+    "prisma/migrations/20251125153248_init/migration.sql": "1dc9117d3d861db0fccc5fc69753e8309392eb8d0af5d2a982bfa2fe52575d6f",
+    "prisma/migrations/20251125190038_add_newsletter_testimonials/migration.sql": "48f3d20d2f3cfbb279cd3f58634ddaff35e682f8428320e1ca46aae8ff2ffc9d",
+    "prisma/migrations/20261003120000_reconcile_application_models/migration.sql": "6eed46a581f33717dbaec8a7bcc360294eebdef005329e34f5040e961e51bfa8",
+    "prisma/migrations/20261005120000_query_indexes/migration.sql": "f09461c7eee84d87580acf362a44cabe0ccef3982823e2c6c453eb734ba4d374",
+    "docs/sql/production-legacy-column.sql": "4b0e5ba7ebfc60e40a33fd65dac2f0f0537b3e0d42e8c5e3960bb00aea9c6a00",
+    "docs/sql/live-schema-reconciliation-review.sql": "aeec0a0214ce3982a2a03c095d0e8104d7ecd3d22203a0f5010f89525f6a326e"
+  },
+  "success": true,
+  "containerRemoved": true,
+  "networkRemoved": true,
+  "finishedAt": "2026-10-05T17:12:36.135Z"
+}

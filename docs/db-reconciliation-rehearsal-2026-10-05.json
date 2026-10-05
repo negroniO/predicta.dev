@@ -1,0 +1,71 @@
+{
+  "mode": "live read-only snapshot",
+  "startedAt": "2026-10-05T16:27:37.775Z",
+  "productionWrites": false,
+  "checks": {
+    "exportPreflight": {
+      "role": "predicta_audit",
+      "read_only": "on",
+      "tls": true,
+      "elevated": false,
+      "unsafe_tables": 0,
+      "unreadable_sequences": 0,
+      "user_functions": 0,
+      "user_triggers": 0
+    },
+    "snapshot": {
+      "bytes": 44498,
+      "sha256": "238a04f6bfb8df2431e94b39da29348623af2e1fa59b0dc5520632d860e691d9",
+      "scope": "public schema, data and sequences; owner/ACL omitted",
+      "capturedAt": "2026-10-05T16:27:50.855Z",
+      "persistedToDisk": false
+    },
+    "restored": {
+      "version": "17.6",
+      "network": "dedicated bridge, masquerading disabled, loopback port only",
+      "storage": "disposable tmpfs"
+    },
+    "restoredHistory": {
+      "matchingMigrations": 2
+    },
+    "expectedFourDifferences": true,
+    "reviewSQLRollback": true,
+    "fullThirdMigrationEquivalent": {
+      "physicalSchema": true,
+      "outstandingCategoryBackfill": 0
+    },
+    "finalSchemaAndStatus": true,
+    "dataPreservation": {
+      "tables": 12,
+      "allOriginalFieldsEqual": true,
+      "allSequenceValuesEqual": true,
+      "oldMigrationChecksumsEqual": true,
+      "secondDeployNoOp": true,
+      "rowCounts": {
+        "Account": 1,
+        "Category": 0,
+        "ContactClick": 8,
+        "NewsletterSubscriber": 2,
+        "Page": 1,
+        "Project": 3,
+        "ProjectReaction": 1,
+        "ProjectView": 208,
+        "Session": 10,
+        "Testimonial": 0,
+        "User": 1,
+        "VerificationToken": 0
+      }
+    },
+    "generatedClientSmoke": {
+      "scalarAndRelationReads": true,
+      "localDraftCreateUpdateDelete": true,
+      "reactionAndViewCascade": true,
+      "originalRowsPreserved": true,
+      "note": "Rolled-back INSERTs consume local sequence values; preservation above was checked before this disposable smoke test."
+    }
+  },
+  "success": true,
+  "containerRemoved": true,
+  "networkRemoved": true,
+  "finishedAt": "2026-10-05T16:28:01.415Z"
+}

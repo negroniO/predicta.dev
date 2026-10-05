@@ -1,0 +1,2534 @@
+{
+  "capturedAt": "2026-10-05T15:56:35.952Z",
+  "mode": "BEGIN READ ONLY; SELECT; ROLLBACK",
+  "checks": {
+    "connection": {
+      "rows": [
+        {
+          "role": "predicta_audit",
+          "server_version": "17.6",
+          "transaction_read_only": "on",
+          "default_read_only": "on",
+          "statement_timeout": "10s",
+          "lock_timeout": "2s",
+          "tls": true,
+          "superuser": false,
+          "create_role": false,
+          "create_database": false,
+          "replication": false,
+          "bypass_rls": false
+        }
+      ]
+    },
+    "tables": {
+      "rows": [
+        {
+          "table_name": "Account",
+          "kind": "r",
+          "rls_enabled": false,
+          "rls_forced": false,
+          "rls_active_for_auditor": false,
+          "can_select": true,
+          "any_write_privilege": false,
+          "total_bytes": 49152,
+          "estimated_rows": -1
+        },
+        {
+          "table_name": "Category",
+          "kind": "r",
+          "rls_enabled": false,
+          "rls_forced": false,
+          "rls_active_for_auditor": false,
+          "can_select": true,
+          "any_write_privilege": false,
+          "total_bytes": 24576,
+          "estimated_rows": -1
+        },
+        {
+          "table_name": "ContactClick",
+          "kind": "r",
+          "rls_enabled": false,
+          "rls_forced": false,
+          "rls_active_for_auditor": false,
+          "can_select": true,
+          "any_write_privilege": false,
+          "total_bytes": 32768,
+          "estimated_rows": -1
+        },
+        {
+          "table_name": "NewsletterSubscriber",
+          "kind": "r",
+          "rls_enabled": false,
+          "rls_forced": false,
+          "rls_active_for_auditor": false,
+          "can_select": true,
+          "any_write_privilege": false,
+          "total_bytes": 49152,
+          "estimated_rows": -1
+        },
+        {
+          "table_name": "Page",
+          "kind": "r",
+          "rls_enabled": false,
+          "rls_forced": false,
+          "rls_active_for_auditor": false,
+          "can_select": true,
+          "any_write_privilege": false,
+          "total_bytes": 49152,
+          "estimated_rows": -1
+        },
+        {
+          "table_name": "Project",
+          "kind": "r",
+          "rls_enabled": false,
+          "rls_forced": false,
+          "rls_active_for_auditor": false,
+          "can_select": true,
+          "any_write_privilege": false,
+          "total_bytes": 147456,
+          "estimated_rows": 3
+        },
+        {
+          "table_name": "ProjectReaction",
+          "kind": "r",
+          "rls_enabled": false,
+          "rls_forced": false,
+          "rls_active_for_auditor": false,
+          "can_select": true,
+          "any_write_privilege": false,
+          "total_bytes": 81920,
+          "estimated_rows": 1
+        },
+        {
+          "table_name": "ProjectView",
+          "kind": "r",
+          "rls_enabled": false,
+          "rls_forced": false,
+          "rls_active_for_auditor": false,
+          "can_select": true,
+          "any_write_privilege": false,
+          "total_bytes": 163840,
+          "estimated_rows": 203
+        },
+        {
+          "table_name": "Session",
+          "kind": "r",
+          "rls_enabled": false,
+          "rls_forced": false,
+          "rls_active_for_auditor": false,
+          "can_select": true,
+          "any_write_privilege": false,
+          "total_bytes": 49152,
+          "estimated_rows": -1
+        },
+        {
+          "table_name": "Testimonial",
+          "kind": "r",
+          "rls_enabled": false,
+          "rls_forced": false,
+          "rls_active_for_auditor": false,
+          "can_select": true,
+          "any_write_privilege": false,
+          "total_bytes": 16384,
+          "estimated_rows": -1
+        },
+        {
+          "table_name": "User",
+          "kind": "r",
+          "rls_enabled": false,
+          "rls_forced": false,
+          "rls_active_for_auditor": false,
+          "can_select": true,
+          "any_write_privilege": false,
+          "total_bytes": 49152,
+          "estimated_rows": -1
+        },
+        {
+          "table_name": "VerificationToken",
+          "kind": "r",
+          "rls_enabled": false,
+          "rls_forced": false,
+          "rls_active_for_auditor": false,
+          "can_select": true,
+          "any_write_privilege": false,
+          "total_bytes": 24576,
+          "estimated_rows": -1
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "kind": "r",
+          "rls_enabled": false,
+          "rls_forced": false,
+          "rls_active_for_auditor": false,
+          "can_select": true,
+          "any_write_privilege": false,
+          "total_bytes": 32768,
+          "estimated_rows": -1
+        }
+      ]
+    },
+    "columns": {
+      "rows": [
+        {
+          "table_name": "Account",
+          "column_name": "id",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Account",
+          "column_name": "userId",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Account",
+          "column_name": "type",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Account",
+          "column_name": "provider",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Account",
+          "column_name": "providerAccountId",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Account",
+          "column_name": "refresh_token",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "Account",
+          "column_name": "access_token",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "Account",
+          "column_name": "expires_at",
+          "data_type": "integer",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "Account",
+          "column_name": "token_type",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "Account",
+          "column_name": "scope",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "Account",
+          "column_name": "id_token",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "Account",
+          "column_name": "session_state",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "Category",
+          "column_name": "id",
+          "data_type": "integer",
+          "not_null": true,
+          "default_expression": "nextval('[literal]'::regclass)"
+        },
+        {
+          "table_name": "Category",
+          "column_name": "name",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Category",
+          "column_name": "slug",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Category",
+          "column_name": "sortOrder",
+          "data_type": "integer",
+          "not_null": true,
+          "default_expression": "0"
+        },
+        {
+          "table_name": "ContactClick",
+          "column_name": "id",
+          "data_type": "integer",
+          "not_null": true,
+          "default_expression": "nextval('[literal]'::regclass)"
+        },
+        {
+          "table_name": "ContactClick",
+          "column_name": "href",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "ContactClick",
+          "column_name": "referrer",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "ContactClick",
+          "column_name": "userAgent",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "ContactClick",
+          "column_name": "createdAt",
+          "data_type": "timestamp(3) without time zone",
+          "not_null": true,
+          "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+          "table_name": "NewsletterSubscriber",
+          "column_name": "id",
+          "data_type": "integer",
+          "not_null": true,
+          "default_expression": "nextval('[literal]'::regclass)"
+        },
+        {
+          "table_name": "NewsletterSubscriber",
+          "column_name": "email",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "NewsletterSubscriber",
+          "column_name": "createdAt",
+          "data_type": "timestamp(3) without time zone",
+          "not_null": true,
+          "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+          "table_name": "Page",
+          "column_name": "id",
+          "data_type": "integer",
+          "not_null": true,
+          "default_expression": "nextval('[literal]'::regclass)"
+        },
+        {
+          "table_name": "Page",
+          "column_name": "slug",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Page",
+          "column_name": "title",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Page",
+          "column_name": "excerpt",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "Page",
+          "column_name": "content",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "Page",
+          "column_name": "status",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": "'[literal]'::text"
+        },
+        {
+          "table_name": "Page",
+          "column_name": "createdAt",
+          "data_type": "timestamp(3) without time zone",
+          "not_null": true,
+          "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+          "table_name": "Page",
+          "column_name": "updatedAt",
+          "data_type": "timestamp(3) without time zone",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Project",
+          "column_name": "id",
+          "data_type": "integer",
+          "not_null": true,
+          "default_expression": "nextval('[literal]'::regclass)"
+        },
+        {
+          "table_name": "Project",
+          "column_name": "slug",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Project",
+          "column_name": "title",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Project",
+          "column_name": "subtitle",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "Project",
+          "column_name": "description",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Project",
+          "column_name": "year",
+          "data_type": "integer",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Project",
+          "column_name": "status",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Project",
+          "column_name": "featured",
+          "data_type": "boolean",
+          "not_null": true,
+          "default_expression": "false"
+        },
+        {
+          "table_name": "Project",
+          "column_name": "tags",
+          "data_type": "text[]",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "Project",
+          "column_name": "techStack",
+          "data_type": "text[]",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "Project",
+          "column_name": "githubUrl",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "Project",
+          "column_name": "liveUrl",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "Project",
+          "column_name": "sortOrder",
+          "data_type": "integer",
+          "not_null": true,
+          "default_expression": "0"
+        },
+        {
+          "table_name": "Project",
+          "column_name": "createdAt",
+          "data_type": "timestamp(3) without time zone",
+          "not_null": true,
+          "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+          "table_name": "Project",
+          "column_name": "updatedAt",
+          "data_type": "timestamp(3) without time zone",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Project",
+          "column_name": "content",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "Project",
+          "column_name": "coverImageUrl",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "Project",
+          "column_name": "categoryId",
+          "data_type": "integer",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "ProjectReaction",
+          "column_name": "id",
+          "data_type": "integer",
+          "not_null": true,
+          "default_expression": "nextval('[literal]'::regclass)"
+        },
+        {
+          "table_name": "ProjectReaction",
+          "column_name": "projectId",
+          "data_type": "integer",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "ProjectReaction",
+          "column_name": "kind",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "ProjectReaction",
+          "column_name": "visitorId",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "ProjectReaction",
+          "column_name": "createdAt",
+          "data_type": "timestamp(3) without time zone",
+          "not_null": true,
+          "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+          "table_name": "ProjectReaction",
+          "column_name": "updatedAt",
+          "data_type": "timestamp(3) without time zone",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "ProjectView",
+          "column_name": "id",
+          "data_type": "integer",
+          "not_null": true,
+          "default_expression": "nextval('[literal]'::regclass)"
+        },
+        {
+          "table_name": "ProjectView",
+          "column_name": "projectId",
+          "data_type": "integer",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "ProjectView",
+          "column_name": "path",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "ProjectView",
+          "column_name": "userAgent",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "ProjectView",
+          "column_name": "referrer",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "ProjectView",
+          "column_name": "visitorId",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "ProjectView",
+          "column_name": "deviceType",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "ProjectView",
+          "column_name": "createdAt",
+          "data_type": "timestamp(3) without time zone",
+          "not_null": true,
+          "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+          "table_name": "Session",
+          "column_name": "id",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Session",
+          "column_name": "sessionToken",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Session",
+          "column_name": "userId",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Session",
+          "column_name": "expires",
+          "data_type": "timestamp(3) without time zone",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Testimonial",
+          "column_name": "id",
+          "data_type": "integer",
+          "not_null": true,
+          "default_expression": "nextval('[literal]'::regclass)"
+        },
+        {
+          "table_name": "Testimonial",
+          "column_name": "name",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Testimonial",
+          "column_name": "role",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "Testimonial",
+          "column_name": "message",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "Testimonial",
+          "column_name": "createdAt",
+          "data_type": "timestamp(3) without time zone",
+          "not_null": true,
+          "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+          "table_name": "User",
+          "column_name": "id",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "User",
+          "column_name": "name",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "User",
+          "column_name": "email",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "User",
+          "column_name": "emailVerified",
+          "data_type": "timestamp(3) without time zone",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "User",
+          "column_name": "image",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "VerificationToken",
+          "column_name": "identifier",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "VerificationToken",
+          "column_name": "token",
+          "data_type": "text",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "VerificationToken",
+          "column_name": "expires",
+          "data_type": "timestamp(3) without time zone",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "column_name": "id",
+          "data_type": "character varying(36)",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "column_name": "checksum",
+          "data_type": "character varying(64)",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "column_name": "finished_at",
+          "data_type": "timestamp with time zone",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "column_name": "migration_name",
+          "data_type": "character varying(255)",
+          "not_null": true,
+          "default_expression": null
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "column_name": "logs",
+          "data_type": "text",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "column_name": "rolled_back_at",
+          "data_type": "timestamp with time zone",
+          "not_null": false,
+          "default_expression": null
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "column_name": "started_at",
+          "data_type": "timestamp with time zone",
+          "not_null": true,
+          "default_expression": "now()"
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "column_name": "applied_steps_count",
+          "data_type": "integer",
+          "not_null": true,
+          "default_expression": "0"
+        }
+      ]
+    },
+    "constraints": {
+      "rows": [
+        {
+          "table_name": "Account",
+          "constraint_name": "Account_pkey",
+          "kind": "p",
+          "validated": true,
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "table_name": "Account",
+          "constraint_name": "Account_userId_fkey",
+          "kind": "f",
+          "validated": true,
+          "definition": "FOREIGN KEY (\"userId\") REFERENCES \"User\"(id) ON UPDATE CASCADE ON DELETE CASCADE"
+        },
+        {
+          "table_name": "Category",
+          "constraint_name": "Category_pkey",
+          "kind": "p",
+          "validated": true,
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "table_name": "ContactClick",
+          "constraint_name": "ContactClick_pkey",
+          "kind": "p",
+          "validated": true,
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "table_name": "NewsletterSubscriber",
+          "constraint_name": "NewsletterSubscriber_pkey",
+          "kind": "p",
+          "validated": true,
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "table_name": "Page",
+          "constraint_name": "Page_pkey",
+          "kind": "p",
+          "validated": true,
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "table_name": "Project",
+          "constraint_name": "Project_categoryId_fkey",
+          "kind": "f",
+          "validated": true,
+          "definition": "FOREIGN KEY (\"categoryId\") REFERENCES \"Category\"(id) ON UPDATE CASCADE ON DELETE SET NULL"
+        },
+        {
+          "table_name": "Project",
+          "constraint_name": "Project_pkey",
+          "kind": "p",
+          "validated": true,
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "table_name": "ProjectReaction",
+          "constraint_name": "ProjectReaction_pkey",
+          "kind": "p",
+          "validated": true,
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "table_name": "ProjectReaction",
+          "constraint_name": "ProjectReaction_projectId_fkey",
+          "kind": "f",
+          "validated": true,
+          "definition": "FOREIGN KEY (\"projectId\") REFERENCES \"Project\"(id) ON UPDATE CASCADE ON DELETE CASCADE"
+        },
+        {
+          "table_name": "ProjectView",
+          "constraint_name": "ProjectView_pkey",
+          "kind": "p",
+          "validated": true,
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "table_name": "ProjectView",
+          "constraint_name": "ProjectView_projectId_fkey",
+          "kind": "f",
+          "validated": true,
+          "definition": "FOREIGN KEY (\"projectId\") REFERENCES \"Project\"(id) ON UPDATE CASCADE ON DELETE CASCADE"
+        },
+        {
+          "table_name": "Session",
+          "constraint_name": "Session_pkey",
+          "kind": "p",
+          "validated": true,
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "table_name": "Session",
+          "constraint_name": "Session_userId_fkey",
+          "kind": "f",
+          "validated": true,
+          "definition": "FOREIGN KEY (\"userId\") REFERENCES \"User\"(id) ON UPDATE CASCADE ON DELETE CASCADE"
+        },
+        {
+          "table_name": "Testimonial",
+          "constraint_name": "Testimonial_pkey",
+          "kind": "p",
+          "validated": true,
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "table_name": "User",
+          "constraint_name": "User_pkey",
+          "kind": "p",
+          "validated": true,
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "constraint_name": "_prisma_migrations_pkey",
+          "kind": "p",
+          "validated": true,
+          "definition": "PRIMARY KEY (id)"
+        }
+      ]
+    },
+    "indexes": {
+      "rows": [
+        {
+          "table_name": "Account",
+          "index_name": "Account_pkey",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"Account_pkey\" ON public.\"Account\" USING btree (id)",
+          "bytes": 16384
+        },
+        {
+          "table_name": "Account",
+          "index_name": "Account_provider_providerAccountId_key",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"Account_provider_providerAccountId_key\" ON public.\"Account\" USING btree (provider, \"providerAccountId\")",
+          "bytes": 16384
+        },
+        {
+          "table_name": "Category",
+          "index_name": "Category_pkey",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"Category_pkey\" ON public.\"Category\" USING btree (id)",
+          "bytes": 8192
+        },
+        {
+          "table_name": "Category",
+          "index_name": "Category_slug_key",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"Category_slug_key\" ON public.\"Category\" USING btree (slug)",
+          "bytes": 8192
+        },
+        {
+          "table_name": "ContactClick",
+          "index_name": "ContactClick_pkey",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"ContactClick_pkey\" ON public.\"ContactClick\" USING btree (id)",
+          "bytes": 16384
+        },
+        {
+          "table_name": "NewsletterSubscriber",
+          "index_name": "NewsletterSubscriber_email_key",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"NewsletterSubscriber_email_key\" ON public.\"NewsletterSubscriber\" USING btree (email)",
+          "bytes": 16384
+        },
+        {
+          "table_name": "NewsletterSubscriber",
+          "index_name": "NewsletterSubscriber_pkey",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"NewsletterSubscriber_pkey\" ON public.\"NewsletterSubscriber\" USING btree (id)",
+          "bytes": 16384
+        },
+        {
+          "table_name": "Page",
+          "index_name": "Page_pkey",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"Page_pkey\" ON public.\"Page\" USING btree (id)",
+          "bytes": 16384
+        },
+        {
+          "table_name": "Page",
+          "index_name": "Page_slug_key",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"Page_slug_key\" ON public.\"Page\" USING btree (slug)",
+          "bytes": 16384
+        },
+        {
+          "table_name": "Project",
+          "index_name": "Project_pkey",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"Project_pkey\" ON public.\"Project\" USING btree (id)",
+          "bytes": 16384
+        },
+        {
+          "table_name": "Project",
+          "index_name": "Project_slug_key",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"Project_slug_key\" ON public.\"Project\" USING btree (slug)",
+          "bytes": 16384
+        },
+        {
+          "table_name": "ProjectReaction",
+          "index_name": "ProjectReaction_pkey",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"ProjectReaction_pkey\" ON public.\"ProjectReaction\" USING btree (id)",
+          "bytes": 16384
+        },
+        {
+          "table_name": "ProjectReaction",
+          "index_name": "ProjectReaction_projectId_idx",
+          "is_unique": false,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE INDEX \"ProjectReaction_projectId_idx\" ON public.\"ProjectReaction\" USING btree (\"projectId\")",
+          "bytes": 16384
+        },
+        {
+          "table_name": "ProjectReaction",
+          "index_name": "ProjectReaction_projectId_visitorId_key",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"ProjectReaction_projectId_visitorId_key\" ON public.\"ProjectReaction\" USING btree (\"projectId\", \"visitorId\")",
+          "bytes": 16384
+        },
+        {
+          "table_name": "ProjectReaction",
+          "index_name": "ProjectReaction_visitorId_idx",
+          "is_unique": false,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE INDEX \"ProjectReaction_visitorId_idx\" ON public.\"ProjectReaction\" USING btree (\"visitorId\")",
+          "bytes": 16384
+        },
+        {
+          "table_name": "ProjectView",
+          "index_name": "ProjectView_createdAt_idx",
+          "is_unique": false,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE INDEX \"ProjectView_createdAt_idx\" ON public.\"ProjectView\" USING btree (\"createdAt\")",
+          "bytes": 16384
+        },
+        {
+          "table_name": "ProjectView",
+          "index_name": "ProjectView_pkey",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"ProjectView_pkey\" ON public.\"ProjectView\" USING btree (id)",
+          "bytes": 16384
+        },
+        {
+          "table_name": "ProjectView",
+          "index_name": "ProjectView_projectId_idx",
+          "is_unique": false,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE INDEX \"ProjectView_projectId_idx\" ON public.\"ProjectView\" USING btree (\"projectId\")",
+          "bytes": 16384
+        },
+        {
+          "table_name": "ProjectView",
+          "index_name": "ProjectView_visitorId_idx",
+          "is_unique": false,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE INDEX \"ProjectView_visitorId_idx\" ON public.\"ProjectView\" USING btree (\"visitorId\")",
+          "bytes": 16384
+        },
+        {
+          "table_name": "Session",
+          "index_name": "Session_pkey",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"Session_pkey\" ON public.\"Session\" USING btree (id)",
+          "bytes": 16384
+        },
+        {
+          "table_name": "Session",
+          "index_name": "Session_sessionToken_key",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"Session_sessionToken_key\" ON public.\"Session\" USING btree (\"sessionToken\")",
+          "bytes": 16384
+        },
+        {
+          "table_name": "Testimonial",
+          "index_name": "Testimonial_pkey",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"Testimonial_pkey\" ON public.\"Testimonial\" USING btree (id)",
+          "bytes": 8192
+        },
+        {
+          "table_name": "User",
+          "index_name": "User_email_key",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"User_email_key\" ON public.\"User\" USING btree (email)",
+          "bytes": 16384
+        },
+        {
+          "table_name": "User",
+          "index_name": "User_pkey",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"User_pkey\" ON public.\"User\" USING btree (id)",
+          "bytes": 16384
+        },
+        {
+          "table_name": "VerificationToken",
+          "index_name": "VerificationToken_identifier_token_key",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"VerificationToken_identifier_token_key\" ON public.\"VerificationToken\" USING btree (identifier, token)",
+          "bytes": 8192
+        },
+        {
+          "table_name": "VerificationToken",
+          "index_name": "VerificationToken_token_key",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX \"VerificationToken_token_key\" ON public.\"VerificationToken\" USING btree (token)",
+          "bytes": 8192
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "index_name": "_prisma_migrations_pkey",
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "definition": "CREATE UNIQUE INDEX _prisma_migrations_pkey ON public._prisma_migrations USING btree (id)",
+          "bytes": 16384
+        }
+      ]
+    },
+    "policies": {
+      "rows": []
+    },
+    "api_role_table_access": {
+      "rows": [
+        {
+          "role": "anon",
+          "table_name": "Account",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "anon",
+          "table_name": "Category",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "anon",
+          "table_name": "ContactClick",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "anon",
+          "table_name": "NewsletterSubscriber",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "anon",
+          "table_name": "Page",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "anon",
+          "table_name": "Project",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "anon",
+          "table_name": "ProjectReaction",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "anon",
+          "table_name": "ProjectView",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "anon",
+          "table_name": "Session",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "anon",
+          "table_name": "Testimonial",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "anon",
+          "table_name": "User",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "anon",
+          "table_name": "VerificationToken",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "anon",
+          "table_name": "_prisma_migrations",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "authenticated",
+          "table_name": "Account",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "authenticated",
+          "table_name": "Category",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "authenticated",
+          "table_name": "ContactClick",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "authenticated",
+          "table_name": "NewsletterSubscriber",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "authenticated",
+          "table_name": "Page",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "authenticated",
+          "table_name": "Project",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "authenticated",
+          "table_name": "ProjectReaction",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "authenticated",
+          "table_name": "ProjectView",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "authenticated",
+          "table_name": "Session",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "authenticated",
+          "table_name": "Testimonial",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "authenticated",
+          "table_name": "User",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "authenticated",
+          "table_name": "VerificationToken",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "authenticated",
+          "table_name": "_prisma_migrations",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "predicta_audit",
+          "table_name": "Account",
+          "can_select": true,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "predicta_audit",
+          "table_name": "Category",
+          "can_select": true,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "predicta_audit",
+          "table_name": "ContactClick",
+          "can_select": true,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "predicta_audit",
+          "table_name": "NewsletterSubscriber",
+          "can_select": true,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "predicta_audit",
+          "table_name": "Page",
+          "can_select": true,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "predicta_audit",
+          "table_name": "Project",
+          "can_select": true,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "predicta_audit",
+          "table_name": "ProjectReaction",
+          "can_select": true,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "predicta_audit",
+          "table_name": "ProjectView",
+          "can_select": true,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "predicta_audit",
+          "table_name": "Session",
+          "can_select": true,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "predicta_audit",
+          "table_name": "Testimonial",
+          "can_select": true,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "predicta_audit",
+          "table_name": "User",
+          "can_select": true,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "predicta_audit",
+          "table_name": "VerificationToken",
+          "can_select": true,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "predicta_audit",
+          "table_name": "_prisma_migrations",
+          "can_select": true,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "service_role",
+          "table_name": "Account",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "service_role",
+          "table_name": "Category",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "service_role",
+          "table_name": "ContactClick",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "service_role",
+          "table_name": "NewsletterSubscriber",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "service_role",
+          "table_name": "Page",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "service_role",
+          "table_name": "Project",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "service_role",
+          "table_name": "ProjectReaction",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "service_role",
+          "table_name": "ProjectView",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "service_role",
+          "table_name": "Session",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "service_role",
+          "table_name": "Testimonial",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "service_role",
+          "table_name": "User",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "service_role",
+          "table_name": "VerificationToken",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        },
+        {
+          "role": "service_role",
+          "table_name": "_prisma_migrations",
+          "can_select": false,
+          "can_insert": false,
+          "can_update": false,
+          "can_delete": false,
+          "rls_enabled": false
+        }
+      ]
+    },
+    "role_memberships": {
+      "rows": []
+    },
+    "schema_access": {
+      "rows": [
+        {
+          "schema": "auth",
+          "can_use": false,
+          "can_create": false
+        },
+        {
+          "schema": "public",
+          "can_use": true,
+          "can_create": false
+        },
+        {
+          "schema": "storage",
+          "can_use": false,
+          "can_create": false
+        }
+      ]
+    },
+    "functions": {
+      "rows": []
+    },
+    "triggers": {
+      "rows": []
+    },
+    "table_statistics": {
+      "rows": [
+        {
+          "table_name": "Account",
+          "seq_scan": 189,
+          "idx_scan": 148,
+          "n_live_tup": 1,
+          "n_dead_tup": 2,
+          "n_mod_since_analyze": 3,
+          "last_autovacuum": null,
+          "last_autoanalyze": null
+        },
+        {
+          "table_name": "Category",
+          "seq_scan": 494,
+          "idx_scan": 12,
+          "n_live_tup": 0,
+          "n_dead_tup": 0,
+          "n_mod_since_analyze": 0,
+          "last_autovacuum": null,
+          "last_autoanalyze": null
+        },
+        {
+          "table_name": "ContactClick",
+          "seq_scan": 140,
+          "idx_scan": 17,
+          "n_live_tup": 8,
+          "n_dead_tup": 0,
+          "n_mod_since_analyze": 8,
+          "last_autovacuum": null,
+          "last_autoanalyze": null
+        },
+        {
+          "table_name": "NewsletterSubscriber",
+          "seq_scan": 118,
+          "idx_scan": 14,
+          "n_live_tup": 2,
+          "n_dead_tup": 0,
+          "n_mod_since_analyze": 2,
+          "last_autovacuum": null,
+          "last_autoanalyze": null
+        },
+        {
+          "table_name": "Page",
+          "seq_scan": 126,
+          "idx_scan": 13355,
+          "n_live_tup": 1,
+          "n_dead_tup": 1,
+          "n_mod_since_analyze": 3,
+          "last_autovacuum": null,
+          "last_autoanalyze": null
+        },
+        {
+          "table_name": "Project",
+          "seq_scan": 4795,
+          "idx_scan": 1729,
+          "n_live_tup": 3,
+          "n_dead_tup": 6,
+          "n_mod_since_analyze": 2,
+          "last_autovacuum": null,
+          "last_autoanalyze": "2026-01-09T15:35:30.374121+00:00"
+        },
+        {
+          "table_name": "ProjectReaction",
+          "seq_scan": 1408,
+          "idx_scan": 213,
+          "n_live_tup": 1,
+          "n_dead_tup": 49,
+          "n_mod_since_analyze": 0,
+          "last_autovacuum": null,
+          "last_autoanalyze": "2025-12-01T11:40:10.574242+00:00"
+        },
+        {
+          "table_name": "ProjectView",
+          "seq_scan": 2073,
+          "idx_scan": 133,
+          "n_live_tup": 208,
+          "n_dead_tup": 16,
+          "n_mod_since_analyze": 5,
+          "last_autovacuum": "2025-11-25T15:36:32.501885+00:00",
+          "last_autoanalyze": "2026-05-21T13:17:45.21228+00:00"
+        },
+        {
+          "table_name": "Session",
+          "seq_scan": 127,
+          "idx_scan": 632,
+          "n_live_tup": 10,
+          "n_dead_tup": 9,
+          "n_mod_since_analyze": 22,
+          "last_autovacuum": null,
+          "last_autoanalyze": null
+        },
+        {
+          "table_name": "Testimonial",
+          "seq_scan": 117,
+          "idx_scan": 9,
+          "n_live_tup": 0,
+          "n_dead_tup": 0,
+          "n_mod_since_analyze": 0,
+          "last_autovacuum": null,
+          "last_autoanalyze": null
+        },
+        {
+          "table_name": "User",
+          "seq_scan": 125,
+          "idx_scan": 704,
+          "n_live_tup": 1,
+          "n_dead_tup": 1,
+          "n_mod_since_analyze": 3,
+          "last_autovacuum": null,
+          "last_autoanalyze": null
+        },
+        {
+          "table_name": "VerificationToken",
+          "seq_scan": 117,
+          "idx_scan": 8,
+          "n_live_tup": 0,
+          "n_dead_tup": 0,
+          "n_mod_since_analyze": 0,
+          "last_autovacuum": null,
+          "last_autoanalyze": null
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "seq_scan": 132,
+          "idx_scan": 4,
+          "n_live_tup": 2,
+          "n_dead_tup": 4,
+          "n_mod_since_analyze": 6,
+          "last_autovacuum": null,
+          "last_autoanalyze": null
+        }
+      ]
+    },
+    "index_statistics": {
+      "rows": [
+        {
+          "table_name": "Account",
+          "index_name": "Account_pkey",
+          "idx_scan": 78,
+          "idx_tup_read": 77,
+          "idx_tup_fetch": 75
+        },
+        {
+          "table_name": "Account",
+          "index_name": "Account_provider_providerAccountId_key",
+          "idx_scan": 70,
+          "idx_tup_read": 69,
+          "idx_tup_fetch": 68
+        },
+        {
+          "table_name": "Category",
+          "index_name": "Category_pkey",
+          "idx_scan": 12,
+          "idx_tup_read": 0,
+          "idx_tup_fetch": 0
+        },
+        {
+          "table_name": "Category",
+          "index_name": "Category_slug_key",
+          "idx_scan": 0,
+          "idx_tup_read": 0,
+          "idx_tup_fetch": 0
+        },
+        {
+          "table_name": "ContactClick",
+          "index_name": "ContactClick_pkey",
+          "idx_scan": 17,
+          "idx_tup_read": 88,
+          "idx_tup_fetch": 88
+        },
+        {
+          "table_name": "NewsletterSubscriber",
+          "index_name": "NewsletterSubscriber_email_key",
+          "idx_scan": 2,
+          "idx_tup_read": 0,
+          "idx_tup_fetch": 0
+        },
+        {
+          "table_name": "NewsletterSubscriber",
+          "index_name": "NewsletterSubscriber_pkey",
+          "idx_scan": 12,
+          "idx_tup_read": 16,
+          "idx_tup_fetch": 16
+        },
+        {
+          "table_name": "Page",
+          "index_name": "Page_pkey",
+          "idx_scan": 11,
+          "idx_tup_read": 12,
+          "idx_tup_fetch": 11
+        },
+        {
+          "table_name": "Page",
+          "index_name": "Page_slug_key",
+          "idx_scan": 13344,
+          "idx_tup_read": 250,
+          "idx_tup_fetch": 249
+        },
+        {
+          "table_name": "Project",
+          "index_name": "Project_pkey",
+          "idx_scan": 439,
+          "idx_tup_read": 481,
+          "idx_tup_fetch": 428
+        },
+        {
+          "table_name": "Project",
+          "index_name": "Project_slug_key",
+          "idx_scan": 1290,
+          "idx_tup_read": 1285,
+          "idx_tup_fetch": 1281
+        },
+        {
+          "table_name": "ProjectReaction",
+          "index_name": "ProjectReaction_pkey",
+          "idx_scan": 13,
+          "idx_tup_read": 12,
+          "idx_tup_fetch": 11
+        },
+        {
+          "table_name": "ProjectReaction",
+          "index_name": "ProjectReaction_projectId_idx",
+          "idx_scan": 0,
+          "idx_tup_read": 0,
+          "idx_tup_fetch": 0
+        },
+        {
+          "table_name": "ProjectReaction",
+          "index_name": "ProjectReaction_projectId_visitorId_key",
+          "idx_scan": 200,
+          "idx_tup_read": 191,
+          "idx_tup_fetch": 60
+        },
+        {
+          "table_name": "ProjectReaction",
+          "index_name": "ProjectReaction_visitorId_idx",
+          "idx_scan": 0,
+          "idx_tup_read": 0,
+          "idx_tup_fetch": 0
+        },
+        {
+          "table_name": "ProjectView",
+          "index_name": "ProjectView_createdAt_idx",
+          "idx_scan": 88,
+          "idx_tup_read": 891,
+          "idx_tup_fetch": 888
+        },
+        {
+          "table_name": "ProjectView",
+          "index_name": "ProjectView_pkey",
+          "idx_scan": 23,
+          "idx_tup_read": 2387,
+          "idx_tup_fetch": 2231
+        },
+        {
+          "table_name": "ProjectView",
+          "index_name": "ProjectView_projectId_idx",
+          "idx_scan": 2,
+          "idx_tup_read": 16,
+          "idx_tup_fetch": 16
+        },
+        {
+          "table_name": "ProjectView",
+          "index_name": "ProjectView_visitorId_idx",
+          "idx_scan": 20,
+          "idx_tup_read": 589,
+          "idx_tup_fetch": 589
+        },
+        {
+          "table_name": "Session",
+          "index_name": "Session_pkey",
+          "idx_scan": 15,
+          "idx_tup_read": 44,
+          "idx_tup_fetch": 39
+        },
+        {
+          "table_name": "Session",
+          "index_name": "Session_sessionToken_key",
+          "idx_scan": 617,
+          "idx_tup_read": 613,
+          "idx_tup_fetch": 612
+        },
+        {
+          "table_name": "Testimonial",
+          "index_name": "Testimonial_pkey",
+          "idx_scan": 9,
+          "idx_tup_read": 0,
+          "idx_tup_fetch": 0
+        },
+        {
+          "table_name": "User",
+          "index_name": "User_email_key",
+          "idx_scan": 1,
+          "idx_tup_read": 1,
+          "idx_tup_fetch": 0
+        },
+        {
+          "table_name": "User",
+          "index_name": "User_pkey",
+          "idx_scan": 703,
+          "idx_tup_read": 701,
+          "idx_tup_fetch": 700
+        },
+        {
+          "table_name": "VerificationToken",
+          "index_name": "VerificationToken_identifier_token_key",
+          "idx_scan": 8,
+          "idx_tup_read": 0,
+          "idx_tup_fetch": 0
+        },
+        {
+          "table_name": "VerificationToken",
+          "index_name": "VerificationToken_token_key",
+          "idx_scan": 0,
+          "idx_tup_read": 0,
+          "idx_tup_fetch": 0
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "index_name": "_prisma_migrations_pkey",
+          "idx_scan": 4,
+          "idx_tup_read": 4,
+          "idx_tup_fetch": 4
+        }
+      ]
+    },
+    "connection_statistics": {
+      "rows": [
+        {
+          "state": "active",
+          "connections": 1,
+          "waiting_for_lock": 0
+        },
+        {
+          "state": null,
+          "connections": 6,
+          "waiting_for_lock": 0
+        }
+      ]
+    },
+    "database_statistics": {
+      "rows": [
+        {
+          "numbackends": 7,
+          "deadlocks": 0,
+          "temp_files": 3799,
+          "temp_bytes": 6890544600,
+          "blks_hit": 156576164,
+          "blks_read": 4020,
+          "stats_reset": "2025-11-15T02:52:15.984231+00:00"
+        }
+      ]
+    },
+    "extensions": {
+      "rows": [
+        {
+          "extname": "pg_stat_statements",
+          "extversion": "1.11",
+          "schema": "extensions"
+        },
+        {
+          "extname": "pgcrypto",
+          "extversion": "1.3",
+          "schema": "extensions"
+        },
+        {
+          "extname": "plpgsql",
+          "extversion": "1.0",
+          "schema": "pg_catalog"
+        },
+        {
+          "extname": "supabase_vault",
+          "extversion": "0.3.1",
+          "schema": "vault"
+        },
+        {
+          "extname": "uuid-ossp",
+          "extversion": "1.1",
+          "schema": "extensions"
+        }
+      ]
+    },
+    "count_Project": {
+      "rows": [
+        {
+          "rows": 3
+        }
+      ]
+    },
+    "count_Category": {
+      "rows": [
+        {
+          "rows": 0
+        }
+      ]
+    },
+    "count_Page": {
+      "rows": [
+        {
+          "rows": 1
+        }
+      ]
+    },
+    "count_ProjectView": {
+      "rows": [
+        {
+          "rows": 208
+        }
+      ]
+    },
+    "count_ProjectReaction": {
+      "rows": [
+        {
+          "rows": 1
+        }
+      ]
+    },
+    "count_ContactClick": {
+      "rows": [
+        {
+          "rows": 8
+        }
+      ]
+    },
+    "count_NewsletterSubscriber": {
+      "rows": [
+        {
+          "rows": 2
+        }
+      ]
+    },
+    "count_Testimonial": {
+      "rows": [
+        {
+          "rows": 0
+        }
+      ]
+    },
+    "count_User": {
+      "rows": [
+        {
+          "rows": 1
+        }
+      ]
+    },
+    "count_Account": {
+      "rows": [
+        {
+          "rows": 1
+        }
+      ]
+    },
+    "count_Session": {
+      "rows": [
+        {
+          "rows": 10
+        }
+      ]
+    },
+    "count_VerificationToken": {
+      "rows": [
+        {
+          "rows": 0
+        }
+      ]
+    },
+    "migration_history": {
+      "rows": [
+        {
+          "migration_name": "20251125153248_init",
+          "started_at": "2025-11-25T15:32:49.349137+00:00",
+          "finished_at": "2025-11-25T15:32:49.876369+00:00",
+          "rolled_back_at": null,
+          "applied_steps_count": 1,
+          "checksum": "1dc9117d3d861db0fccc5fc69753e8309392eb8d0af5d2a982bfa2fe52575d6f",
+          "has_logs": false
+        },
+        {
+          "migration_name": "20251125190038_add_newsletter_testimonials",
+          "started_at": "2025-11-25T19:00:38.72607+00:00",
+          "finished_at": "2025-11-25T19:00:39.24834+00:00",
+          "rolled_back_at": null,
+          "applied_steps_count": 1,
+          "checksum": "48f3d20d2f3cfbb279cd3f58634ddaff35e682f8428320e1ca46aae8ff2ffc9d",
+          "has_logs": false
+        }
+      ]
+    },
+    "project_integrity": {
+      "rows": [
+        {
+          "invalid_status": 0,
+          "invalid_slug": 1,
+          "blank_title": 0,
+          "timestamp_reversed": 0,
+          "future_timestamp": 0
+        }
+      ]
+    },
+    "page_integrity": {
+      "rows": [
+        {
+          "invalid_status": 0,
+          "reserved_slug": 0,
+          "invalid_slug": 0,
+          "timestamp_reversed": 0
+        }
+      ]
+    },
+    "orphans_ProjectView_Project": {
+      "rows": [
+        {
+          "orphan_rows": 0
+        }
+      ]
+    },
+    "orphans_ProjectReaction_Project": {
+      "rows": [
+        {
+          "orphan_rows": 0
+        }
+      ]
+    },
+    "orphans_Account_User": {
+      "rows": [
+        {
+          "orphan_rows": 0
+        }
+      ]
+    },
+    "orphans_Session_User": {
+      "rows": [
+        {
+          "orphan_rows": 0
+        }
+      ]
+    },
+    "orphans_Project_Category": {
+      "rows": [
+        {
+          "orphan_rows": 0
+        }
+      ]
+    },
+    "duplicates_Project": {
+      "rows": [
+        {
+          "duplicate_groups": 0
+        }
+      ]
+    },
+    "duplicates_Page": {
+      "rows": [
+        {
+          "duplicate_groups": 0
+        }
+      ]
+    },
+    "duplicates_Category": {
+      "rows": [
+        {
+          "duplicate_groups": 0
+        }
+      ]
+    },
+    "duplicates_NewsletterSubscriber": {
+      "rows": [
+        {
+          "duplicate_groups": 0
+        }
+      ]
+    },
+    "reaction_integrity": {
+      "rows": [
+        {
+          "invalid_kind": 0,
+          "blank_visitor_id": 0
+        }
+      ]
+    },
+    "session_expiry": {
+      "rows": [
+        {
+          "expired_rows": 10,
+          "unexpired_rows": 0
+        }
+      ]
+    },
+    "table_owners": {
+      "rows": [
+        {
+          "table_name": "Account",
+          "owner": "postgres"
+        },
+        {
+          "table_name": "Category",
+          "owner": "postgres"
+        },
+        {
+          "table_name": "ContactClick",
+          "owner": "postgres"
+        },
+        {
+          "table_name": "NewsletterSubscriber",
+          "owner": "postgres"
+        },
+        {
+          "table_name": "Page",
+          "owner": "postgres"
+        },
+        {
+          "table_name": "Project",
+          "owner": "postgres"
+        },
+        {
+          "table_name": "ProjectReaction",
+          "owner": "postgres"
+        },
+        {
+          "table_name": "ProjectView",
+          "owner": "postgres"
+        },
+        {
+          "table_name": "Session",
+          "owner": "postgres"
+        },
+        {
+          "table_name": "Testimonial",
+          "owner": "postgres"
+        },
+        {
+          "table_name": "User",
+          "owner": "postgres"
+        },
+        {
+          "table_name": "VerificationToken",
+          "owner": "postgres"
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "owner": "postgres"
+        }
+      ]
+    },
+    "default_privileges": {
+      "rows": []
+    },
+    "column_level_api_grants": {
+      "rows": []
+    },
+    "views": {
+      "rows": []
+    },
+    "storage_visibility": {
+      "rows": [
+        {
+          "table_name": "buckets",
+          "rls_enabled": true,
+          "auditor_can_select": false
+        },
+        {
+          "table_name": "objects",
+          "rls_enabled": true,
+          "auditor_can_select": false
+        }
+      ]
+    },
+    "statistics_visibility": {
+      "rows": [
+        {
+          "all_stats_member": false,
+          "extensions_usage": false,
+          "statement_stats_select": true
+        }
+      ]
+    },
+    "slug_shape": {
+      "rows": [
+        {
+          "contains_uppercase": 1,
+          "contains_whitespace": 0,
+          "contains_other_characters": 0,
+          "malformed_hyphens": 0,
+          "too_long": 0
+        }
+      ]
+    },
+    "plan_public_projects": {
+      "rows": [
+        {
+          "Plan": {
+            "Node Type": "Limit",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 1.06,
+            "Total Cost": 1.07,
+            "Plan Rows": 3,
+            "Plan Width": 73,
+            "Plans": [
+              {
+                "Node Type": "Sort",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 1.06,
+                "Total Cost": 1.07,
+                "Plan Rows": 3,
+                "Plan Width": 73,
+                "Sort Key": [
+                  "\"sortOrder\"",
+                  "year DESC",
+                  "id"
+                ],
+                "Plans": [
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "Project",
+                    "Alias": "Project",
+                    "Startup Cost": 0,
+                    "Total Cost": 1.04,
+                    "Plan Rows": 3,
+                    "Plan Width": 73,
+                    "Filter": "(status = ANY ('{Completed,\"In Progress\"}'::text[]))"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "plan_recent_views": {
+      "rows": [
+        {
+          "Plan": {
+            "Node Type": "Limit",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 2.37,
+            "Total Cost": 2.42,
+            "Plan Rows": 2,
+            "Plan Width": 40,
+            "Plans": [
+              {
+                "Node Type": "Incremental Sort",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 2.37,
+                "Total Cost": 2.42,
+                "Plan Rows": 2,
+                "Plan Width": 40,
+                "Sort Key": [
+                  "\"createdAt\" DESC",
+                  "id DESC"
+                ],
+                "Presorted Key": [
+                  "\"createdAt\""
+                ],
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Backward",
+                    "Index Name": "ProjectView_createdAt_idx",
+                    "Relation Name": "ProjectView",
+                    "Alias": "ProjectView",
+                    "Startup Cost": 0.14,
+                    "Total Cost": 2.36,
+                    "Plan Rows": 1,
+                    "Plan Width": 40,
+                    "Index Cond": "((\"createdAt\" >= '2026-09-06 00:00:00'::timestamp without time zone) AND (\"createdAt\" < '2026-10-06 00:00:00'::timestamp without time zone))"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "plan_click_analytics": {
+      "rows": [
+        {
+          "Plan": {
+            "Node Type": "Limit",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 19.1,
+            "Total Cost": 19.11,
+            "Plan Rows": 3,
+            "Plan Width": 40,
+            "Plans": [
+              {
+                "Node Type": "Sort",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 19.1,
+                "Total Cost": 19.11,
+                "Plan Rows": 3,
+                "Plan Width": 40,
+                "Sort Key": [
+                  "(count(*)) DESC"
+                ],
+                "Plans": [
+                  {
+                    "Node Type": "Aggregate",
+                    "Strategy": "Sorted",
+                    "Partial Mode": "Simple",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Startup Cost": 19.02,
+                    "Total Cost": 19.08,
+                    "Plan Rows": 3,
+                    "Plan Width": 40,
+                    "Group Key": [
+                      "href"
+                    ],
+                    "Plans": [
+                      {
+                        "Node Type": "Sort",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Startup Cost": 19.02,
+                        "Total Cost": 19.03,
+                        "Plan Rows": 3,
+                        "Plan Width": 32,
+                        "Sort Key": [
+                          "href"
+                        ],
+                        "Plans": [
+                          {
+                            "Node Type": "Seq Scan",
+                            "Parent Relationship": "Outer",
+                            "Parallel Aware": false,
+                            "Async Capable": false,
+                            "Relation Name": "ContactClick",
+                            "Alias": "ContactClick",
+                            "Startup Cost": 0,
+                            "Total Cost": 19,
+                            "Plan Rows": 3,
+                            "Plan Width": 32,
+                            "Filter": "((\"createdAt\" >= '2026-09-06 00:00:00'::timestamp without time zone) AND (\"createdAt\" < '2026-10-06 00:00:00'::timestamp without time zone))"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
