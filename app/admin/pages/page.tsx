@@ -1,8 +1,6 @@
+import AdminLink from "../components/AdminLink";
+import { requireAdminPage } from "@/app/lib/admin";
 import { prisma } from "@/app/lib/prisma";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import Link from "next/link";
 import MarkdownEditorWithPreview from "@/app/components/MarkdownEditorWithPreview";
 import {
   FormWithSubmitState,
@@ -22,8 +20,7 @@ export default async function AdminPages({
   searchParams: Promise<SearchParams>;
 }) {
   const params = await searchParams;
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/api/auth/signin?callbackUrl=/admin/pages");
+  const session = await requireAdminPage(`/admin/pages`);
 
   const pages = await prisma.page.findMany({
     orderBy: [{ slug: "asc" }],
@@ -49,12 +46,12 @@ export default async function AdminPages({
           </h1>
           <p className="text-xs text-slate-400">Signed in as {session.user?.email}</p>
         </div>
-        <Link
+        <AdminLink
           href="/admin"
           className="text-xs text-cyan-300 hover:text-cyan-200 underline underline-offset-2"
         >
           ← Back to projects
-        </Link>
+        </AdminLink>
       </header>
 
       {(success || error) && (
@@ -80,8 +77,10 @@ export default async function AdminPages({
           className="grid gap-4 md:grid-cols-2"
         >
           <div className="space-y-1">
-            <label className="block text-slate-300">Title *</label>
+            <label htmlFor="editor-title" className="block text-slate-300">Title *</label>
             <input
+              id="editor-title"
+
               name="title"
               required
               className="w-full rounded-lg bg-slate-900 border border-slate-700 px-2 py-2 text-xs focus:border-cyan-400 outline-none"
@@ -96,8 +95,10 @@ export default async function AdminPages({
           />
 
           <div className="space-y-1 md:col-span-2">
-            <label className="block text-slate-300">Excerpt</label>
+            <label htmlFor="editor-excerpt" className="block text-slate-300">Excerpt</label>
             <textarea
+              id="editor-excerpt"
+
               name="excerpt"
               rows={2}
               className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-xs focus:border-cyan-400 outline-none"
@@ -105,14 +106,16 @@ export default async function AdminPages({
           </div>
 
           <div className="space-y-1">
-            <label className="block text-slate-300">Status</label>
+            <label htmlFor="editor-status" className="block text-slate-300">Status</label>
             <select
+              id="editor-status"
+
               name="status"
-              defaultValue="published"
+              defaultValue="draft"
               className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-xs focus:border-cyan-400 outline-none"
             >
-              <option value="published">Published</option>
-              <option value="draft">Draft</option>
+              <option value="published">Published — visible on the site</option>
+              <option value="draft">Draft — private</option>
             </select>
           </div>
 
@@ -147,13 +150,13 @@ export default async function AdminPages({
                     slug: {page.slug} · status: {page.status}
                   </p>
                 </div>
-                <Link
+                <AdminLink
                   href={`/${page.slug}`}
                   className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2"
                   target="_blank"
                 >
                   View
-                </Link>
+                </AdminLink>
               </div>
 
               <FormWithSubmitState
@@ -162,9 +165,12 @@ export default async function AdminPages({
                 className="grid gap-4 md:grid-cols-2"
               >
                 <input type="hidden" name="_action" value="update" />
+                <input type="hidden" name="updatedAt" value={page.updatedAt.toISOString()} />
                 <div className="space-y-1">
-                  <label className="block text-slate-300">Title *</label>
+                  <label htmlFor={`page-${page.id}-title`} className="block text-slate-300">Title *</label>
                   <input
+                    id={`page-${page.id}-title`}
+
                     name="title"
                     defaultValue={page.title}
                     required
@@ -180,8 +186,10 @@ export default async function AdminPages({
                 />
 
                 <div className="space-y-1 md:col-span-2">
-                  <label className="block text-slate-300">Excerpt</label>
+                  <label htmlFor={`page-${page.id}-excerpt`} className="block text-slate-300">Excerpt</label>
                   <textarea
+                    id={`page-${page.id}-excerpt`}
+
                     name="excerpt"
                     defaultValue={page.excerpt ?? ""}
                     rows={2}
@@ -190,14 +198,16 @@ export default async function AdminPages({
                 </div>
 
                 <div className="space-y-1">
-                  <label className="block text-slate-300">Status</label>
+                  <label htmlFor={`page-${page.id}-status`} className="block text-slate-300">Status</label>
                   <select
+                    id={`page-${page.id}-status`}
+
                     name="status"
                     defaultValue={page.status}
                     className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-xs focus:border-cyan-400 outline-none"
                   >
-                    <option value="published">Published</option>
-                    <option value="draft">Draft</option>
+                    <option value="published">Published — visible on the site</option>
+                    <option value="draft">Draft — private</option>
                   </select>
                 </div>
 
@@ -215,19 +225,20 @@ export default async function AdminPages({
                   </SubmitButton>
                 </div>
               </FormWithSubmitState>
-              <form
+              <FormWithSubmitState warnUnsaved={false}
                 action={`/api/admin/pages/${page.slug}`}
                 method="POST"
                 className="inline"
               >
                 <input type="hidden" name="_action" value="delete" />
+                <input type="hidden" name="updatedAt" value={page.updatedAt.toISOString()} />
                 <ConfirmDeleteButton
                   className="text-[11px] text-red-300 hover:text-red-200 underline underline-offset-2"
                   message={`Delete page "${page.title}"?`}
                 >
                   Delete
                 </ConfirmDeleteButton>
-              </form>
+              </FormWithSubmitState>
             </div>
           ))}
         </div>

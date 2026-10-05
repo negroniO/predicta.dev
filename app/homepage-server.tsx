@@ -1,3 +1,6 @@
+import { SITE_URL } from "@/app/lib/site";
+import { serializeJsonLd } from "@/app/lib/json-ld";
+import { publicProjectWhere } from "@/app/lib/public-projects";
 // app/homepage-server.tsx
 import PageTransition from "./components/PageTransition";
 import Link from "next/link";
@@ -8,11 +11,11 @@ import MlHome from "./components/MlHome";
 import FeaturedRowCarousel from "./components/FeaturedRowCarousel";
 
 
-export const revalidate = 60;
+
 
 export default async function HomePageServer() {
   const featuredProjects = await prisma.project.findMany({
-    where: { featured: true },
+    where: { featured: true, ...publicProjectWhere },
     orderBy: [{ sortOrder: "asc" }, { year: "desc" }],
     take: 4,
   });
@@ -26,31 +29,17 @@ export default async function HomePageServer() {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://predicta.dev/",
+          item: `${SITE_URL}/`,
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "Projects",
-          item: "https://predicta.dev/projects",
+          item: `${SITE_URL}/projects`,
         },
       ],
     },
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      name: "George",
-      url: "https://predicta.dev/",
-      jobTitle: "FP&A / Data Science",
-      worksFor: {
-        "@type": "Organization",
-        name: "predicta.dev",
-      },
-      sameAs: [
-        "https://predicta.dev/projects",
-        "https://predicta.dev/about",
-      ],
-    },
+
   ];
 
   return (
@@ -58,14 +47,14 @@ export default async function HomePageServer() {
       <script
         type="application/ld+json"
         suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }}
       />
 
       {/* 1) FULL-PAGE HERO */}
       <MlHome />
 
       {/* 2) REST OF HOMEPAGE CONTENT – scroll target for the hero */}
-      <main
+      <div
         id="homepage-main"
         className="max-w-5xl mx-auto px-4 py-12 space-y-10"
       >
@@ -88,7 +77,7 @@ export default async function HomePageServer() {
                 panel to show it here.
               </p>
             ) : (
-              <FeaturedRowCarousel projects={featuredProjects as any} />
+              <FeaturedRowCarousel projects={featuredProjects} />
             )}
 
             <div className="pt-3">
@@ -135,13 +124,12 @@ export default async function HomePageServer() {
               Stay in the loop
             </h2>
             <p className="text-sm text-foreground/80">
-              Get the latest project in your inbox with the occasional write-up.
-              One field, one click.
+              Interested in future projects and write-ups? Leave your email to register your interest.
             </p>
             <SubscribeForm />
           </section>
         </CardShell>
-      </main>
+      </div>
     </PageTransition>
   );
 }

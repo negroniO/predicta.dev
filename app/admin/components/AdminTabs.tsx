@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import AdminLink from "./AdminLink";
 import { usePathname } from "next/navigation";
 
 const tabs = [
@@ -17,7 +17,7 @@ export default function AdminTabs() {
       {tabs.map((tab) => {
         const active = pathname === tab.href;
         return (
-          <Link
+          <AdminLink
             key={tab.href}
             href={tab.href}
             className={
@@ -28,7 +28,7 @@ export default function AdminTabs() {
             }
           >
             {tab.label}
-          </Link>
+          </AdminLink>
         );
       })}
     </div>

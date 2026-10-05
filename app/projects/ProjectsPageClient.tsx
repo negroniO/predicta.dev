@@ -3,6 +3,8 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { canOptimizeCover } from "@/app/lib/images";
 
 type Project = {
   id: number;
@@ -60,10 +62,11 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
   }, [projects, normalizedQuery, activeCategory]);
 
   const totalPages = Math.max(1, Math.ceil(filteredProjects.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
   const pagedProjects = useMemo(() => {
-    const start = (page - 1) * pageSize;
+    const start = (currentPage - 1) * pageSize;
     return filteredProjects.slice(start, start + pageSize);
-  }, [filteredProjects, page, pageSize]);
+  }, [filteredProjects, currentPage, pageSize]);
 
   const suggestions = useMemo(() => {
     if (!normalizedQuery) return [];
@@ -96,12 +99,17 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
 
       {/* Search + category filters */}
       <section className="space-y-3">
-        <div className="relative max-w-md">
+        <div className="relative max-w-md"
+          onFocus={() => setFocused(true)}
+          onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false); }}
+          onKeyDown={(e) => { if (e.key === "Escape") setFocused(false); }}
+        >
           <input
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => { setQuery(e.target.value); setPage(1); }}
             onFocus={() => setFocused(true)}
-            onBlur={() => setTimeout(() => setFocused(false), 100)}
+            aria-label="Search projects"
+            aria-controls="project-results"
             placeholder="Search by title, tag, or topic..."
             className="w-full rounded-full bg-card/70 border border-card-border px-4 py-2 text-xs text-foreground placeholder:text-foreground/60 outline-none focus:border-accent focus:ring-1 focus:ring-accent/60"
           />
@@ -140,7 +148,8 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
           <div className="flex flex-wrap gap-1.5 text-[11px]">
             <button
               type="button"
-              onClick={() => setActiveCategory(null)}
+              onClick={() => { setActiveCategory(null); setPage(1); }}
+              aria-pressed={activeCategory === null}
               className={
                 "px-2.5 py-1 rounded-full border text-xs " +
                 (activeCategory === null
@@ -154,7 +163,8 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
               <button
                 key={cat}
                 type="button"
-                onClick={() => setActiveCategory(cat)}
+                onClick={() => { setActiveCategory(cat); setPage(1); }}
+                aria-pressed={activeCategory === cat}
                 className={
                   "px-2.5 py-1 rounded-full border text-xs " +
                   (activeCategory === cat
@@ -168,7 +178,7 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
           </div>
         )}
 
-        <p className="text-[11px] text-foreground/60">
+        <p className="text-[11px] text-foreground/60" role="status">
           Showing{" "}
           <span className="text-slate-200">{filteredProjects.length}</span> of{" "}
           <span className="text-slate-200">{projects.length}</span> projects
@@ -189,7 +199,7 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
       </section>
 
       {/* Project Cards – overlay hero style */}
-      <section className="space-y-4">
+      <section id="project-results" className="space-y-4" aria-label="Project results">
         {pagedProjects.map((p) => (
           <article
             key={p.id}
@@ -198,11 +208,13 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
             {/* Image + overlay header */}
             <div className="relative h-32 md:h-36 w-full overflow-hidden rounded-t-2xl">
               {p.coverImageUrl ? (
-                <img
+                <Image
                   src={p.coverImageUrl}
                   alt={p.title}
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  loading="lazy"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 992px"
+                  unoptimized={!canOptimizeCover(p.coverImageUrl)}
                 />
               ) : (
                 <div className="h-full w-full bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900" />
@@ -299,13 +311,14 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
           </article>
         ))}
 
-        {filteredProjects.length === 0 && (
+        {filteredProjects.length === 0 && projects.length === 0 && (
+          <p className="text-sm text-slate-400">No projects published yet. Check back soon.</p>
+        )}
+        {filteredProjects.length === 0 && projects.length > 0 && (
           <p className="text-sm text-slate-400">
             No projects match{" "}
             <span className="text-cyan-300">“{query}”</span>. Try a different
-            keyword like <span className="text-slate-200">“ML”</span>,{" "}
-            <span className="text-slate-200">“forecasting”</span>, or{" "}
-            <span className="text-slate-200">“SQL”</span>.
+            keyword or <button type="button" onClick={() => { setQuery(""); setActiveCategory(null); setPage(1); }} className="text-cyan-300 underline">clear the filters</button>.
           </p>
         )}
       </section>
@@ -329,21 +342,21 @@ export default function ProjectsPageClient({ projects }: { projects: Project[] }
       {totalPages > 1 && (
         <div className="flex items-center justify-between text-xs text-slate-300 pt-4">
           <span>
-            Page {page} of {totalPages}
+            Page {currentPage} of {totalPages}
           </span>
           <div className="flex gap-2">
             <button
               type="button"
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page === 1}
+              onClick={() => setPage(Math.max(1, currentPage - 1))}
+              disabled={currentPage === 1}
               className="rounded-full border border-slate-700 px-3 py-1 disabled:opacity-60 hover:border-cyan-400"
             >
               ← Prev
             </button>
             <button
               type="button"
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={page === totalPages}
+              onClick={() => setPage(Math.min(totalPages, currentPage + 1))}
+              disabled={currentPage === totalPages}
               className="rounded-full border border-slate-700 px-3 py-1 disabled:opacity-60 hover:border-cyan-400"
             >
               Next →

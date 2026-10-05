@@ -1,13 +1,17 @@
-// prisma/seed.cjs
 const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
 
-async function main() {
-  // Optional: clear existing data while developing
-  await prisma.project.deleteMany();
+function assertLocalSeedAllowed(env) {
+  let url;
+  try { url = new URL(env.DATABASE_URL); } catch { throw new Error("A local DATABASE_URL is required"); }
+  if (env.NODE_ENV !== "development" || env.ALLOW_DEV_SEED !== "1" ||
+      !["postgres:", "postgresql:"].includes(url.protocol) ||
+      !["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) ||
+      url.searchParams.has("host")) {
+    throw new Error("Seeding requires NODE_ENV=development, ALLOW_DEV_SEED=1 and a loopback database URL");
+  }
+}
 
-  await prisma.project.createMany({
-    data: [
+const examples = [
       {
         slug: "failed-credit-card-dashboard",
         title: "Failed Credit Card Collections Dashboard",
@@ -38,16 +42,21 @@ async function main() {
         liveUrl: null,
         sortOrder: 2,
       },
-    ],
-  });
+    ];
+
+async function seed(prisma) {
+  for (const data of examples) {
+    // Existing rows and their related analytics are never overwritten or removed.
+    await prisma.project.upsert({ where: { slug: data.slug }, create: data, update: {} });
+  }
 }
 
-main()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
-    process.exit(1);
-  });
+module.exports = { assertLocalSeedAllowed, seed };
+
+if (require.main === module) {
+  assertLocalSeedAllowed(process.env);
+  const prisma = new PrismaClient();
+  seed(prisma)
+    .catch(() => { console.error("Local seed failed"); process.exitCode = 1; })
+    .finally(() => prisma.$disconnect());
+}

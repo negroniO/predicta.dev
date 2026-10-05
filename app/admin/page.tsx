@@ -1,8 +1,6 @@
+import AdminLink from "./components/AdminLink";
+import { requireAdminPage } from "@/app/lib/admin";
 import { prisma } from "@/app/lib/prisma";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import Link from "next/link";
 import MarkdownEditorWithPreview from "@/app/components/MarkdownEditorWithPreview";
 import {
   FormWithSubmitState,
@@ -34,12 +32,7 @@ export default async function AdminPage({
       ? true
       : false;
   const error = params.error ? String(params.error) : null;
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    // Not logged in → send to GitHub sign-in
-    redirect("/api/auth/signin?callbackUrl=/admin");
-  }
+  const session = await requireAdminPage(`/admin`);
 
   const categories = await prisma.category.findMany({
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
@@ -80,12 +73,12 @@ export default async function AdminPage({
           </p>
         </div>
 
-        <Link
+        <AdminLink
           href="/api/auth/signout"
           className="text-xs rounded-full border border-slate-700 px-3 py-1 hover:border-cyan-400 hover:text-cyan-300"
         >
           Sign out
-        </Link>
+        </AdminLink>
       </header>
 
       {/* Flash messages */}
@@ -138,7 +131,7 @@ export default async function AdminPage({
                   {c.slug} · order: {c.sortOrder}
                 </span>
               </span>
-              <form
+              <FormWithSubmitState warnUnsaved={false}
                 action={`/api/admin/categories/${c.id}`}
                 method="POST"
                 className="flex items-center gap-2"
@@ -149,7 +142,7 @@ export default async function AdminPage({
                 >
                   Delete
                 </ConfirmDeleteButton>
-              </form>
+              </FormWithSubmitState>
             </div>
           ))}
         </div>
@@ -170,8 +163,10 @@ export default async function AdminPage({
         >
           {/* Title */}
           <div className="space-y-1">
-            <label className="block text-slate-300">Title *</label>
+            <label htmlFor="editor-title" className="block text-slate-300">Title *</label>
             <input
+              id="editor-title"
+
               name="title"
               required
               placeholder="e.g. Payment Recovery ML"
@@ -189,8 +184,10 @@ export default async function AdminPage({
 
           {/* Subtitle */}
           <div className="space-y-1 md:col-span-2">
-            <label className="block text-slate-300">Subtitle</label>
+            <label htmlFor="editor-subtitle" className="block text-slate-300">Subtitle</label>
             <input
+              id="editor-subtitle"
+
               name="subtitle"
               placeholder="Short one-line summary"
               className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-xs focus:border-cyan-400 outline-none"
@@ -199,8 +196,10 @@ export default async function AdminPage({
 
           {/* Description */}
           <div className="space-y-1 md:col-span-2">
-            <label className="block text-slate-300">Description</label>
+            <label htmlFor="editor-description" className="block text-slate-300">Description</label>
             <textarea
+              id="editor-description"
+
               name="description"
               rows={4}
               placeholder="A few sentences or bullet points describing the project"
@@ -219,22 +218,26 @@ export default async function AdminPage({
 
           {/* Status */}
           <div className="space-y-1">
-            <label className="block text-slate-300">Status *</label>
+            <label htmlFor="editor-status" className="block text-slate-300">Status *</label>
             <select
+              id="editor-status"
+
               name="status"
-              defaultValue="Completed"
+              defaultValue="Draft"
               className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-xs focus:border-cyan-400 outline-none"
             >
-              <option value="Completed">Completed</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Draft">Draft</option>
+              <option value="Completed">Completed — public</option>
+              <option value="In Progress">In Progress — public</option>
+              <option value="Draft">Draft — private</option>
             </select>
           </div>
 
           {/* Year */}
           <div className="space-y-1">
-            <label className="block text-slate-300">Year</label>
+            <label htmlFor="editor-year" className="block text-slate-300">Year</label>
             <input
+              id="editor-year"
+
               name="year"
               type="number"
               defaultValue={new Date().getFullYear()}
@@ -244,8 +247,10 @@ export default async function AdminPage({
 
           {/* Category */}
           <div className="space-y-1">
-            <label className="block text-slate-300">Category</label>
+            <label htmlFor="editor-category" className="block text-slate-300">Category</label>
             <select
+              id="editor-category"
+
               name="category"
               defaultValue=""
               className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-xs focus:border-cyan-400 outline-none"
@@ -278,8 +283,10 @@ export default async function AdminPage({
 
           {/* Sort Order */}
           <div className="space-y-1">
-            <label className="block text-slate-300">Sort Order</label>
+            <label htmlFor="editor-sortOrder" className="block text-slate-300">Sort Order</label>
             <input
+              id="editor-sortOrder"
+
               name="sortOrder"
               type="number"
               placeholder="1"
@@ -289,8 +296,10 @@ export default async function AdminPage({
 
           {/* GitHub URL */}
           <div className="space-y-1">
-            <label className="block text-slate-300">GitHub URL</label>
+            <label htmlFor="editor-githubUrl" className="block text-slate-300">GitHub URL</label>
             <input
+              id="editor-githubUrl"
+
               name="githubUrl"
               placeholder="https://github.com/..."
               className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-xs focus:border-cyan-400 outline-none"
@@ -299,8 +308,10 @@ export default async function AdminPage({
 
           {/* Live URL */}
           <div className="space-y-1">
-            <label className="block text-slate-300">Live URL</label>
+            <label htmlFor="editor-liveUrl" className="block text-slate-300">Live URL</label>
             <input
+              id="editor-liveUrl"
+
               name="liveUrl"
               placeholder="https://myapp.com"
               className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-xs focus:border-cyan-400 outline-none"
@@ -371,26 +382,14 @@ export default async function AdminPage({
               </div>
               <div className="flex gap-3 text-xs items-center flex-wrap">
                 {/* Feature toggle */}
-                <form
+                <FormWithSubmitState warnUnsaved={false}
                   action={`/api/admin/projects/${p.slug}`}
                   method="POST"
                   className="inline"
                 >
-                  <input type="hidden" name="_action" value="update" />
-                  <input type="hidden" name="title" value={p.title} />
-                  <input type="hidden" name="slug" value={p.slug} />
-                  <input type="hidden" name="subtitle" value={p.subtitle ?? ""} />
-                  <input type="hidden" name="description" value={p.description} />
-                  <input type="hidden" name="content" value={p.content ?? ""} />
-                  <input type="hidden" name="status" value={p.status} />
-                  <input type="hidden" name="year" value={p.year} />
-                  <input type="hidden" name="sortOrder" value={p.sortOrder} />
-                  <input type="hidden" name="tags" value={(p.tags ?? []).join(", ")} />
-                  <input type="hidden" name="techStack" value={(p.techStack ?? []).join(", ")} />
-                  <input type="hidden" name="category" value={p.categoryId ?? ""} />
-                  <input type="hidden" name="githubUrl" value={p.githubUrl ?? ""} />
-                  <input type="hidden" name="liveUrl" value={p.liveUrl ?? ""} />
-                  {!p.featured && <input type="hidden" name="featured" value="1" />}
+                  <input type="hidden" name="_action" value="feature" />
+                  <input type="hidden" name="updatedAt" value={p.updatedAt.toISOString()} />
+                  <input type="hidden" name="featured" value={String(!p.featured)} />
                   <button
                     type="submit"
                     className={
@@ -402,27 +401,15 @@ export default async function AdminPage({
                   >
                     {p.featured ? "Unfeature" : "Mark featured"}
                   </button>
-                </form>
+                </FormWithSubmitState>
                 {/* Sort order bump */}
-                <form
+                <FormWithSubmitState warnUnsaved={false}
                   action={`/api/admin/projects/${p.slug}`}
                   method="POST"
                   className="inline-flex items-center gap-1"
                 >
-                  <input type="hidden" name="_action" value="update" />
-                  <input type="hidden" name="title" value={p.title} />
-                  <input type="hidden" name="slug" value={p.slug} />
-                  <input type="hidden" name="subtitle" value={p.subtitle ?? ""} />
-                  <input type="hidden" name="description" value={p.description} />
-                  <input type="hidden" name="content" value={p.content ?? ""} />
-                  <input type="hidden" name="status" value={p.status} />
-                  <input type="hidden" name="year" value={p.year} />
-                  <input type="hidden" name="tags" value={(p.tags ?? []).join(", ")} />
-                  <input type="hidden" name="techStack" value={(p.techStack ?? []).join(", ")} />
-                  <input type="hidden" name="category" value={p.categoryId ?? ""} />
-                  <input type="hidden" name="githubUrl" value={p.githubUrl ?? ""} />
-                  <input type="hidden" name="liveUrl" value={p.liveUrl ?? ""} />
-                  {p.featured && <input type="hidden" name="featured" value="1" />}
+                  <input type="hidden" name="_action" value="reorder" />
+                  <input type="hidden" name="updatedAt" value={p.updatedAt.toISOString()} />
                   <input type="hidden" name="sortOrder" value={Math.max(0, p.sortOrder - 1)} />
                   <button
                     type="submit"
@@ -431,26 +418,14 @@ export default async function AdminPage({
                   >
                     ↑
                   </button>
-                </form>
-                <form
+                </FormWithSubmitState>
+                <FormWithSubmitState warnUnsaved={false}
                   action={`/api/admin/projects/${p.slug}`}
                   method="POST"
                   className="inline-flex items-center gap-1"
                 >
-                  <input type="hidden" name="_action" value="update" />
-                  <input type="hidden" name="title" value={p.title} />
-                  <input type="hidden" name="slug" value={p.slug} />
-                  <input type="hidden" name="subtitle" value={p.subtitle ?? ""} />
-                  <input type="hidden" name="description" value={p.description} />
-                  <input type="hidden" name="content" value={p.content ?? ""} />
-                  <input type="hidden" name="status" value={p.status} />
-                  <input type="hidden" name="year" value={p.year} />
-                  <input type="hidden" name="tags" value={(p.tags ?? []).join(", ")} />
-                  <input type="hidden" name="techStack" value={(p.techStack ?? []).join(", ")} />
-                  <input type="hidden" name="category" value={p.categoryId ?? ""} />
-                  <input type="hidden" name="githubUrl" value={p.githubUrl ?? ""} />
-                  <input type="hidden" name="liveUrl" value={p.liveUrl ?? ""} />
-                  {p.featured && <input type="hidden" name="featured" value="1" />}
+                  <input type="hidden" name="_action" value="reorder" />
+                  <input type="hidden" name="updatedAt" value={p.updatedAt.toISOString()} />
                   <input type="hidden" name="sortOrder" value={p.sortOrder + 1} />
                   <button
                     type="submit"
@@ -459,19 +434,19 @@ export default async function AdminPage({
                   >
                     ↓
                   </button>
-                </form>
-                <Link
+                </FormWithSubmitState>
+                <AdminLink
                   href={`/projects/${p.slug}`}
                   className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2"
                 >
                   View
-                </Link>
-                <Link
+                </AdminLink>
+                <AdminLink
                   href={`/admin/edit/${p.slug}`}
                   className="text-slate-300 hover:text-cyan-200 underline underline-offset-2"
                 >
                   Edit
-                </Link>
+                </AdminLink>
               </div>
             </div>
           ))}

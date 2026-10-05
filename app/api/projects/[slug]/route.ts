@@ -1,3 +1,6 @@
+import { apiError, ApiError } from "@/app/lib/api";
+import { isValidSlug } from "@/app/lib/validation";
+import { publicProjectWhere } from "@/app/lib/public-projects";
 // app/api/projects/[slug]/route.ts
 export const runtime = "nodejs";
 
@@ -10,24 +13,20 @@ export async function GET(
   context: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
-  console.log("[API] /api/projects/[slug] slug =", slug);
+
 
   try {
-    const project = await prisma.project.findUnique({
-      where: { slug },
+    if (slug.length > 160 || !isValidSlug(slug)) throw new ApiError("invalid_slug");
+    const project = await prisma.project.findFirst({
+      where: { slug, ...publicProjectWhere },
     });
 
     if (!project) {
-      console.warn("[API] Project not found for slug:", slug);
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
+      throw new ApiError("not_found", 404);
     }
 
     return NextResponse.json(project);
   } catch (error) {
-    console.error(`[GET /api/projects/${slug}] ERROR:`, error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    return apiError(error, "project_read");
   }
 }

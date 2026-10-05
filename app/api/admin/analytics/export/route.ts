@@ -1,38 +1,22 @@
-import { NextRequest, NextResponse } from "next/server";
+import { csvCell } from "@/app/lib/export-format";
+import { authorizeAdminRequest } from "@/app/lib/admin";
+import { NextRequest } from "next/server";
 import { prisma } from "@/app/lib/prisma";
-import { clampDateRange } from "@/app/lib/validation";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { analyticsRange } from "@/app/lib/analytics";
+import { apiError, ApiError } from "@/app/lib/api";
 
 export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.redirect("/api/auth/signin?callbackUrl=/admin", { status: 302 });
-  }
+  const denied = await authorizeAdminRequest(req);
+  if (denied) return denied;
 
+  try {
   const { searchParams } = new URL(req.url);
   const startParam = searchParams.get("start");
   const endParam = searchParams.get("end");
 
-  let start = startParam ? new Date(startParam) : (() => {
-    const d = new Date();
-    d.setDate(d.getDate() - 30);
-    return d;
-  })();
-  let end = endParam ? new Date(endParam) : new Date();
-
-  if (Number.isNaN(start.getTime())) {
-    start.setDate(start.getDate() - 30);
-  }
-  if (Number.isNaN(end.getTime())) {
-    end.setTime(Date.now());
-  }
-  end.setHours(23, 59, 59, 999);
-  const clamped = clampDateRange(start, end, 90);
-  start = clamped.start;
-  end = clamped.end;
+  const { start, end } = analyticsRange(startParam, endParam);
 
   const views = await prisma.projectView.findMany({
     where: { createdAt: { gte: start, lte: end } },
@@ -43,8 +27,11 @@ export async function GET(req: NextRequest) {
       deviceType: true,
       project: { select: { slug: true } },
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+    take: 10_001,
   });
+
+  if (views.length > 10_000) throw new ApiError("export_too_large", 422, "Select a shorter date range (maximum 10,000 rows)");
 
   const rows = [
     ["createdAt", "projectSlug", "path", "referrer", "deviceType"].join(","),
@@ -52,12 +39,12 @@ export async function GET(req: NextRequest) {
       [
         v.createdAt.toISOString(),
         v.project.slug,
-        JSON.stringify(v.path ?? ""),
-        JSON.stringify(v.referrer ?? ""),
-        JSON.stringify(v.deviceType ?? ""),
-      ].join(",")
+        v.path,
+        v.referrer,
+        v.deviceType,
+      ].map(csvCell).join(",")
     ),
-  ].join("\n");
+  ].join("\r\n");
 
   return new Response(rows, {
     status: 200,
@@ -66,4 +53,5 @@ export async function GET(req: NextRequest) {
       "Content-Disposition": "attachment; filename=analytics.csv",
     },
   });
+  } catch (error) { return apiError(error, "analytics_export"); }
 }

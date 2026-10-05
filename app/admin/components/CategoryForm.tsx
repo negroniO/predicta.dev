@@ -26,8 +26,10 @@ export function CategoryForm({ nextSortOrder }: { nextSortOrder: number }) {
       className="grid gap-3 text-xs md:grid-cols-4"
     >
       <div className="space-y-1 md:col-span-2">
-        <label className="block text-slate-300">Name</label>
+        <label htmlFor="category-name" className="block text-slate-300">Name</label>
         <input
+          id="category-name"
+
           name="name"
           required
           value={name}
@@ -44,8 +46,10 @@ export function CategoryForm({ nextSortOrder }: { nextSortOrder: number }) {
         placeholder="ml-data"
       />
       <div className="space-y-1">
-        <label className="block text-slate-300">Sort Order</label>
+        <label htmlFor="category-sortOrder" className="block text-slate-300">Sort Order</label>
         <input
+          id="category-sortOrder"
+
           name="sortOrder"
           type="number"
           defaultValue={nextSortOrder}

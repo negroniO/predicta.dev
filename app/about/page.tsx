@@ -1,7 +1,8 @@
+export const dynamic = "force-dynamic";
 import Link from "next/link";
 import PageTransition from "../components/PageTransition";
 import { prisma } from "@/app/lib/prisma";
-import { marked } from "marked";
+import { renderMarkdown } from "@/app/lib/content";
 
 export async function generateMetadata() {
   const page = await prisma.page.findFirst({
@@ -10,7 +11,7 @@ export async function generateMetadata() {
   });
 
   return {
-    title: page?.title ?? "About | predicta.dev",
+    title: page?.title ?? "About",
     description:
       page?.excerpt ??
       "About George Iordanous – FP&A analyst specialising in data-driven collections, forecasting, and payment analytics.",
@@ -23,7 +24,7 @@ export default async function AboutPage() {
     where: { slug: "about", status: "published" },
   });
 
-  const html = page?.content ? await marked(page.content) : null;
+  const html = page?.content ? renderMarkdown(page.content) : null;
 
   return (
     <PageTransition>

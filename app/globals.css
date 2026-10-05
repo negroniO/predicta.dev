@@ -161,10 +161,19 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.swiper .swiper-pagination-bullet {
-  @apply bg-slate-600 opacity-70 transition-all duration-200;
+
+
+/* Keep keyboard focus visible on controls that otherwise only style hover. */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid #22d3ee;
+  outline-offset: 3px;
 }
 
-.swiper .swiper-pagination-bullet-active {
-  @apply bg-cyan-400 w-5 rounded-full opacity-100;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

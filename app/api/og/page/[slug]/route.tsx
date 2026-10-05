@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { prisma } from "@/app/lib/prisma";
 
 export const runtime = "nodejs";
-export const size = { width: 1200, height: 630 };
+const size = { width: 1200, height: 630 };
 
 export async function GET(
   _req: Request,
@@ -13,6 +13,8 @@ export async function GET(
     where: { slug, status: "published" },
     select: { title: true, excerpt: true },
   });
+
+  if (!page) return new Response("Not found", { status: 404 });
 
   const title = page?.title ?? "predicta.dev";
   const subtitle =

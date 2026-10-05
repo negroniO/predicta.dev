@@ -1,10 +1,11 @@
+import { publicProjectWhere } from "@/app/lib/public-projects";
 // app/components/ProjectsSection.tsx
 import { prisma } from "../lib/prisma";
 import Link from "next/link";
 
 export default async function ProjectsSection() {
   const projects = await prisma.project.findMany({
-    where: { featured: true },
+    where: { featured: true, ...publicProjectWhere },
     orderBy: [{ sortOrder: "asc" }, { year: "desc" }],
   });
 

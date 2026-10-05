@@ -27,8 +27,12 @@ model Project {
   coverImageUrl String?
   views         ProjectView[]
   category      Category?     @relation(fields: [categoryId], references: [id])
+  // Retain historical category text until production reconciliation is verified.
+  legacyCategory String?       @map("category")
   categoryId    Int?
   reactions     ProjectReaction[]
+
+  @@index([categoryId])
 }
 
 model Category {
@@ -56,6 +60,8 @@ model ContactClick {
   referrer  String?
   userAgent String?
   createdAt DateTime @default(now())
+
+  @@index([createdAt])
 }
 
 model User {
@@ -141,6 +147,7 @@ model ProjectReaction {
   updatedAt  DateTime @updatedAt
   project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
+  @@index([updatedAt])
   @@unique([projectId, visitorId])
   @@index([projectId])
   @@index([visitorId])

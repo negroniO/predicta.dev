@@ -1,5 +1,6 @@
 "use client";
 
+import { SITE_URL } from "@/app/lib/site";
 import { useState } from "react";
 
 type Props = {
@@ -9,18 +10,19 @@ type Props = {
 
 export default function ShareButtons({ slug, title }: Props) {
   const [copied, setCopied] = useState(false);
+  const [error, setError] = useState(false);
   // Use a stable origin so SSR/CSR match and avoid hydration mismatch.
-  const origin = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-  const shareUrl = `${origin}/projects/${slug}`;
+  const shareUrl = `${SITE_URL}/projects/${encodeURIComponent(slug)}`;
   const utm = `${shareUrl}?utm_source=share&utm_medium=social&utm_campaign=${slug}`;
 
   async function copy() {
+    setError(false);
     try {
       await navigator.clipboard.writeText(utm);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
-    } catch (e) {
-      console.error("copy failed", e);
+    } catch {
+      setError(true);
     }
   }
 
@@ -57,6 +59,7 @@ export default function ShareButtons({ slug, title }: Props) {
       >
         {copied ? "Copied!" : "Copy link"}
       </button>
+      <span role="status">{error ? "Could not copy. Copy the page address from your browser." : copied ? "Link copied." : ""}</span>
     </div>
   );
 }
